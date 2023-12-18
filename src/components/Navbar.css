@@ -1,0 +1,31 @@
+.Navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 112px;
+  height: 100%;
+  padding: 8px;
+}
+
+.NavIconsUl {
+  display: grid;
+  grid-template-rows: repeat(auto-fit, minmax(80px, 80px));
+  gap: 8px;
+  height: 80%;
+}
+
+.NavItem {
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+}
+
+.NavItem .icon {
+    text-align: center;
+    display: grid;
+    place-items: center;
+}
+
+.NavItem .name {
+    text-align: center;
+    padding: 8px;
+}
