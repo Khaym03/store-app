@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import ProductList from './ProductList.jsx'
+import ProductList from './components/ProductList.jsx'
 import Navbar from './components/Navbar.jsx'
 import './index.css'
 import './css/colors.module.css'

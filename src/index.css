@@ -24,16 +24,23 @@
 #content {
   height: 100%;
   margin-left: 112px;
-  padding: 2rem;
+  padding: 1rem;
   position: relative;
   display: grid;
+  grid-template-areas: 
+  'ProductList Measure Order'
+  'ProductList Client Client';
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 2rem;
 }
 
 .def-border {
-  border: 2px solid rgb(255, 255, 255 / 6%);
+  border: 2px solid rgb(255 255 255 / 10%);
+}
+
+.focus-border {
+  border-color: #4ed8e9 !important;;
 }
 
 .rounded-sm {
