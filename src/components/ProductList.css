@@ -1,11 +1,10 @@
 .ProductList{
-    padding: 1rem;
     grid-area: ProductList;
 }
 
 .ProductList ul {
     display: grid;
-    grid-template-rows: repeat(auto-fit, 1fr);
+    grid-template-rows: repeat(auto-fit, minmax(65px, 1fr));
     gap: 8px;
     padding: 1rem;
     list-style-type: none;
@@ -18,8 +17,6 @@
     grid-template-columns: 2fr 1fr;
     place-items: center;
     text-transform: capitalize;
-    transition: 200ms ease-in border-color;
-    cursor: pointer;
 }
 
 .ProductList li * {

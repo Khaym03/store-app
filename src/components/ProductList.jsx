@@ -4,7 +4,10 @@ import './ProductList.css'
 
 const ProductCard = ({ name, value, clickHandler }) => {
   return (
-    <li className="def-border rounded-md" onClick={clickHandler}>
+    <li
+      className="def-border rounded-md transition-border-color pointer"
+      onClick={clickHandler}
+    >
       <div className="name body-large align-left">{name}</div>
       <span className="body-medium align-right">{value}</span>
     </li>

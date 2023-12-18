@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import ProductList from './components/ProductList.jsx'
 import Navbar from './components/Navbar.jsx'
+import ProductList from './components/ProductList.jsx'
+import Measure from './components/Measure.jsx'
 import './index.css'
 import './css/colors.module.css'
 import './css/tokens.css'
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Navbar />
     <main id="content">
       <ProductList />
+      <Measure/>
     </main>
   </React.StrictMode>
 )

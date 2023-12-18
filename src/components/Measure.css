@@ -1,0 +1,32 @@
+.Measure {
+  grid-area: Measure;
+  padding: 1rem;
+}
+
+.InputRangeWrapper {
+  padding: 1rem;
+  min-height: 65px;
+  display: grid;
+  place-items: center;
+}
+
+.InputRangeWrapper input {
+  width: 100%;
+  accent-color:#4ed8e9;
+}
+
+.Units {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+}
+
+.MeasureUnits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  min-height: 65px;
+  justify-content: space-between;
+  place-items: center;
+}
