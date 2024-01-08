@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import Navbar from './components/Navbar.jsx'
 import ProductList from './components/ProductList.jsx'
 import Measure from './components/Measure.jsx'
+import Order from './components/Order.jsx'
 import './index.css'
 import './css/colors.module.css'
 import './css/tokens.css'
@@ -12,9 +13,12 @@ import './css/typography.module.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Navbar />
-    <main id="content">
-      <ProductList />
-      <Measure/>
+    <main id="content" className='grid-center'>
+      <section className='mainSection'>
+        <ProductList />
+        <Measure />
+        <Order/>
+      </section>
     </main>
   </React.StrictMode>
 )

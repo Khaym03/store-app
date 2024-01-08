@@ -19,13 +19,23 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --md-sys-color-primary-rgb: 78 216 233;
+  --md-sys-color-surface-1: rgb(var(--md-sys-color-primary-rgb) / 0.05);
+  --md-sys-color-surface-2: rgb(var(--md-sys-color-primary-rgb) / 0.08);
+  --md-sys-color-surface-3: rgb(var(--md-sys-color-primary-rgb) / 0.11);
+  --md-sys-color-surface-4: rgb(var(--md-sys-color-primary-rgb) / 0.12);
+  --md-sys-color-surface-5: rgb(var(--md-sys-color-primary-rgb) / 0.14);
 }
 
 #content {
   height: 100%;
-  margin-left: 112px;
-  padding: 1rem;
+  margin-left: 96px;
   position: relative;
+  overflow: auto;
+}
+
+.mainSection {
   display: grid;
   grid-template-areas:
     'ProductList Measure Order'
@@ -33,6 +43,10 @@
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 2rem;
+  width: 1300px;
+  max-width: 1300px;
+  height: 700px;
+  max-height: 700px;
 }
 
 .capitalize {
@@ -73,7 +87,7 @@
 .row-4 {
   display: grid;
   grid-template-rows: repeat(4, 69.15px);
-  gap: 8px;
+  align-content: space-between;
 }
 
 .mt-1 {
@@ -167,3 +181,22 @@ button {
   cursor: pointer;
 }
 
+.surface-1 {
+  background-color: var(--md-sys-color-surface-1);
+}
+
+.surface-2 {
+  background-color: var(--md-sys-color-surface-2);
+}
+
+.surface-3 {
+  background-color: var(--md-sys-color-surface-3);
+}
+
+.surface-4 {
+  background-color: var(--md-sys-color-surface-4);
+}
+
+.surface-5 {
+  background-color: var(--md-sys-color-surface-5);
+}
