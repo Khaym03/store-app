@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, /*useContext*/ } from 'react'
 import PropTypes from 'prop-types'
+// import {DollarContext} from './DollarProvider'
 import './ProductList.css'
 
 const ProductCard = ({ name, value, clickHandler }) => {
@@ -45,6 +46,7 @@ const FetchProducts = () => {
 function ProductList() {
   const { data } = FetchProducts()
   const [isFocus, setIsFocus] = useState(false)
+  // const dollar = useContext(DollarContext)
 
   const handlerClick = e => {
     const li = Array.from(document.querySelectorAll('.ProductList li'))

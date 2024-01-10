@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Navbar from './components/Navbar.jsx'
+import DollarProvider from './components/DollarProvider.jsx'
+import SalesSectionManager from './components/SalesSectionManager.jsx'
 import ProductList from './components/ProductList.jsx'
 import Measure from './components/Measure.jsx'
 import Order from './components/Order.jsx'
@@ -13,12 +15,12 @@ import './css/typography.module.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Navbar />
-    <main id="content" className='grid-center'>
-      <section className='mainSection'>
+    <DollarProvider>
+      <SalesSectionManager>
         <ProductList />
         <Measure />
-        <Order/>
-      </section>
-    </main>
+        <Order />
+      </SalesSectionManager>
+    </DollarProvider>
   </React.StrictMode>
 )
