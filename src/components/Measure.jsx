@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import PropTypes from 'prop-types'
 import './Measure.css'
 
@@ -79,28 +78,90 @@ MeasureUnits.propTypes = {
 }
 
 const ShowUnit = ({ rangeValue }) => {
-  return <div className='ShowUnit def-border body-large w-full h-full grid-center rounded'>{`${rangeValue} ml`}</div>
+  return (
+    <div className="ShowUnit def-border body-large w-full h-full grid-center rounded">{`${rangeValue} ml`}</div>
+  )
 }
 
 ShowUnit.propTypes = {
   rangeValue: PropTypes.number
 }
 
-const AddToCart = () => {
-    return (<button type='submit' className="on-primary body-large">Add to cart</button>)
+const AddToCart = ({ selected, rangeValue, setOrders, orders }) => {
+  const clickHandler = () => {
+    if (selected) {
+      const [name, price] = selected
+      const fixedPrice = Number(((rangeValue / 1000) * price).toFixed(2))
+      const newOrder = [name, rangeValue, fixedPrice]
+
+      const map = new Map()
+      const merged = [...orders, newOrder]
+
+      merged.forEach(([name, quan, price]) => {
+        if (!map.has(name)) {
+          map.set(name, [quan, price])
+        } else {
+          const [q, p] = map.get(name)
+          map.set(name, [quan + q, price + p])
+        }
+      })
+
+      const flated = Array.from(map).reduce((acc, curr) => {
+        return [...acc, [curr[0], ...curr[1]]]
+      }, [])
+
+      // console.log(flated)
+
+      setOrders(flated)
+    }
+  }
+
+  return (
+    <button
+      type="submit"
+      className="on-primary body-large"
+      onClick={clickHandler}
+    >
+      Add to cart
+    </button>
+  )
 }
 
-const Measure = () => {
-  const [rangeValue, setRangeValue] = useState(1000)
+AddToCart.propTypes = {
+  selected: PropTypes.array,
+  rangeValue: PropTypes.number,
+  setOrders: PropTypes.func.isRequired,
+  orders: PropTypes.array
+}
 
+const Measure = ({
+  selected,
+  rangeValue,
+  setRangeValue,
+  setOrders,
+  orders
+}) => {
   return (
     <div className="Measure row-4">
       <InputRange rangeValue={rangeValue} setRangeValue={setRangeValue} />
       <MeasureUnits setRangeValue={setRangeValue} />
       <ShowUnit rangeValue={rangeValue} />
-      <AddToCart/>
+      <AddToCart
+        selected={selected}
+        rangeValue={rangeValue}
+        setOrders={setOrders}
+        orders={orders}
+      />
     </div>
   )
+}
+
+Measure.propTypes = {
+  selected: PropTypes.array,
+  rangeValue: PropTypes.number,
+  setRangeValue: PropTypes.func.isRequired,
+  setOrders: PropTypes.func.isRequired,
+  orders: PropTypes.array
 }
 
 export default Measure

@@ -1,16 +1,27 @@
-import { useState, useEffect, /*useContext*/ } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
-// import {DollarContext} from './DollarProvider'
+import { DollarContext } from './DollarProvider'
 import './ProductList.css'
 
 const ProductCard = ({ name, value, clickHandler }) => {
+  const dollar = useContext(DollarContext),
+    profit = 1.5
+
+  let price
+  if (name === 'cloro') price = (value / 100) * dollar * 3
+  else price = (value / 100) * dollar * profit
+
   return (
     <li
       className="def-border rounded-md transition-border-color pointer"
       onClick={clickHandler}
     >
-      <div className="name body-large align-left">{name}</div>
-      <span className="body-medium align-right">{value}</span>
+      <div data-name={name} className="name body-large align-left">
+        {name}
+      </div>
+      <span data-price={price.toFixed(2)} className="body-medium align-right">
+        {price.toFixed(2)}
+      </span>
     </li>
   )
 }
@@ -43,24 +54,17 @@ const FetchProducts = () => {
   return { data }
 }
 
-function ProductList() {
+const getNameAndPrice = target => {
+  const name = target.querySelector('[data-name]').getAttribute('data-name')
+  const price = Number(
+    target.querySelector('[data-price]').getAttribute('data-price')
+  )
+
+  return [name, price]
+}
+
+function ProductList({ selected, setSelected }) {
   const { data } = FetchProducts()
-  const [isFocus, setIsFocus] = useState(false)
-  // const dollar = useContext(DollarContext)
-
-  const handlerClick = e => {
-    const li = Array.from(document.querySelectorAll('.ProductList li'))
-
-    if (isFocus) {
-      li.forEach(li => li.classList.remove('focus-border'))
-      e.target.classList.add('focus-border')
-      setIsFocus(true)
-    } else {
-      e.target.classList.add('focus-border')
-      setIsFocus(true)
-    }
-  }
-
   return (
     <div className="ProductList rounded-lg">
       <ul>
@@ -70,12 +74,30 @@ function ProductList() {
               key={i}
               name={prod.name}
               value={prod.price}
-              clickHandler={handlerClick}
+              clickHandler={e => {
+                const li = Array.from(
+                  document.querySelectorAll('.ProductList li')
+                )
+
+                if (selected) {
+                  li.forEach(li => li.classList.remove('focus-border'))
+                  e.target.classList.add('focus-border')
+                  setSelected(getNameAndPrice(e.target))
+                } else {
+                  e.target.classList.add('focus-border')
+                  setSelected(getNameAndPrice(e.target))
+                }
+              }}
             />
           ))}
       </ul>
     </div>
   )
+}
+
+ProductList.propTypes = {
+  selected: PropTypes.array,
+  setSelected: PropTypes.func
 }
 
 export default ProductList
