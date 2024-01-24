@@ -4,7 +4,7 @@ import { DollarContext } from './DollarProvider'
 import './ProductList.css'
 
 const ProductCard = ({ name, value, clickHandler }) => {
-  const dollar = useContext(DollarContext),
+  const {dollar} = useContext(DollarContext),
     profit = 1.5
 
   let price

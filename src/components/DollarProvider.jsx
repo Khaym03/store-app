@@ -5,6 +5,7 @@ export const DollarContext = React.createContext()
 
 const DollarProvider = ({ children }) => {
   const [dollar, setDollar] = useState(0)
+  const [orders, setOrders] = useState([])
   const url = 'http://localhost:1234/getDollar'
 
   useEffect(() => {
@@ -14,7 +15,7 @@ const DollarProvider = ({ children }) => {
   }, [url])
 
   return (
-    <DollarContext.Provider value={dollar}>
+    <DollarContext.Provider value={{dollar, orders, setOrders}}>
       <main id="content" className="grid-center">
         {children}
       </main>

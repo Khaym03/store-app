@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
 import './Measure.css'
+import { useContext } from 'react'
+import { DollarContext } from './DollarProvider'
 
 const InputRange = ({ rangeValue, setRangeValue }) => {
   const changeHandler = e => {
@@ -87,9 +89,10 @@ ShowUnit.propTypes = {
   rangeValue: PropTypes.number
 }
 
-const AddToCart = ({ selected, rangeValue, setOrders, orders }) => {
+const AddToCart = ({ selected, rangeValue, setTotal }) => {
+  const { orders, setOrders } = useContext(DollarContext)
   const clickHandler = () => {
-    if (selected) {
+    if (selected.length > 0) {
       const [name, price] = selected
       const fixedPrice = Number(((rangeValue / 1000) * price).toFixed(2))
       const newOrder = [name, rangeValue, fixedPrice]
@@ -110,8 +113,9 @@ const AddToCart = ({ selected, rangeValue, setOrders, orders }) => {
         return [...acc, [curr[0], ...curr[1]]]
       }, [])
 
-      // console.log(flated)
+      const total = flated.reduce((acc, cur) => acc + cur[2], 0)
 
+      setTotal(total)
       setOrders(flated)
     }
   }
@@ -119,10 +123,10 @@ const AddToCart = ({ selected, rangeValue, setOrders, orders }) => {
   return (
     <button
       type="submit"
-      className="on-primary body-large"
+      className="secondary-container on-secondary-container-text body-large capitalize"
       onClick={clickHandler}
     >
-      Add to cart
+      agragar a la lista
     </button>
   )
 }
@@ -130,17 +134,10 @@ const AddToCart = ({ selected, rangeValue, setOrders, orders }) => {
 AddToCart.propTypes = {
   selected: PropTypes.array,
   rangeValue: PropTypes.number,
-  setOrders: PropTypes.func.isRequired,
-  orders: PropTypes.array
+  setTotal: PropTypes.func.isRequired
 }
 
-const Measure = ({
-  selected,
-  rangeValue,
-  setRangeValue,
-  setOrders,
-  orders
-}) => {
+const Measure = ({ selected, rangeValue, setRangeValue, setTotal }) => {
   return (
     <div className="Measure row-4">
       <InputRange rangeValue={rangeValue} setRangeValue={setRangeValue} />
@@ -149,8 +146,7 @@ const Measure = ({
       <AddToCart
         selected={selected}
         rangeValue={rangeValue}
-        setOrders={setOrders}
-        orders={orders}
+        setTotal={setTotal}
       />
     </div>
   )
@@ -160,8 +156,7 @@ Measure.propTypes = {
   selected: PropTypes.array,
   rangeValue: PropTypes.number,
   setRangeValue: PropTypes.func.isRequired,
-  setOrders: PropTypes.func.isRequired,
-  orders: PropTypes.array
+  setTotal: PropTypes.func.isRequired
 }
 
 export default Measure

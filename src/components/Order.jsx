@@ -1,5 +1,8 @@
+import { useContext } from 'react'
 import './Order.css'
 import PropTypes from 'prop-types'
+import {DollarContext} from './DollarProvider'
+
 
 const Row = ({ name, quan, price }) => (
   <li className="Order-row ">
@@ -15,21 +18,18 @@ Row.propTypes = {
   price: PropTypes.number
 }
 
-const Order = ({ orders }) => {
+const Order = () => {
+  const {orders} = useContext(DollarContext)
   return (
    <section className='Order-section surface-1 rounded-md'>
      <ul className="Order">
-      {orders &&
+      {orders.length > 0 &&
         orders.map(([name, quan , price], i) => {
           return <Row key={i} name={name} quan={quan} price={price} />
         })}
     </ul>
    </section>
   )
-}
-
-Order.propTypes = {
-  orders: PropTypes.array
 }
 
 export default Order
