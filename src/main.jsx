@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Navbar from './components/Navbar.jsx'
-import DollarProvider from './components/DollarProvider.jsx'
-import SalesSectionManager from './components/SalesSectionManager.jsx'
+import SectionSliderProvider from './components/SectionSliderProvider.jsx'
+import { SectionDisplayer } from './components/SectionSliderProvider.jsx'
+
 import './index.css'
 import './css/colors.module.css'
 import './css/tokens.css'
@@ -11,9 +12,9 @@ import './css/typography.module.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Navbar />
-    <DollarProvider>
-      <SalesSectionManager/>
-    </DollarProvider>
+    <SectionSliderProvider>
+      <Navbar />
+      <SectionDisplayer />
+    </SectionSliderProvider>
   </React.StrictMode>
 )

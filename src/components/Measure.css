@@ -7,11 +7,15 @@
   min-height: 65px;
   display: grid;
   place-items: center;
+  position: relative;
 }
 
 .InputRangeWrapper input {
-  width: 100%;
-  accent-color:#4ed8e9;
+  position: absolute;
+  text-align: center;
+  font-family: inherit;
+  border: none;
+  border-radius: inherit;
 }
 
 .Units {
@@ -23,9 +27,15 @@
 
 .MeasureUnits {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   min-height: 65px;
   justify-content: space-between;
   place-items: center;
+}
+
+.Measure .converter {
+  position: absolute;
+  text-align: center;
+  border: transparent;
 }

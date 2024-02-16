@@ -11,18 +11,22 @@
     overflow-y: auto;
 }
 
-.ProductList li {
+.ProductList .ProductCard {
     display: grid;
     grid-template-columns: 2fr 1fr;
     place-items: center;
     text-transform: capitalize;
+    transition: box-shadow 100ms ease-in, color 100ms ease-in, border-color 100ms ease-in;
 }
 
-.ProductList li * {
+.ProductList .ProductCard-wrapper * {
     pointer-events: none;
 }
 
 
 .ProductList li:hover {
-    border-color: #4ed8e9;
+    /* border-color: var(--md-sys-color-on-surface-variant); */
+    box-shadow: var(--default-box-shadow);
+    color: var(--md-sys-color-tertiary);
+    border-color: var(--md-sys-color-tertiary);
 }

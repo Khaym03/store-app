@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { URLs } from '../constants'
 import PropTypes from 'prop-types'
 
 export const DollarContext = React.createContext()
@@ -6,7 +7,13 @@ export const DollarContext = React.createContext()
 const DollarProvider = ({ children }) => {
   const [dollar, setDollar] = useState(0)
   const [orders, setOrders] = useState([])
-  const url = 'http://localhost:1234/getDollar'
+  const [total, setTotal] = useState(0)
+  const [bs, setBs] = useState(0)
+  const [searchingClient, setSearchingClient] = useState('')
+  const [showSaveNotification, setShowSaveNotification] = useState(false)
+  const [initialLoad, setInitialLoad] = useState(true)
+  const [selected, setSelected] = useState([])
+  const url = URLs.getDollarURL
 
   useEffect(() => {
     fetch(url)
@@ -15,10 +22,26 @@ const DollarProvider = ({ children }) => {
   }, [url])
 
   return (
-    <DollarContext.Provider value={{dollar, orders, setOrders}}>
-      <main id="content" className="grid-center">
-        {children}
-      </main>
+    <DollarContext.Provider
+      value={{
+        dollar,
+        orders,
+        setOrders,
+        total,
+        setTotal,
+        bs,
+        setBs,
+        searchingClient,
+        setSearchingClient,
+        showSaveNotification,
+        setShowSaveNotification,
+        initialLoad,
+        setInitialLoad,
+        selected,
+        setSelected
+      }}
+    >
+      {children}
     </DollarContext.Provider>
   )
 }

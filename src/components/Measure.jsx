@@ -1,39 +1,43 @@
 import PropTypes from 'prop-types'
 import './Measure.css'
-import { useContext } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { DollarContext } from './DollarProvider'
+import { MdAdd } from 'react-icons/md'
 
-const InputRange = ({ rangeValue, setRangeValue }) => {
+const calcMls = (x, price) => x / price
+
+const InputRange = ({ setRangeValue, inputRef }) => {
   const changeHandler = e => {
     const value = Number(e.target.value)
+    if (Number.isNaN(value)) return
+
     setRangeValue(value)
   }
 
   return (
-    <div className="InputRangeWrapper def-border rounded transition-border-color">
+    <div className="InputRangeWrapper rounded transition-border-color tertiary-container on-tertiary-container-text">
       <input
         id="measure-range"
-        type="range"
-        min="1"
-        max="1000"
-        step="1"
-        value={rangeValue}
+        type="text"
+        ref={inputRef}
         onChange={changeHandler}
+        placeholder="Ingrese los ML"
+        className="pointer full text-base font-medium surface-light"
       />
     </div>
   )
 }
 
 InputRange.propTypes = {
-  rangeValue: PropTypes.number,
-  setRangeValue: PropTypes.func.isRequired
+  setRangeValue: PropTypes.func.isRequired,
+  inputRef: PropTypes.node
 }
 
 const Units = ({ fraction, clickHandler }) => {
   return (
     <div
       onClick={clickHandler}
-      className="Units def-border rounded bode-small transition-border-color pointer"
+      className="Units rounded-lg text-sm font-medium transition-border-color pointer secondary-container on-secondary-container-text"
     >
       {fraction}
     </div>
@@ -43,6 +47,37 @@ const Units = ({ fraction, clickHandler }) => {
 Units.propTypes = {
   fraction: PropTypes.string,
   clickHandler: PropTypes.func.isRequired
+}
+
+const Converter = ({ setRangeValue }) => {
+  const { bs, setBs, selected } = useContext(DollarContext)
+  const price = selected[1]
+
+  const handleChange = e => {
+    if (selected.length > 0) {
+      const value = Number(e.target.value),
+        ml = calcMls(value, price) * 1000
+
+      setBs(value)
+      setRangeValue(ml)
+    }
+  }
+
+  return (
+    <div className="relative full ">
+      <input
+        className="converter full body-large rounded-lg surface-variant on-surface-variant-text"
+        type="text"
+        placeholder="Bs"
+        value={!bs ? '' : bs}
+        onChange={handleChange}
+      />
+    </div>
+  )
+}
+
+Converter.propTypes = {
+  setRangeValue: PropTypes.func
 }
 
 const MeasureUnits = ({ setRangeValue }) => {
@@ -67,10 +102,11 @@ const MeasureUnits = ({ setRangeValue }) => {
   }
 
   return (
-    <div className="MeasureUnits">
+    <div className="MeasureUnits ">
       {fractions.map((fr, i) => (
         <Units key={i} fraction={fr} clickHandler={clickHandler} />
       ))}
+      <Converter setRangeValue={setRangeValue} />
     </div>
   )
 }
@@ -81,7 +117,9 @@ MeasureUnits.propTypes = {
 
 const ShowUnit = ({ rangeValue }) => {
   return (
-    <div className="ShowUnit def-border body-large w-full h-full grid-center rounded">{`${rangeValue} ml`}</div>
+    <div className="ShowUnit surface-light text-base font-medium w-full h-full grid-center rounded">{`${parseInt(
+      rangeValue
+    )} ml`}</div>
   )
 }
 
@@ -89,13 +127,33 @@ ShowUnit.propTypes = {
   rangeValue: PropTypes.number
 }
 
-const AddToCart = ({ selected, rangeValue, setTotal }) => {
-  const { orders, setOrders } = useContext(DollarContext)
+const AddToCart = ({
+  rangeValue,
+  orderWasAdded,
+  setOrderWasAdded,
+  inputRef
+}) => {
+  const { orders, setOrders, setTotal, bs, setBs, selected } =
+    useContext(DollarContext)
+
+  const formattedOrder = () => {
+    const [name, price] = selected
+    let fixedPrice
+    if (bs) {
+      const ml = calcMls(bs, price),
+        fixedMl = parseInt(ml * 1000)
+
+      fixedPrice = Number((ml * price).toFixed(2))
+      return [name, fixedMl, fixedPrice]
+    } else {
+      fixedPrice = Number(((rangeValue / 1000) * price).toFixed(2))
+      return [name, rangeValue, fixedPrice]
+    }
+  }
+
   const clickHandler = () => {
     if (selected.length > 0) {
-      const [name, price] = selected
-      const fixedPrice = Number(((rangeValue / 1000) * price).toFixed(2))
-      const newOrder = [name, rangeValue, fixedPrice]
+      const newOrder = formattedOrder()
 
       const map = new Map()
       const merged = [...orders, newOrder]
@@ -117,46 +175,65 @@ const AddToCart = ({ selected, rangeValue, setTotal }) => {
 
       setTotal(total)
       setOrders(flated)
+      setBs(0)
+      setOrderWasAdded(true)
     }
   }
+  useEffect(() => {
+    if (orderWasAdded) inputRef.current.value = ''
+  }, [orderWasAdded, inputRef])
 
   return (
-    <button
-      type="submit"
-      className="secondary-container on-secondary-container-text body-large capitalize"
+    <div
+      className="secondary-container on-secondary-container-text body-large capitalize grid-center pointer rounded-lg"
       onClick={clickHandler}
     >
-      agragar a la lista
-    </button>
+      <div className="flex grid-center">
+        <span className="mr-1 grid-center">
+          <MdAdd size={'1.5rem'} />
+        </span>
+        <span>agregar</span>
+      </div>
+    </div>
   )
 }
 
 AddToCart.propTypes = {
   selected: PropTypes.array,
   rangeValue: PropTypes.number,
-  setTotal: PropTypes.func.isRequired
+  orderWasAdded: PropTypes.bool,
+  setOrderWasAdded: PropTypes.func,
+  inputRef: PropTypes.node
 }
 
-const Measure = ({ selected, rangeValue, setRangeValue, setTotal }) => {
+const Measure = ({ rangeValue, setRangeValue }) => {
+  const [orderWasAdded, setOrderWasAdded] = useState(false)
+  const inputRef = useRef(null)
+
   return (
-    <div className="Measure row-4">
-      <InputRange rangeValue={rangeValue} setRangeValue={setRangeValue} />
+    <section className="Measure row-4 p-1 rounded-lg">
+      <InputRange
+        rangeValue={rangeValue}
+        setRangeValue={setRangeValue}
+        orderWasAdded={orderWasAdded}
+        setOrderWasAdded={setOrderWasAdded}
+        inputRef={inputRef}
+      />
       <MeasureUnits setRangeValue={setRangeValue} />
       <ShowUnit rangeValue={rangeValue} />
       <AddToCart
-        selected={selected}
         rangeValue={rangeValue}
-        setTotal={setTotal}
+        setOrderWasAdded={setOrderWasAdded}
+        inputRef={inputRef}
+        orderWasAdded={orderWasAdded}
       />
-    </div>
+    </section>
   )
 }
 
 Measure.propTypes = {
-  selected: PropTypes.array,
   rangeValue: PropTypes.number,
-  setRangeValue: PropTypes.func.isRequired,
-  setTotal: PropTypes.func.isRequired
+  setRangeValue: PropTypes.func.isRequired
 }
 
 export default Measure

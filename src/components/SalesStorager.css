@@ -1,42 +1,92 @@
-.SalesStorager{
-    grid-area: Client;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+.SalesStorager {
+  grid-area: Client;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 }
 
 .Total {
-    width: 300px;
-    height: 65px;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    padding: 0.5rem;
+  /* display: grid;
+  grid-template-columns: 1fr 1fr; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.Total-value{
-    font-weight: 500;
-    font-size: large;
+.Total-value {
+  font-weight: 500;
+  font-size: large;
 }
 
-.Storager-actions{
-    display: grid;
-    grid-template-rows: 0.8fr 1fr;
-    place-items: center;
+.Storager-actions {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
 }
 
 .Storager-actions .action-bar {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-direction: column;
-    
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.action-bar {
+  gap: 1rem;
 }
 
 .StoragerActionBtns > * {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 .StoragerActionBtns:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
+.search-bar-wrapper {
+  justify-content: space-between;
+  position: relative;
+  height: var(--min-row-height);
+}
+
+.search-bar-wrapper input[type='text'] {
+  width: 80%;
+  height: 100%;
+  position: absolute;
+  padding-left: 1rem;
+}
+
+.client-card {
+  justify-content: space-between;
+}
+
+.SalesStorager .client-search-section {
+  display: grid;
+  gap: 16px;
+  grid-template-rows: var(--min-row-height) 246px;
+}
+
+.SalesStorager ul {
+  display: grid;
+  grid-auto-rows: var(--min-row-height);
+  gap: 11px;
+  overflow-y: auto;
+}
+
+.client-dialog {
+  width: 300px;
+  height: 200px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.client-dialog .wrapper {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
+}
+
+.client-dialog input[type=text] {
+  width: 100%;
+  text-align: center;
+}

@@ -2,30 +2,59 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 96px;
+  width: var(--nav-width);
   height: 100%;
-  padding: 8px;
+  z-index: 1;
+  background-color: var(--light-gray);
+  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .NavIconsUl {
   display: grid;
-  grid-template-rows: repeat(auto-fit, minmax(80px, 80px));
+  grid-template-rows: repeat(auto-fit, 56px);
   gap: 8px;
   height: 80%;
 }
 
 .NavItem {
-    display: grid;
-    grid-template-rows: 2fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  transition: background-color 100ms ease-in;
+}
+
+.NavItem > * {
+  pointer-events: none;
+}
+
+.NavItem:hover {
+  background-color: rgb(0 0 0 / 8%);
 }
 
 .NavItem .icon {
-    text-align: center;
-    display: grid;
-    place-items: center;
+  text-align: center;
+  display: grid;
+  place-items: center;
 }
 
 .NavItem .name {
-    text-align: center;
-    padding: 8px;
+  display: flex;
+  text-align: left;
+  align-items: center;
+}
+
+.SimpleInfo {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.SimpleInfo label {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.SimpleInfo p {
+  font-size: 14px;
+  font-style: italic;
 }

@@ -1,103 +1,97 @@
-import { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { DollarContext } from './DollarProvider'
+import { useTransition, animated } from '@react-spring/web'
 import './ProductList.css'
+import { useContext } from 'react'
+import { DollarContext } from './DollarProvider'
 
-const ProductCard = ({ name, value, clickHandler }) => {
-  const {dollar} = useContext(DollarContext),
-    profit = 1.5
-
-  let price
-  if (name === 'cloro') price = (value / 100) * dollar * 3
-  else price = (value / 100) * dollar * profit
-
+const ProductCard = ({ name, value }) => {
   return (
-    <li
-      className="def-border rounded-md transition-border-color pointer"
-      onClick={clickHandler}
-    >
-      <div data-name={name} className="name body-large align-left">
-        {name}
-      </div>
-      <span data-price={price.toFixed(2)} className="body-medium align-right">
-        {price.toFixed(2)}
+    <div className=" rounded-lg  ProductCard full text-base font-medium">
+      <div className="name align-left">{name}</div>
+      <span className="align-right italic">
+        {value.toFixed(2)}
       </span>
-    </li>
+    </div>
   )
 }
 
 ProductCard.propTypes = {
   name: PropTypes.string,
-  value: PropTypes.number,
-  clickHandler: PropTypes.func.isRequired
+  value: PropTypes.number
 }
 
-const FetchProducts = () => {
-  const url = 'http://localhost:1234/getProducts'
+function ProductList() {
+  const {selected,setSelected} = useContext(DollarContext)
+  const data = [
+    {
+      name: 'acondicionador',
+      price: 45
+    },
+    {
+      name: 'ariel',
+      price: 33
+    },
+    {
+      name: 'cera',
+      price: 28
+    },
+    {
+      name: 'cloro',
+      price: 18
+    },
+    {
+      name: 'desengrasante',
+      price: 45
+    },
+    {
+      name: 'desinfectante',
+      price: 20
+    },
+    {
+      name: 'lavaplatos',
+      price: 33
+    },
+    {
+      name: 'shampoo',
+      price: 45
+    },
+    {
+      name: 'suavizante',
+      price: 25
+    }
+  ]
 
-  const [data, setData] = useState(null)
+  const transitions = useTransition(data, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    keys: item => item.name // Use the product name as the key
+  })
 
-  useEffect(() => {
-    fetch(url)
-      .then(res => {
-        if (res.ok) {
-          return res.json()
-        } else {
-          throw new Error('Error fetching data')
-        }
-      })
-      .then(data => {
-        setData(data)
-      })
-  }, [url])
+  const clickHandler = ({ name, price }) => setSelected([name, price])
 
-  return { data }
-}
-
-const getNameAndPrice = target => {
-  const name = target.querySelector('[data-name]').getAttribute('data-name')
-  const price = Number(
-    target.querySelector('[data-price]').getAttribute('data-price')
-  )
-
-  return [name, price]
-}
-
-function ProductList({ selected, setSelected }) {
-  const { data } = FetchProducts()
   return (
     <div className="ProductList rounded-lg">
-      <ul>
-        {data &&
-          data.map((prod, i) => (
-            <ProductCard
-              key={i}
-              name={prod.name}
-              value={prod.price}
-              clickHandler={e => {
-                const li = Array.from(
-                  document.querySelectorAll('.ProductList li')
-                )
-
-                if (selected) {
-                  li.forEach(li => li.classList.remove('focus-border'))
-                  e.target.classList.add('focus-border')
-                  setSelected(getNameAndPrice(e.target))
-                } else {
-                  e.target.classList.add('focus-border')
-                  setSelected(getNameAndPrice(e.target))
-                }
-              }}
-            />
-          ))}
+      <ul className="p-1">
+        {transitions((styles, product) => (
+          <animated.li
+            style={styles}
+            className={`full rounded-lg def-border transition-border-color pointer ProductCard-wrapper text-semi-transparent ${
+              selected && selected[0] === product.name ? 'focus-border' : ''
+            }`}
+            onClick={() => clickHandler(product)}
+          >
+            <ProductCard name={product.name} value={product.price} />
+          </animated.li>
+        ))}
       </ul>
     </div>
   )
 }
 
-ProductList.propTypes = {
-  selected: PropTypes.array,
-  setSelected: PropTypes.func
-}
+// ProductList.propTypes = {
+//   selected: PropTypes.array,
+//   setSelected: PropTypes.func
+// }
 
 export default ProductList
