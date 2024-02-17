@@ -30,7 +30,7 @@ const InputRange = ({ setRangeValue, inputRef }) => {
 
 InputRange.propTypes = {
   setRangeValue: PropTypes.func.isRequired,
-  inputRef: PropTypes.node
+  inputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) })
 }
 
 const Units = ({ fraction, clickHandler }) => {
@@ -203,7 +203,7 @@ AddToCart.propTypes = {
   rangeValue: PropTypes.number,
   orderWasAdded: PropTypes.bool,
   setOrderWasAdded: PropTypes.func,
-  inputRef: PropTypes.node
+  inputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) })
 }
 
 const Measure = ({ rangeValue, setRangeValue }) => {

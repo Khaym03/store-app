@@ -11,6 +11,7 @@ export class URLs {
   static postClientEndpoint = '/postClient'
   static postSaleEndpoint = '/postSale'
   static deleteLastSaleEndpoint = '/deleteLastSale'
+  static updateSaleStatusByIDEndpoint = '/updateSaleStatusByID'
 
   static get getDollarURL() {
     return this.local + this.getDollarEndpoint
@@ -45,5 +46,9 @@ export class URLs {
 
   static get deleteLastSaleURL() {
     return this.local + this.deleteLastSaleEndpoint
+  }
+
+  static get updateSaleStatusByIDURL(){
+    return this.local + this.updateSaleStatusByIDEndpoint
   }
 }

@@ -28,14 +28,26 @@
 .book-grid .client-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  border-top: 2px solid #f3f6fc;
-}
-
-.client-grid:hover {
-    background-color: #f3f6fc;
 }
 
 .header-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
+}
+
+#DetailedClient-grid{
+  display: grid;
+  grid-auto-rows: 40px;
+  height: calc(40px * 5);
+  overflow-y: auto;
+}
+
+.DetailedClientRow {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 1fr 1.5fr;
+}
+
+.DetailedClientRow input[type='checkbox'] {
+  width: 24px;
+  height: 24px;
 }

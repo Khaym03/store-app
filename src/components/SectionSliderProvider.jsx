@@ -4,6 +4,7 @@ import DollarProvider from './DollarProvider'
 import SalesSectionManager from './SalesSectionManager'
 import OweSectionManager from './OweSectionManager'
 import ToolBar from './ToolBar'
+import OweProvider from './OweProvider'
 
 export const SectionSliderContext = createContext()
 
@@ -18,7 +19,9 @@ export const SectionDisplayer = () => {
           <SalesSectionManager />
         </DollarProvider>
       ) : currentSection === APP_SECTIONS.OWE_SECTION ? (
-        <OweSectionManager />
+        <OweProvider>
+          <OweSectionManager />
+        </OweProvider>
       ) : null}
     </main>
   )

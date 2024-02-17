@@ -4,7 +4,10 @@ import { URLs } from '../constants'
 import { FetchTable } from '../hooks/FetchTable'
 import PropTypes from 'prop-types'
 import './OweSectionManager.css'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState, forwardRef } from 'react'
+import { MdPlaylistAddCheck } from 'react-icons/md'
+import { IoMdPaper } from 'react-icons/io'
+import { OweContext } from './OweProvider'
 
 const NewDebtor = () => {
   return (
@@ -50,11 +53,22 @@ OweActionBar.propTypes = {
 }
 
 const ClientGrid = ({ clientInfo }) => {
+  const { setSelectedClient } = useContext(OweContext)
+
   const clientName = clientInfo[0].name
   const clientOwe = clientInfo[1].reduce((acc, curr) => acc + curr.price, 0)
   const since = clientInfo[1][0].date
+
+  const clickHandler = () => {
+    setSelectedClient(clientInfo)
+  }
+
   return (
-    <div className="client-grid bold text-base capitalize pointer">
+    <div
+      onClick={clickHandler}
+      data-client_id={clientInfo[0].id}
+      className="client-grid bold text-base capitalize pointer thin-line hover-light"
+    >
       <div className="flex-start align-center ml-1">
         <span className="surface-variant on-surface-variant-text rounded-lg mr-1 square-40 grid-center">
           <MdAccountBox size={'2rem'} />
@@ -110,10 +124,106 @@ OweBook.propTypes = {
   children: PropTypes.node
 }
 
+const DetailedClientRow = ({ name, price, date }) => {
+  const clickhander = ({ currentTarget }) => {
+    const checkBox = currentTarget.querySelector('input')
+    checkBox.checked = !checkBox.checked
+  }
+
+  return (
+    <li
+      className="DetailedClientRow thin-line hover-light pointer pointer-events-none"
+      onClick={clickhander}
+    >
+      <span className="grid-center">
+        <input type="checkbox" name={name} defaultChecked={false} />
+      </span>
+      <span className="flex-start align-center capitalize text-sm font-medium">
+        {name}
+      </span>
+      <span className="grid-center text-sm font-medium italic">{price}</span>
+      <span className="grid-center">{date}</span>
+    </li>
+  )
+}
+
+DetailedClientRow.propTypes = {
+  name: PropTypes.string,
+  price: PropTypes.number,
+  date: PropTypes.string
+}
+
+let DetailedClient = ({ children, clientName }, ref) => {
+  const { selectedClient } = useContext(OweContext)
+  const [toggleSelectAll, setToggleSelectAll] = useState(false)
+
+  const selectAll = () => {
+    const allCheckBoxs = ref.current.querySelectorAll('input')
+    allCheckBoxs.forEach(input => (input.checked = !toggleSelectAll))
+    setToggleSelectAll(!toggleSelectAll)
+  }
+
+  const updateSaleStatus = () => {
+    const selected = Array.from(ref.current.querySelectorAll('input'))
+
+    if(!(selected.length > 0 && selectedClient.length > 0)) return
+
+    const salesToBeProcessed = selected.reduce((acc, currInput, index) => {
+      if (currInput.checked) return [...acc, selectedClient[1][index]]
+      return acc
+    }, [])
+
+    salesToBeProcessed.forEach(sale => {
+      fetch(URLs.updateSaleStatusByIDURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: sale.id })
+      })
+    })
+  }
+
+  return (
+    <div>
+      <h2 className="font-medium mb-sm">{clientName}</h2>
+      <p className="text-sm font-semi-transparent font-medium mb-sm">
+        Selecciona las ventas que quieres borrar de la lista de deudas
+      </p>
+      <ul ref={ref} id="DetailedClient-grid" className="mb-sm">
+        {children}
+      </ul>
+      <div className="grid-col-2 gap-1">
+        <button className="rounded-lg" onClick={selectAll}>
+          <span className="grid-center">
+            <MdPlaylistAddCheck size={'1.5rem'} />
+          </span>
+          <span className="grid-center">Seleccionar todo</span>
+        </button>
+        <button className="rounded-lg " onClick={updateSaleStatus}>
+          <span className="grid-center">
+            <IoMdPaper size={'1.5rem'} />
+          </span>
+          <span className="grid-center">Deuda pagada</span>
+        </button>
+      </div>
+    </div>
+  )
+}
+
+DetailedClient = forwardRef(DetailedClient)
+
+DetailedClient.propTypes = {
+  children: PropTypes.node,
+  clientName: PropTypes.string
+}
+
 const OweSectionManager = () => {
   const { data: clients } = FetchTable(URLs.getClientsURL)
   const { data: owes } = FetchTable(URLs.getSalesByStatusURL)
   const { data: allDebts } = FetchTable(URLs.getSalesByStatusURL)
+
+  const { selectedClient, detailedClientUlRef } = useContext(OweContext)
 
   const totalDebts = allDebts
     ? allDebts.reduce((acc, cur) => acc + cur.price, 0)
@@ -147,7 +257,23 @@ const OweSectionManager = () => {
           <TableOfDebs clientsInfo={activeDebtors} />
         </OweBook>
       </div>
-      <div className="surface-light"></div>
+      <div className="def-border rounded-lg p-1">
+        {selectedClient.length > 0 && (
+          <DetailedClient
+            clientName={selectedClient[0].name}
+            ref={detailedClientUlRef}
+          >
+            {selectedClient[1].map(({ name, price, date }, i) => (
+              <DetailedClientRow
+                key={i}
+                name={name}
+                price={price}
+                date={date}
+              />
+            ))}
+          </DetailedClient>
+        )}
+      </div>
     </section>
   )
 }

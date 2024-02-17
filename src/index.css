@@ -381,3 +381,11 @@ input[type='text']:focus {
   width: 40px;
   height: 40px;
 }
+
+.thin-line {
+  border-top: 2px solid #f3f6fc;
+}
+
+.hover-light:hover {
+  background-color: #f3f6fc !important;
+}
