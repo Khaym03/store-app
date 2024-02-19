@@ -5,6 +5,7 @@ import SalesSectionManager from './SalesSectionManager'
 import OweSectionManager from './OweSectionManager'
 import ToolBar from './ToolBar'
 import OweProvider from './OweProvider'
+import AnalyticSection from './AnalyticSection'
 
 export const SectionSliderContext = createContext()
 
@@ -13,7 +14,7 @@ export const SectionDisplayer = () => {
 
   return (
     <main id="content" className="grid-center">
-      <ToolBar/>
+      <ToolBar />
       {currentSection === APP_SECTIONS.SALES_SECTION ? (
         <DollarProvider>
           <SalesSectionManager />
@@ -22,6 +23,8 @@ export const SectionDisplayer = () => {
         <OweProvider>
           <OweSectionManager />
         </OweProvider>
+      ) : currentSection === APP_SECTIONS.ANALYTICS_SECTION ? (
+        <AnalyticSection />
       ) : null}
     </main>
   )

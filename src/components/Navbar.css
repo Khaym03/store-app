@@ -24,12 +24,12 @@
   transition: background-color 100ms ease-in;
 }
 
-.NavItem > * {
-  pointer-events: none;
+.NavItem:hover {
+  background-color: rgb(0 0 0 / 4%);
 }
 
-.NavItem:hover {
-  background-color: rgb(0 0 0 / 8%);
+.selectedNavItem {
+  background-color: rgb(0 0 0 / 4%) !important;
 }
 
 .NavItem .icon {

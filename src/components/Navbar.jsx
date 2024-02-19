@@ -7,10 +7,10 @@ import { IoMdCash } from 'react-icons/io'
 import { MdAddBusiness } from 'react-icons/md'
 import { SectionSliderContext } from './SectionSliderProvider'
 import { useContext, useEffect } from 'react'
-import { IoMdAnalytics } from "react-icons/io";
+import { IoMdAnalytics } from 'react-icons/io'
 
 const NavItem = ({ sectionName, Icon }) => {
-  const { setCurrentSection } = useContext(SectionSliderContext)
+  const { setCurrentSection, currentSection } = useContext(SectionSliderContext)
 
   const clickHandler = () => {
     setCurrentSection(sectionName)
@@ -18,7 +18,9 @@ const NavItem = ({ sectionName, Icon }) => {
 
   return (
     <li
-      className="NavItem  rounded-lg on-surface-variant-text pointer"
+      className={`NavItem position-relative rounded-lg on-surface-variant-text pointer pointer-events-none ${
+        currentSection === sectionName ? 'selectedNavItem' : ''
+      }`}
       onClick={clickHandler}
     >
       <div className="icon rounded">
@@ -90,7 +92,10 @@ const Navbar = () => {
           Icon={MdAddShoppingCart}
         />
         <NavItem sectionName={APP_SECTIONS.OWE_SECTION} Icon={MdDashboard} />
-        <NavItem sectionName={APP_SECTIONS.ANALYTICS_SECTION} Icon={IoMdAnalytics} />
+        <NavItem
+          sectionName={APP_SECTIONS.ANALYTICS_SECTION}
+          Icon={IoMdAnalytics}
+        />
       </ul>
       <div className="grid gap-1">
         <SimpleInfo

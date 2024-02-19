@@ -286,9 +286,9 @@ button {
   align-items: center;
 }
 
-/* .mb-1 {
-  margin-bottom: 0.5rem;
-} */
+.overflow-hidden {
+  overflow: hidden;
+}
 
 .surface-light {
   background-color: var(--light-gray);
@@ -324,6 +324,10 @@ input[type='text']:focus {
 
 .pointer-events-none > * {
   pointer-events: none;
+}
+
+.position-relative {
+  position: relative;
 }
 
 .grid-col-2 {
