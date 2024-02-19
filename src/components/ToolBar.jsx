@@ -17,7 +17,7 @@ const Arrow = ({ showToolBar, setShowToolBar }) => {
     <animated.span
       id="ToolBar-arrow"
       style={rotate}
-      className="pointer surface-light grid-center box-shadow"
+      className="cursor-pointer surface-light grid-center box-shadow"
       onClick={clickHandler}
     >
       <FaCaretDown size={'1.5rem'} className="absolute text-semi-transparent" />
@@ -68,7 +68,7 @@ const ToolBar = () => {
       style={acordion}
       className={'background box-shadow grid-center'}
     >
-      <ul className="pointer">
+      <ul className="cursor-pointer">
         <ToolBarButton
           title={'Borra la ultima venta'}
           style={'error-container on-error-container-text'}

@@ -33,14 +33,6 @@
   gap: 1rem;
 }
 
-.StoragerActionBtns > * {
-  pointer-events: none;
-}
-
-.StoragerActionBtns:hover {
-  cursor: pointer;
-}
-
 .search-bar-wrapper {
   justify-content: space-between;
   position: relative;

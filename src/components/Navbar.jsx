@@ -18,15 +18,15 @@ const NavItem = ({ sectionName, Icon }) => {
 
   return (
     <li
-      className={`NavItem position-relative rounded-lg on-surface-variant-text pointer pointer-events-none ${
-        currentSection === sectionName ? 'selectedNavItem' : ''
+      className={`NavItem hover:bg-slate-200 grid transition-colors relative rounded-lg on-surface-variant-text cursor-pointer  ${
+        currentSection === sectionName ? 'bg-slate-200' : ''
       }`}
       onClick={clickHandler}
     >
-      <div className="icon rounded">
+      <div className="text-center grid place-items-center  rounded-lg">
         <Icon size={'1.5rem'} />
       </div>
-      <span className="name text-sm capitalize font-medium">{sectionName}</span>
+      <span className="items-center flex text-left text-sm capitalize font-medium">{sectionName}</span>
     </li>
   )
 }
@@ -41,13 +41,13 @@ export const SimpleInfo = ({ title, info, Icon, color }) => {
   if (color) style = color
 
   return (
-    <div className={'rounded-lg p-1 SimpleInfo ' + style}>
-      <div className="mr-1 flex-center">
+    <div className={'rounded-lg p-4 SimpleInfo grid ' + style}>
+      <div className="mr-4 flex-center">
         <Icon size={'1.5rem'} />
       </div>
       <div>
-        <label>{title}</label>
-        <p>{info.toFixed(2)}</p>
+        <label className='text-xs font-bold'>{title}</label>
+        <p className='text-sm italic'>{info.toFixed(2)}</p>
       </div>
     </div>
   )
@@ -85,8 +85,8 @@ const Navbar = () => {
   ])
 
   return (
-    <nav className="Navbar">
-      <ul className="NavIconsUl mb-auto">
+    <nav className="Navbar absolute top-0 left-0 h-full flex flex-col z-10 py-8 px-4">
+      <ul className="NavIconsUl grid gap-2 h-4/5 mb-auto">
         <NavItem
           sectionName={APP_SECTIONS.SALES_SECTION}
           Icon={MdAddShoppingCart}

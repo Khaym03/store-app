@@ -22,7 +22,7 @@ const NewDebtor = () => {
 
 const InfoCard = ({ title, info }) => {
   return (
-    <div className="tertiary-container on-tertiary-container-text rounded-lg grid-row-2 p-1">
+    <div className="tertiary-container on-tertiary-container-text rounded-lg grid-row-2 p-4">
       <div className="flex-start">
         <span className="background rounded-lg mr-1 square-40 grid-center">
           <IoMdCash size={'1.75rem'} />
@@ -67,7 +67,7 @@ const ClientGrid = ({ clientInfo }) => {
     <div
       onClick={clickHandler}
       data-client_id={clientInfo[0].id}
-      className="client-grid bold text-base capitalize pointer thin-line hover-light"
+      className="client-grid bold text-base capitalize cursor-pointer thin-line hover-light"
     >
       <div className="flex-start align-center ml-1">
         <span className="surface-variant on-surface-variant-text rounded-lg mr-1 square-40 grid-center">
@@ -112,7 +112,7 @@ TableOfDebs.propTypes = {
 
 const OweBook = ({ children }) => {
   return (
-    <section className="def-border rounded-lg p-1 full">
+    <section className="def-border rounded-lg p-4 full">
       <h2 className="capitalize mb-1">libro de deudores</h2>
       <BookHeader />
       {children}
@@ -132,7 +132,7 @@ const DetailedClientRow = ({ name, price, date }) => {
 
   return (
     <li
-      className="DetailedClientRow thin-line hover-light pointer pointer-events-none"
+      className="DetailedClientRow thin-line hover-light cursor-pointer pointer-events-none"
       onClick={clickhander}
     >
       <span className="grid-center">
@@ -257,7 +257,7 @@ const OweSectionManager = () => {
           <TableOfDebs clientsInfo={activeDebtors} />
         </OweBook>
       </div>
-      <div className="def-border rounded-lg p-1">
+      <div className="def-border rounded-lg p-4">
         {selectedClient.length > 0 && (
           <DetailedClient
             clientName={selectedClient[0].name}

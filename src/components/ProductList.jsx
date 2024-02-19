@@ -6,11 +6,9 @@ import { DollarContext } from './DollarProvider'
 
 const ProductCard = ({ name, value }) => {
   return (
-    <div className=" rounded-lg  ProductCard full text-base font-medium">
-      <div className="name align-left">{name}</div>
-      <span className="align-right italic">
-        {value.toFixed(2)}
-      </span>
+    <div className="grid place-items-center capitalize rounded-lg  ProductCard h-full text-base font-medium transition-colors hover:shadow-lg">
+      <div className="align-left">{name}</div>
+      <span className="align-right italic">{value.toFixed(2)}</span>
     </div>
   )
 }
@@ -21,7 +19,7 @@ ProductCard.propTypes = {
 }
 
 function ProductList() {
-  const {selected,setSelected} = useContext(DollarContext)
+  const { selected, setSelected } = useContext(DollarContext)
   const data = [
     {
       name: 'acondicionador',
@@ -72,11 +70,11 @@ function ProductList() {
 
   return (
     <div className="ProductList rounded-lg">
-      <ul className="p-1">
+      <ul className="grid gap-2 h-full list-none overflow-y-auto p-4">
         {transitions((styles, product) => (
           <animated.li
             style={styles}
-            className={`full rounded-lg def-border transition-border-color pointer ProductCard-wrapper text-semi-transparent ${
+            className={`rounded-lg def-border transition-colors cursor-pointer  text-slate-400 ${
               selected && selected[0] === product.name ? 'focus-border' : ''
             }`}
             onClick={() => clickHandler(product)}
@@ -88,10 +86,5 @@ function ProductList() {
     </div>
   )
 }
-
-// ProductList.propTypes = {
-//   selected: PropTypes.array,
-//   setSelected: PropTypes.func
-// }
 
 export default ProductList

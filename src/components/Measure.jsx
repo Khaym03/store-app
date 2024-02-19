@@ -15,14 +15,14 @@ const InputRange = ({ setRangeValue, inputRef }) => {
   }
 
   return (
-    <div className="InputRangeWrapper rounded transition-border-color tertiary-container on-tertiary-container-text">
+    <div className="min-h-16 rounded-lg p-4 grid place-items-center relative transition-colors tertiary-container on-tertiary-container-text">
       <input
         id="measure-range"
         type="text"
         ref={inputRef}
         onChange={changeHandler}
         placeholder="Ingrese los ML"
-        className="pointer full text-base font-medium surface-light"
+        className="cursor-pointer full text-base font-medium surface-light absolute text-center border-none rounded-lg transition-colors"
       />
     </div>
   )
@@ -37,7 +37,7 @@ const Units = ({ fraction, clickHandler }) => {
   return (
     <div
       onClick={clickHandler}
-      className="Units rounded-lg text-sm font-medium transition-border-color pointer secondary-container on-secondary-container-text"
+      className="grid w-full h-full place-items-center rounded-lg text-sm font-medium transition-colors cursor-pointer secondary-container on-secondary-container-text"
     >
       {fraction}
     </div>
@@ -64,9 +64,9 @@ const Converter = ({ setRangeValue }) => {
   }
 
   return (
-    <div className="relative full ">
+    <div className="relative w-full h-full ">
       <input
-        className="converter full body-large rounded-lg surface-variant on-surface-variant-text"
+        className="absolute text-center w-full h-full text-md font-medium rounded-lg surface-variant on-surface-variant-text"
         type="text"
         placeholder="Bs"
         value={!bs ? '' : bs}
@@ -102,7 +102,7 @@ const MeasureUnits = ({ setRangeValue }) => {
   }
 
   return (
-    <div className="MeasureUnits ">
+    <div className="MeasureUnits grid grid-cols-4 gap-2 min-h-16">
       {fractions.map((fr, i) => (
         <Units key={i} fraction={fr} clickHandler={clickHandler} />
       ))}
@@ -117,7 +117,7 @@ MeasureUnits.propTypes = {
 
 const ShowUnit = ({ rangeValue }) => {
   return (
-    <div className="ShowUnit surface-light text-base font-medium w-full h-full grid-center rounded">{`${parseInt(
+    <div className="surface-light text-base font-medium w-full h-full grid place-items-center rounded-lg">{`${parseInt(
       rangeValue
     )} ml`}</div>
   )
@@ -185,11 +185,11 @@ const AddToCart = ({
 
   return (
     <div
-      className="secondary-container on-secondary-container-text body-large capitalize grid-center pointer rounded-lg"
+      className="secondary-container on-secondary-container-text text-md capitalize grid place-items-center font-medium cursor-pointer rounded-lg"
       onClick={clickHandler}
     >
-      <div className="flex grid-center">
-        <span className="mr-1 grid-center">
+      <div className="flex">
+        <span className="mr-4 grid place-items-center">
           <MdAdd size={'1.5rem'} />
         </span>
         <span>agregar</span>
@@ -211,7 +211,7 @@ const Measure = ({ rangeValue, setRangeValue }) => {
   const inputRef = useRef(null)
 
   return (
-    <section className="Measure row-4 p-1 rounded-lg">
+    <section className="Measure grid grid-rows-4 gap-2 p-4 rounded-lg">
       <InputRange
         rangeValue={rangeValue}
         setRangeValue={setRangeValue}

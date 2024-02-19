@@ -21,7 +21,7 @@ const SAVE_SALE = 'guardar',
 
 const Total = ({ total }) => {
   return (
-    <div className="Total surface-variant on-surface-variant-text rounded-lg p-1">
+    <div className="Total surface-variant on-surface-variant-text rounded-lg p-4">
       <header className='text-align-center capitalize text-sm bold'>total a pagar</header>
       <div className='grid-col-2 full'>
         <div className="Total-icon-wrapper grid-center rounded-lg ">
@@ -124,7 +124,7 @@ const ClientCard = ({ name, clientId }) => {
 
   return (
     <div
-      className="client-card surface-variant client-row rounded flex pointer-events-none pointer full"
+      className="client-card surface-variant client-row rounded flex pointer-events-none cursor-pointer full"
       data-clientid={clientId}
       onClick={clickHandler}
     >
@@ -183,7 +183,7 @@ const ClientDialog = () => {
       </button>
 
       <dialog className="client-dialog def-border box-shadow rounded-lg">
-        <div className="wrapper full p-1">
+        <div className="wrapper full p-4">
           <div className="relative">
             <input
               className="body-large def-border rounded-lg"
@@ -231,14 +231,14 @@ const SalesStorager = () => {
 
   return (
     <section className="SalesStorager rounded-lg">
-      <div className="Storager-actions p-1">
+      <div className="Storager-actions p-4">
         <Total total={total} />
         <div className="action-bar full">
           <StoragerAction Icon={MdDeleteForever} text={DELETE_SALE} />
           <StoragerAction Icon={MdArchive} text={SAVE_SALE} />
         </div>
       </div>
-      <section className="p-1 client-search-section">
+      <section className="p-4 client-search-section">
         <div className="search-bar-wrapper rounded-lg flex">
           <SearchBar />
           <ClientDialog />

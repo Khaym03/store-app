@@ -1,4 +1,3 @@
-import './Notification.css'
 import { useSpring, animated } from '@react-spring/web'
 import { DollarContext } from './DollarProvider'
 import { useContext } from 'react'
@@ -21,14 +20,14 @@ const Notification = ({ message, Icon }) => {
     <animated.div
       style={fadeIn}
       className={
-        'notification rounded-lg flex-center success-save pointer-event-none opacity-0'
+        'w-72 bottom-8 right-8 rounded-lg flex-center bg-green-300 text-green-900  h-16 pointer-events-none absolute'
       }
     >
       <div className="flex">
-        <span className="mr-1 grid-center">
+        <span className="mr-4 grid place-items-center">
           <Icon size={'1.75rem'} />
         </span>
-        <span className="message flex-center">{message}</span>
+        <span className="text-sm font-medium flex justify-center items-center">{message}</span>
       </div>
     </animated.div>
   )

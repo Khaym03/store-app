@@ -10,6 +10,7 @@ Chart.register(CategoryScale)
 const AnalyticSection = () => {
   const { data: allSales } = FetchTable(URLs.getSalesURL)
   const [data, setData] = useState([])
+  const [percentages, setPercentages] = useState([])
 
   useEffect(() => {
     if (allSales) {
@@ -32,7 +33,17 @@ const AnalyticSection = () => {
     }
   }, [allSales])
 
-  //console.log(data)
+  useEffect(() => {
+    if (data.length > 0) {
+      const total = data[1].reduce((acc, currAmount) => acc + currAmount, 0)
+      const percentage = data[1].map(
+        amount => +((amount / total) * 100).toFixed(2)
+      )
+
+      setPercentages(percentage)
+    }
+  }, [data])
+
   const productColors = [
     '#68bd62',
     '#de7373',
@@ -59,23 +70,15 @@ const AnalyticSection = () => {
     datasets: [
       {
         label: 'Porciento',
-        data: data[1],
+        data: percentages,
         backgroundColor: productColors
       }
     ]
   }
 
-  if (data.length > 0) {
-    const total = data[1].reduce((acc, currAmount) => acc + currAmount, 0)
-    const percentage = data[1].map(
-      amount => +((amount / total) * 100).toFixed(2)
-    )
-    console.log(percentage)
-  }
-
   return (
     <section className="grid-col-2 grid-row-2 gap-1 section">
-      <div className='grid-center overflow-hidden'>
+      <div className="grid-center overflow-hidden">
         <Bar
           data={chartData}
           options={{
