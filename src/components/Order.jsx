@@ -7,8 +7,8 @@ import { useTransition, animated } from '@react-spring/web'
 const Row = ({ name, quan, price }) => (
   <>
     <div className="align-left capitalize ">{name}</div>
-    <div className="grid-center ">{parseInt(quan)}</div>
-    <div className="align-right ">{price.toFixed(2)}</div>
+    <div className="grid place-items-center italic">{parseInt(quan)}</div>
+    <div className="align-right italic">{price.toFixed(2)}</div>
   </>
 )
 
@@ -20,9 +20,9 @@ Row.propTypes = {
 
 const OrderHeader = () => {
   return (
-    <div className="Order-header order-cols body-large bold">
+    <div className="Order-header grid relative order-cols text-base font-medium">
       <span className="align-left capitalize">producto</span>
-      <span className="grid-center capitalize">ml</span>
+      <span className="grid place-items-center capitalize">ml</span>
       <span className="align-right capitalize">precio</span>
     </div>
   )
@@ -37,14 +37,14 @@ const Order = () => {
     keys: item => item[0] // Use the product name as the key
   })
   return (
-    <section className="Order-section">
-      <div className='full on-tertiary-container-text surface-light rounded-lg pt-1 pb-1'>
+    <section style={{gridArea: 'Order'}} className="p-4">
+      <div className='w-full h-full on-tertiary-container-text surface-light rounded-lg pt-4 pb-4'>
         <OrderHeader />
-        <ul className="Order ">
+        <ul className="Order w-full h-full max-h-[240px] grid overflow-y-hidden">
           {transitions(
             (styles, data) =>
               data && (
-                <animated.li style={styles}  className={'Order-row order-cols label-large'}>
+                <animated.li style={styles}  className={'grid order-cols text-sm text-slate-500 font-medium'}>
                   <Row name={data[0]} quan={data[1]} price={data[2]} />
                 </animated.li>
               )

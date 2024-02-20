@@ -10,7 +10,7 @@ const SalesSectionManager = () => {
   const [rangeValue, setRangeValue] = useState(1000)
 
   return (
-    <section className="mainSection section">
+    <section className="mainSection gap-8 section grid">
       <ProductList />
       <Measure rangeValue={rangeValue} setRangeValue={setRangeValue} />
       <Order />

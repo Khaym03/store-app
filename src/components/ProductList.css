@@ -1,16 +1,3 @@
-.ProductList{
-    grid-area: ProductList;
-}
-
-.ProductList ul {
-    grid-template-rows: repeat(auto-fill, 64px);
-}
-
-.ProductList .ProductCard {
+.ProductCard {
     grid-template-columns: 2fr 1fr;
-}
-
-.ProductList li:hover {
-    color: var(--md-sys-color-tertiary);
-    border-color: var(--md-sys-color-tertiary);
 }

@@ -77,8 +77,8 @@ const AnalyticSection = () => {
   }
 
   return (
-    <section className="grid-col-2 grid-row-2 gap-1 section">
-      <div className="grid-center overflow-hidden">
+    <section className="grid grid-cols-2 grid-rows-2 gap-4 section">
+      <div className="grid place-items-center overflow-hidden">
         <Bar
           data={chartData}
           options={{
@@ -94,7 +94,7 @@ const AnalyticSection = () => {
           }}
         />
       </div>
-      <div className="grid-center overflow-hidden">
+      <div className="grid place-items-center overflow-hidden">
         <Pie
           data={donutData}
           options={{

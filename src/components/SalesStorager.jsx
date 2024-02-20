@@ -1,9 +1,8 @@
-import './SalesStorager.css'
 import { MdAddShoppingCart } from 'react-icons/md'
 import { MdArchive } from 'react-icons/md'
 import { MdDeleteForever } from 'react-icons/md'
 import PropTypes from 'prop-types'
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import { salesFormater, postSales, postClient } from '../utils.js'
 import { DollarContext } from './DollarProvider'
 import { MdOutlineAddReaction } from 'react-icons/md'
@@ -12,7 +11,7 @@ import { MdAdd } from 'react-icons/md'
 import { FetchTable } from '../hooks/FetchTable.jsx'
 import { useTransition, animated } from '@react-spring/web'
 import { URLs } from '../constants.js'
-import {SectionSliderContext} from './SectionSliderProvider.jsx'
+import { SectionSliderContext } from './SectionSliderProvider.jsx'
 
 const iconSize = '2.5rem'
 
@@ -21,14 +20,16 @@ const SAVE_SALE = 'guardar',
 
 const Total = ({ total }) => {
   return (
-    <div className="Total surface-variant on-surface-variant-text rounded-lg p-4">
-      <header className='text-align-center capitalize text-sm bold'>total a pagar</header>
-      <div className='grid-col-2 full'>
-        <div className="Total-icon-wrapper grid-center rounded-lg ">
+    <div className="flex flex-col justify-center surface-variant on-surface-variant-text rounded-lg p-4">
+      <header className="text-center capitalize text-sm font-bold">
+        total a pagar
+      </header>
+      <div className="grid grid-cols-2 w-full h-full">
+        <div className="grid place-items-center rounded-lg ">
           <MdAddShoppingCart size={iconSize} />
         </div>
-        <div className=" grid-center">
-          <animated.span className="Total-value italic display-small">
+        <div className="grid place-items-center">
+          <animated.span className="text-3xl font-medium italic">
             {Number(total.toFixed(2)).toLocaleString('en-US')}
           </animated.span>
         </div>
@@ -46,7 +47,7 @@ const StoragerAction = ({ Icon, text }) => {
   const { orders, setOrders, setTotal, setShowSaveNotification } =
     useContext(DollarContext)
 
-  const {setSaveButtonWasClicked} = useContext(SectionSliderContext)
+  const { setSaveButtonWasClicked } = useContext(SectionSliderContext)
 
   const deleteHandler = () => {
     setOrders([])
@@ -72,17 +73,17 @@ const StoragerAction = ({ Icon, text }) => {
   }
 
   return (
-    <div
-      className={`StoragerActionBtns grid-center rounded-lg ${bgColor} ${color}`}
+    <button
+      className={`grid place-items-center rounded-lg ${bgColor} ${color}`}
       onClick={handler}
     >
       <div className="flex-col">
-        <span className="Total-icon-wrapper grid-center rounded-lg mb-1">
+        <span className="grid place-items-center rounded-lg mb-4">
           <Icon size={iconSize} />
         </span>
-        <span className="grid-center capitalize">{text}</span>
+        <span className="grid place-items-center capitalize">{text}</span>
       </div>
-    </div>
+    </button>
   )
 }
 
@@ -95,13 +96,13 @@ const SearchBar = () => {
   const { setSearchingClient } = useContext(DollarContext)
 
   const changeHandler = e => {
-    setSearchingClient(e.target.value.toLowerCase())
+    setSearchingClient(e.currentTarget.value.toLowerCase())
   }
 
   return (
     <div className="">
       <input
-        className="body-large rounded def-border"
+        className="text-sm font-medium h-full absolute pl-4 w-4/5 rounded-lg shadow-sm border-solid border-2 border-slate-100"
         type="text"
         placeholder="Buscar Cliente"
         onInput={changeHandler}
@@ -124,18 +125,20 @@ const ClientCard = ({ name, clientId }) => {
 
   return (
     <div
-      className="client-card surface-variant client-row rounded flex pointer-events-none cursor-pointer full"
+      className="justify-between bg-slate-100 hover:bg-slate-200 transition-colors shadow-sm client-row rounded-lg flex cursor-pointer w-full h-full"
       data-clientid={clientId}
       onClick={clickHandler}
     >
       <span className="flex">
-        <span className="grid-center ml-1">
+        <span className="grid place-items-center ml-4">
           <MdAccountCircle size={'1.5rem'} />
         </span>
 
-        <span className="label-large grid-center ml-1">{name}</span>
+        <span className="capitalize text-sm font-medium grid place-items-center ml-4">
+          {name}
+        </span>
       </span>
-      <span className="grid-center mr-1">
+      <span className="grid place-items-center mr-4">
         <MdAdd size={'1.5rem'} />
       </span>
     </div>
@@ -148,56 +151,62 @@ ClientCard.propTypes = {
 }
 
 const ClientDialog = () => {
-  const dialog = document.querySelector('.client-dialog')
   const { data } = FetchTable(URLs.getClientsURL)
 
-  const popup = () => dialog.showModal()
+  const dialogRef = useRef(null),
+    inputRef = useRef(null)
 
-  const close = () => dialog.close()
+  const popup = () => dialogRef.current.showModal(),
+    close = () => dialogRef.current.close()
 
   const addClient = () => {
-    const input = dialog.querySelector('input')
-
-    const name = input.value.toLowerCase()
+    const name = inputRef.current.value.toLowerCase()
 
     const alreadyExist = data.find(client => name === client.name.toLowerCase())
 
     if (alreadyExist) {
-      input.value = ''
-      input.placeholder = 'Ese Nombre ya existe'
+      inputRef.current.value = ''
+      inputRef.current.placeholder = 'Ese Nombre ya existe'
     } else {
-      input.value = ''
-      input.placeholder = 'Ingre el Nombre'
+      inputRef.current.value = ''
+      inputRef.current.placeholder = 'Ingre el Nombre'
       postClient(name)
-      dialog.close()
+      dialogRef.close()
     }
   }
 
   return (
     <div>
       <button
-        className="flex-center  tertiary-container on-tertiary-container-text rounded"
+        className="flex justify-center items-center tertiary-container on-tertiary-container-text rounded-lg h-full"
         onClick={popup}
       >
         <MdOutlineAddReaction size={'1.5rem'} />
       </button>
 
-      <dialog className="client-dialog def-border box-shadow rounded-lg">
-        <div className="wrapper full p-4">
+      <dialog
+        ref={dialogRef}
+        className=" w-72 h-48 absolute inset-2/4 -translate-y-2/4 -translate-x-2/4 border-solid border-2 border-slate-100 shadow-lg rounded-lg"
+      >
+        <div className="grid grid-rows-2 gap-4 w-full h-full p-4">
           <div className="relative">
             <input
-              className="body-large def-border rounded-lg"
+              className="text-sm font-medium w-full text-center shadow-sm border-solid border-2 border-slate-100 rounded-lg h-full absolute"
               type="text"
               placeholder="Ingrese el Nombre"
+              ref={inputRef}
             />
           </div>
-          <div className="grid-col-2 gap-1">
-            <button onClick={close} className="rounded-lg">
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              onClick={close}
+              className="rounded-lg transition-colors hover:bg-slate-100"
+            >
               cancel
             </button>
             <button
               onClick={addClient}
-              className="rounded-lg secondary-container on-secondary-container-text"
+              className="hover:bg-sky-300 transition-colors rounded-lg secondary-container on-secondary-container-text"
             >
               añadir
             </button>
@@ -230,20 +239,22 @@ const SalesStorager = () => {
   })
 
   return (
-    <section className="SalesStorager rounded-lg">
-      <div className="Storager-actions p-4">
+    <section style={{gridArea:' Client'}} className=" grid-cols-2 grid gap-4 rounded-lg">
+      <div className="grid gap-4 grid-rows-2 p-4">
         <Total total={total} />
-        <div className="action-bar full">
+        <div className="grid grid-cols-2 gap-4">
           <StoragerAction Icon={MdDeleteForever} text={DELETE_SALE} />
           <StoragerAction Icon={MdArchive} text={SAVE_SALE} />
         </div>
       </div>
-      <section className="p-4 client-search-section">
-        <div className="search-bar-wrapper rounded-lg flex">
-          <SearchBar />
-          <ClientDialog />
-        </div>
-        <ul>
+      <section className="flex flex-col p-4">
+      <div className="h-[52.4px] relative justify-between rounded-lg flex mb-2">
+            <SearchBar />
+            <ClientDialog />
+          </div>
+        <ul
+          className={`grid max-h-[241.6px] gap-2 overflow-y-auto auto-rows-[52.4px] h-full  text-slate-700`}
+        >
           {transitions(
             (styles, client) =>
               client && (

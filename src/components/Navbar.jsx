@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import { MdDashboard } from 'react-icons/md'
 import { MdAddShoppingCart } from 'react-icons/md'
-import './Navbar.css'
 import { URLs } from '../constants'
 import { IoMdCash } from 'react-icons/io'
 import { MdAddBusiness } from 'react-icons/md'
@@ -42,7 +41,7 @@ export const SimpleInfo = ({ title, info, Icon, color }) => {
 
   return (
     <div className={'rounded-lg p-4 SimpleInfo grid ' + style}>
-      <div className="mr-4 flex-center">
+      <div className="mr-4 flex justify-center items-center">
         <Icon size={'1.5rem'} />
       </div>
       <div>
@@ -85,8 +84,8 @@ const Navbar = () => {
   ])
 
   return (
-    <nav className="Navbar absolute top-0 left-0 h-full flex flex-col z-10 py-8 px-4">
-      <ul className="NavIconsUl grid gap-2 h-4/5 mb-auto">
+    <nav className="Navbar bg-slate-100 absolute top-0 left-0 h-full flex flex-col z-10 py-8 px-4">
+      <ul className="grid auto-rows-[56px] gap-2 h-4/5 mb-auto">
         <NavItem
           sectionName={APP_SECTIONS.SALES_SECTION}
           Icon={MdAddShoppingCart}

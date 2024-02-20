@@ -20,7 +20,7 @@ const Notification = ({ message, Icon }) => {
     <animated.div
       style={fadeIn}
       className={
-        'w-72 bottom-8 right-8 rounded-lg flex-center bg-green-300 text-green-900  h-16 pointer-events-none absolute'
+        'w-72 bottom-8 right-8 rounded-lg flex justify-center items-center bg-green-300 text-green-900  h-16 pointer-events-none absolute'
       }
     >
       <div className="flex">

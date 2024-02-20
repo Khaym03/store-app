@@ -6,9 +6,9 @@ import { DollarContext } from './DollarProvider'
 
 const ProductCard = ({ name, value }) => {
   return (
-    <div className="grid place-items-center capitalize rounded-lg  ProductCard h-full text-base font-medium transition-colors hover:shadow-lg">
-      <div className="align-left">{name}</div>
-      <span className="align-right italic">{value.toFixed(2)}</span>
+    <div className="grid place-items-center capitalize rounded-lg  ProductCard h-full text-base font-medium transition-colors">
+      <div className="align-left text-slate-500">{name}</div>
+      <span className="align-right italic ">{value.toFixed(2)}</span>
     </div>
   )
 }
@@ -69,13 +69,15 @@ function ProductList() {
   const clickHandler = ({ name, price }) => setSelected([name, price])
 
   return (
-    <div className="ProductList rounded-lg">
-      <ul className="grid gap-2 h-full list-none overflow-y-auto p-4">
+    <div style={{ gridArea: 'ProductList' }} className="ProductList rounded-lg">
+      <ul className="grid auto-rows-[66.222px] gap-2 h-full list-none overflow-y-auto p-4">
         {transitions((styles, product) => (
           <animated.li
             style={styles}
-            className={`rounded-lg def-border transition-colors cursor-pointer  text-slate-400 ${
-              selected && selected[0] === product.name ? 'focus-border' : ''
+            className={`rounded-lg border-solid border-2  ProductList transition-colors cursor-pointer  text-slate-600 hover:bg-slate-100   ${
+              selected && selected[0] === product.name
+                ? 'shadow-md border-slate-500 bg-slate-100'
+                : 'border-slate-100 bg-slate-50 hover:border-slate-200'
             }`}
             onClick={() => clickHandler(product)}
           >

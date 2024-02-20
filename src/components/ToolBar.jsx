@@ -17,7 +17,7 @@ const Arrow = ({ showToolBar, setShowToolBar }) => {
     <animated.span
       id="ToolBar-arrow"
       style={rotate}
-      className="cursor-pointer surface-light grid-center box-shadow"
+      className="cursor-pointer surface-light grid place-items-center shadow-sm"
       onClick={clickHandler}
     >
       <FaCaretDown size={'1.5rem'} className="absolute text-semi-transparent" />
@@ -34,10 +34,10 @@ const ToolBarButton = ({ title, style, actionHandler }) => {
   return (
     <div
       title={title}
-      className={'flex-col flex-center p-half rounded-lg ' + style}
+      className={'flex-col flex justify-center items-center pt-2 rounded-lg ' + style}
       onClick={actionHandler}
     >
-      <span className="grid-center">
+      <span className="grid place-items-center">
         <MdAutoDelete size={'1.5rem'} />
       </span>
     </div>
@@ -66,7 +66,7 @@ const ToolBar = () => {
     <animated.section
       id="ToolBar"
       style={acordion}
-      className={'background box-shadow grid-center'}
+      className={'background shadow-sm grid place-items-center'}
     >
       <ul className="cursor-pointer">
         <ToolBarButton

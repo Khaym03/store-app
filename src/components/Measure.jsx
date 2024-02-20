@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-import './Measure.css'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { DollarContext } from './DollarProvider'
 import { MdAdd } from 'react-icons/md'
@@ -22,7 +21,7 @@ const InputRange = ({ setRangeValue, inputRef }) => {
         ref={inputRef}
         onChange={changeHandler}
         placeholder="Ingrese los ML"
-        className="cursor-pointer full text-base font-medium surface-light absolute text-center border-none rounded-lg transition-colors"
+        className="cursor-pointer w-full h-full text-base font-medium surface-light absolute text-center border-none rounded-lg transition-colors"
       />
     </div>
   )
@@ -211,7 +210,7 @@ const Measure = ({ rangeValue, setRangeValue }) => {
   const inputRef = useRef(null)
 
   return (
-    <section className="Measure grid grid-rows-4 gap-2 p-4 rounded-lg">
+    <section style={{gridArea: 'Measure'}} className="grid grid-rows-4 gap-2 p-4 rounded-lg">
       <InputRange
         rangeValue={rangeValue}
         setRangeValue={setRangeValue}

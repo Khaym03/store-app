@@ -6,14 +6,20 @@ import OweSectionManager from './OweSectionManager'
 import ToolBar from './ToolBar'
 import OweProvider from './OweProvider'
 import AnalyticSection from './AnalyticSection'
+import OptimalPurchase from '../hooks/OptimalPurchase'
 
 export const SectionSliderContext = createContext()
 
 export const SectionDisplayer = () => {
   const { currentSection, APP_SECTIONS } = useContext(SectionSliderContext)
-
+  // const ignore = new Map()
+  // ignore.set('cloro', 'cloro')
+  // ignore.set('desengrasante', 'desengrasante')
+  // const {optimalPurchase} = OptimalPurchase(1346, ignore)
+  
+  // console.log(optimalPurchase)
   return (
-    <main id="content" className="grid-center">
+    <main id="content" className="grid place-items-center h-full relative overflow-x-auto overflow-y-hidden">
       <ToolBar />
       {currentSection === APP_SECTIONS.SALES_SECTION ? (
         <DollarProvider>

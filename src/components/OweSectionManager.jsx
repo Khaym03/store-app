@@ -11,25 +11,25 @@ import { OweContext } from './OweProvider'
 
 const NewDebtor = () => {
   return (
-    <div className="secondary-container on-secondary-container-text rounded-lg flex-center">
-      <span className="mr-1">
+    <div className="secondary-container on-secondary-container-text rounded-lg flex justify-center items-center">
+      <span className="mr-4">
         <MdAccountBox size={'1.5rem'} />
       </span>
-      <span className="text-md capitalize bold">Nueva deuda</span>
+      <span className="text-md capitalize font-medium">Nueva deuda</span>
     </div>
   )
 }
 
 const InfoCard = ({ title, info }) => {
   return (
-    <div className="tertiary-container on-tertiary-container-text rounded-lg grid-row-2 p-4">
-      <div className="flex-start">
-        <span className="background rounded-lg mr-1 square-40 grid-center">
+    <div className="tertiary-container on-tertiary-container-text rounded-lg grid grid-rows-2 p-4">
+      <div className="flex justify-start">
+        <span className="background rounded-lg mr-4 w-10 h-10 grid place-items-center">
           <IoMdCash size={'1.75rem'} />
         </span>
-        <span className="font-medium text-base align-center">{title}</span>
+        <span className="font-medium text-base flex items-center">{title}</span>
       </div>
-      <div className="text-xl font-medium align-center italic">{info}</div>
+      <div className="text-xl font-medium flex items-center italic">{info}</div>
     </div>
   )
 }
@@ -41,9 +41,9 @@ InfoCard.propTypes = {
 
 const OweActionBar = ({ children }) => {
   return (
-    <div className="flex-col mb-1">
-      <h1 className="capitalize mb-1">area de deudas</h1>
-      <ul className="rounded-lg action-bar full">{children}</ul>
+    <div className="flex flex-col mb-4">
+      <h1 className="capitalize mb-4">area de deudas</h1>
+      <ul className="rounded-lg grid grid-cols-3 w-full h-full gap-4">{children}</ul>
     </div>
   )
 }
@@ -67,16 +67,18 @@ const ClientGrid = ({ clientInfo }) => {
     <div
       onClick={clickHandler}
       data-client_id={clientInfo[0].id}
-      className="client-grid bold text-base capitalize cursor-pointer thin-line hover-light"
+      className="client-grid grid font-medium text-base capitalize cursor-pointer thin-line hover:bg-slate-100 text-slate-700 transition-colors"
     >
-      <div className="flex-start align-center ml-1">
-        <span className="surface-variant on-surface-variant-text rounded-lg mr-1 square-40 grid-center">
+      <div className="flex justify-start items-center ml-4">
+        <span className="bg-slate-200 w-10 h-10 on-surface-variant-text rounded-lg mr-4 grid place-items-center">
           <MdAccountBox size={'2rem'} />
         </span>
         <span>{clientName}</span>
       </div>
-      <span className="grid-center italic">{clientOwe.toFixed(2)}</span>
-      <span className="grid-center">{since}</span>
+      <span className="grid place-items-center italic">
+        {clientOwe.toFixed(2)}
+      </span>
+      <span className="grid place-items-center">{since}</span>
     </div>
   )
 }
@@ -87,17 +89,21 @@ ClientGrid.propTypes = {
 
 const BookHeader = () => {
   return (
-    <div className="header-grid mb-sm text-base text-semi-transparent capitalize bold">
-      <span className="flex-start align-center ml-1">nombre del cliente</span>
-      <span className="grid-center">deuda</span>
-      <span className="grid-center">desde</span>
+    <div className="header-grid grid mb-2 text-base text-slate-900 capitalize font-medium">
+      <span className="flex justify-start items-center text-base ml-4">
+        nombre del cliente
+      </span>
+      <span className="grid place-items-center">deuda</span>
+      <span className="grid place-items-center">desde</span>
     </div>
   )
 }
 
 const TableOfDebs = ({ clientsInfo }) => {
   return (
-    <div className="book-grid">
+    <div
+      className={`book-grid grid grid-cols-1 auto-rows-[64px] h-[384px] overflow-y-auto`}
+    >
       {clientsInfo &&
         clientsInfo.map(info => (
           <ClientGrid key={info[0].id} clientInfo={info} />
@@ -112,8 +118,8 @@ TableOfDebs.propTypes = {
 
 const OweBook = ({ children }) => {
   return (
-    <section className="def-border rounded-lg p-4 full">
-      <h2 className="capitalize mb-1">libro de deudores</h2>
+    <section className="shadow-sm border-solid border-2 border-slate-100 rounded-lg p-4 w-full h-full">
+      <h2 className="capitalize mb-4 text-2xl font-bold">libro de deudores</h2>
       <BookHeader />
       {children}
     </section>
@@ -132,17 +138,19 @@ const DetailedClientRow = ({ name, price, date }) => {
 
   return (
     <li
-      className="DetailedClientRow thin-line hover-light cursor-pointer pointer-events-none"
+      className="DetailedClientRow grid thin-line hover:bg-slate-100 cursor-pointer "
       onClick={clickhander}
     >
-      <span className="grid-center">
-        <input type="checkbox" name={name} defaultChecked={false} />
+      <span className="grid place-items-center">
+        <input className='w-6 h-6' type="checkbox" name={name} defaultChecked={false} />
       </span>
-      <span className="flex-start align-center capitalize text-sm font-medium">
+      <span className="flex justify-start items-center capitalize text-sm font-medium">
         {name}
       </span>
-      <span className="grid-center text-sm font-medium italic">{price}</span>
-      <span className="grid-center">{date}</span>
+      <span className="grid place-items-center text-sm font-medium italic">
+        {price}
+      </span>
+      <span className="grid place-items-center">{date}</span>
     </li>
   )
 }
@@ -166,7 +174,7 @@ let DetailedClient = ({ children, clientName }, ref) => {
   const updateSaleStatus = () => {
     const selected = Array.from(ref.current.querySelectorAll('input'))
 
-    if(!(selected.length > 0 && selectedClient.length > 0)) return
+    if (!(selected.length > 0 && selectedClient.length > 0)) return
 
     const salesToBeProcessed = selected.reduce((acc, currInput, index) => {
       if (currInput.checked) return [...acc, selectedClient[1][index]]
@@ -186,25 +194,25 @@ let DetailedClient = ({ children, clientName }, ref) => {
 
   return (
     <div>
-      <h2 className="font-medium mb-sm">{clientName}</h2>
-      <p className="text-sm font-semi-transparent font-medium mb-sm">
+      <h2 className="font-bold text-2xl mb-2">{clientName}</h2>
+      <p className="text-sm text-slate-700 font-medium mb-2">
         Selecciona las ventas que quieres borrar de la lista de deudas
       </p>
-      <ul ref={ref} id="DetailedClient-grid" className="mb-sm">
+      <ul ref={ref} className="mb-2 grid auto-rows-[40px] h-[200px] overflow-y-auto">
         {children}
       </ul>
-      <div className="grid-col-2 gap-1">
-        <button className="rounded-lg" onClick={selectAll}>
-          <span className="grid-center">
+      <div className="grid grid-cols-2 gap-4">
+        <button className="transition-colors rounded-lg bg-slate-100 hover:bg-slate-200" onClick={selectAll}>
+          <span className="grid place-items-center">
             <MdPlaylistAddCheck size={'1.5rem'} />
           </span>
-          <span className="grid-center">Seleccionar todo</span>
+          <span className="grid place-items-center">Seleccionar todo</span>
         </button>
-        <button className="rounded-lg " onClick={updateSaleStatus}>
-          <span className="grid-center">
+        <button className="transition-colors  rounded-lg bg-slate-100 hover:bg-slate-200" onClick={updateSaleStatus}>
+          <span className="grid place-items-center">
             <IoMdPaper size={'1.5rem'} />
           </span>
-          <span className="grid-center">Deuda pagada</span>
+          <span className="grid place-items-center">Deuda pagada</span>
         </button>
       </div>
     </div>
@@ -246,8 +254,8 @@ const OweSectionManager = () => {
   }, [clients, owes])
 
   return (
-    <section id="owe-section" className="section ">
-      <div className="first-block">
+    <section id="owe-section" className="section grid gap-8 ">
+      <div className="flex flex-col">
         <OweActionBar>
           <NewDebtor />
           <InfoCard title={'Deuda Total'} info={totalDebts} />
@@ -257,7 +265,7 @@ const OweSectionManager = () => {
           <TableOfDebs clientsInfo={activeDebtors} />
         </OweBook>
       </div>
-      <div className="def-border rounded-lg p-4">
+      <div className="shadow-sm border-solid border-2 border-slate-100 rounded-lg p-4">
         {selectedClient.length > 0 && (
           <DetailedClient
             clientName={selectedClient[0].name}
