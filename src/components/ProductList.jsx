@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types'
 import { useTransition, animated } from '@react-spring/web'
-import './ProductList.css'
 import { useContext } from 'react'
 import { DollarContext } from './DollarProvider'
 
 const ProductCard = ({ name, value }) => {
   return (
-    <div className="grid place-items-center capitalize rounded-lg  ProductCard h-full text-base font-medium transition-colors">
+    <div className="grid place-items-center capitalize rounded-lg ProductCard h-full text-base font-medium transition-colors">
       <div className="align-left text-slate-500">{name}</div>
       <span className="align-right italic ">{value.toFixed(2)}</span>
     </div>

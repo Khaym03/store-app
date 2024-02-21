@@ -17,7 +17,7 @@ const NavItem = ({ sectionName, Icon }) => {
 
   return (
     <li
-      className={`NavItem hover:bg-slate-200 grid transition-colors relative rounded-lg on-surface-variant-text cursor-pointer  ${
+      className={`cols-1-2 hover:bg-slate-200 grid transition-colors relative rounded-lg on-surface-variant-text cursor-pointer  ${
         currentSection === sectionName ? 'bg-slate-200' : ''
       }`}
       onClick={clickHandler}
@@ -40,7 +40,7 @@ export const SimpleInfo = ({ title, info, Icon, color }) => {
   if (color) style = color
 
   return (
-    <div className={'rounded-lg p-4 SimpleInfo grid ' + style}>
+    <div className={'rounded-lg p-4 cols-1-2 grid ' + style}>
       <div className="mr-4 flex justify-center items-center">
         <Icon size={'1.5rem'} />
       </div>

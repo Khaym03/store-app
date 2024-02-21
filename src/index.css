@@ -2,40 +2,18 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
-  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --md-sys-color-primary-rgb: 78 216 233;
-  --md-sys-color-surface-1: rgb(var(--md-sys-color-primary-rgb) / 0.05);
-  --md-sys-color-surface-2: rgb(var(--md-sys-color-primary-rgb) / 0.08);
-  --md-sys-color-surface-3: rgb(var(--md-sys-color-primary-rgb) / 0.11);
-  --md-sys-color-surface-4: rgb(var(--md-sys-color-primary-rgb) / 0.12);
-  --md-sys-color-surface-5: rgb(var(--md-sys-color-primary-rgb) / 0.14);
-
-  --default-border: 2px solid rgb(0 0 0 / 10%);
-
   --nav-width: 240px;
-
-  --min-row-height: 40px;
 }
 
 body {
@@ -65,20 +43,6 @@ body {
   width: var(--nav-width);
 }
 
-.NavItem {
-  grid-template-columns: 1fr 2fr;
-}
-
-.SimpleInfo {
-  grid-template-columns: 1fr 2fr;
-}
-
-.focus-border {
-  color: var(--md-sys-color-tertiary);
-  border-color: var(--md-sys-color-tertiary);
-  background-color: #edeff2;
-}
-
 .align-left {
   margin: auto auto auto 2rem;
 }
@@ -102,21 +66,12 @@ a:hover {
   position: relative;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
 button {
   padding: 0.6em 1.2em;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   border-color: transparent;
-}
-
-.surface-light {
-  background-color: var(--light-gray);
 }
 
 input[type='text'] {
@@ -128,10 +83,39 @@ input[type='text']:focus {
   outline-color: var(--md-sys-color-tertiary);
 }
 
-.thin-line {
-  border-top: 2px solid #f3f6fc;
+.Order-header::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  bottom: 0;
+  height: 1px;
+  width: 80%;
+  background: linear-gradient(transparent, rgb(0 0 0 / 20%), transparent);
+  z-index: 2;
 }
 
-.hover-light:hover {
-  background-color: #f3f6fc !important;
+/* Grids */
+
+.cols-1-2 {
+  grid-template-columns: 1fr 2fr;
+}
+
+.Order {
+  grid-template-rows: repeat(auto-fill, 28px);
+}
+
+.cols-2-1-1 {
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+#owe-section {
+  grid-template-columns: 1.5fr 1fr;
+}
+
+.DetailedClientRow {
+  grid-template-columns: 0.5fr 1fr 1fr 1.5fr;
+}
+
+.ProductCard {
+  grid-template-columns: 2fr 1fr;
 }

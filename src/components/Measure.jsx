@@ -21,7 +21,7 @@ const InputRange = ({ setRangeValue, inputRef }) => {
         ref={inputRef}
         onChange={changeHandler}
         placeholder="Ingrese los ML"
-        className="cursor-pointer w-full h-full text-base font-medium surface-light absolute text-center border-none rounded-lg transition-colors"
+        className="cursor-pointer w-full h-full text-base font-medium bg-slate-100 absolute text-center border-none rounded-lg transition-colors"
       />
     </div>
   )

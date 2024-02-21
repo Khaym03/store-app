@@ -3,7 +3,6 @@ import { IoMdCash } from 'react-icons/io'
 import { URLs } from '../constants'
 import { FetchTable } from '../hooks/FetchTable'
 import PropTypes from 'prop-types'
-import './OweSectionManager.css'
 import { useContext, useEffect, useState, forwardRef } from 'react'
 import { MdPlaylistAddCheck } from 'react-icons/md'
 import { IoMdPaper } from 'react-icons/io'
@@ -42,7 +41,7 @@ InfoCard.propTypes = {
 const OweActionBar = ({ children }) => {
   return (
     <div className="flex flex-col mb-4">
-      <h1 className="capitalize mb-4">area de deudas</h1>
+      <h1 className="capitalize mb-4 font-bold text-3xl">area de deudas</h1>
       <ul className="rounded-lg grid grid-cols-3 w-full h-full gap-4">{children}</ul>
     </div>
   )
@@ -67,7 +66,7 @@ const ClientGrid = ({ clientInfo }) => {
     <div
       onClick={clickHandler}
       data-client_id={clientInfo[0].id}
-      className="client-grid grid font-medium text-base capitalize cursor-pointer thin-line hover:bg-slate-100 text-slate-700 transition-colors"
+      className="cols-2-1-1 grid font-medium text-base capitalize cursor-pointer border-t-2 border-slate-50 hover:bg-slate-100 text-slate-700 transition-colors"
     >
       <div className="flex justify-start items-center ml-4">
         <span className="bg-slate-200 w-10 h-10 on-surface-variant-text rounded-lg mr-4 grid place-items-center">
@@ -89,7 +88,7 @@ ClientGrid.propTypes = {
 
 const BookHeader = () => {
   return (
-    <div className="header-grid grid mb-2 text-base text-slate-900 capitalize font-medium">
+    <div className="cols-2-1-1 grid mb-2 text-base text-slate-900 capitalize font-medium">
       <span className="flex justify-start items-center text-base ml-4">
         nombre del cliente
       </span>
@@ -138,7 +137,7 @@ const DetailedClientRow = ({ name, price, date }) => {
 
   return (
     <li
-      className="DetailedClientRow grid thin-line hover:bg-slate-100 cursor-pointer "
+      className="DetailedClientRow grid border-t-2 border-slate-50 hover:bg-slate-100 cursor-pointer "
       onClick={clickhander}
     >
       <span className="grid place-items-center">
