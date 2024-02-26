@@ -90,7 +90,7 @@ const Navbar = () => {
         />
         <NavItem sectionName={APP_SECTIONS.GAZA_CALC_SECTION} Icon={MdOutlineCalculate}/>
       </ul>
-      <div className="grid gap-1">
+      <div className="grid gap-2">
         <SimpleInfo
           title={'Total vendido Hoy'}
           info={todaySales}

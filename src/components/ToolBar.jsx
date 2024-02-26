@@ -141,7 +141,7 @@ const ToolBar = () => {
     <animated.section
       style={acordion}
       className={
-        'background shadow-sm grid grid-cols-2 absolute left-0 w-full h-28 top-0 z-10'
+        'bg-white shadow-sm grid grid-cols-2 absolute left-0 w-full h-28 top-0 z-10'
       }
     >
       <ul className=" grid grid-cols-4 gap-4 px-8 py-8 h-full">

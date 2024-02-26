@@ -194,7 +194,7 @@ const ClientDialog = ({ setUpdateClientList }) => {
 
       <dialog
         ref={dialogRef}
-        className=" w-72 h-48 absolute inset-2/4 -translate-y-2/4 -translate-x-2/4 border-solid border-2 border-slate-100 shadow-lg rounded-lg background"
+        className=" w-72 h-48 absolute inset-2/4 -translate-y-2/4 -translate-x-2/4 border-solid border-2 border-slate-100 shadow-lg rounded-lg"
       >
         <div className="grid grid-rows-2 gap-4 w-full h-full p-4">
           <div className="relative">
@@ -235,9 +235,10 @@ const SalesStorager = () => {
     useContext(DollarContext)
 
   const transitions = useTransition(clients || [], {
-    from: { opacity: 0, display: 'block' },
-    enter: { opacity: 1 },
-    leave: { opacity: 0, display: 'none' },
+    from: { opacity: 0, display:'none' },
+    enter: { opacity: 1,  display:'block'},
+    config: { duration: 40 },
+    trail: 20,
     keys: item => item.name // Use the product name as the key
   })
 

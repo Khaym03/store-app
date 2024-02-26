@@ -8,27 +8,16 @@ import { MdPlaylistAddCheck } from 'react-icons/md'
 import { IoMdPaper } from 'react-icons/io'
 import { OweContext } from './OweProvider'
 
-const NewDebtor = () => {
-  return (
-    <div className="secondary-container on-secondary-container-text rounded-lg flex justify-center items-center">
-      <span className="mr-4">
-        <MdAccountBox size={'1.5rem'} />
-      </span>
-      <span className="text-md capitalize font-medium">Nueva deuda</span>
-    </div>
-  )
-}
-
 const InfoCard = ({ title, info, color }) => {
   return (
-    <div className={"rounded-lg grid grid-rows-2 p-4 " + color}>
+    <div className={"rounded-lg grid grid-rows-2 p-2 " + color}>
       <div className="flex justify-start">
-        <span className="background rounded-lg mr-4 w-10 h-10 grid place-items-center">
+        <span className="rounded-lg mr-4 w-10 h-10 grid place-items-center">
           <IoMdCash size={'1.75rem'} />
         </span>
         <span className="font-medium text-base flex items-center">{title}</span>
       </div>
-      <div className="text-xl font-medium flex items-center italic">{info}</div>
+      <div className="text-xl font-medium flex items-center italic ml-2">{info}</div>
     </div>
   )
 }
@@ -43,7 +32,7 @@ const OweActionBar = ({ children }) => {
   return (
     <div className="flex flex-col mb-4">
       <h1 className="capitalize mb-4 font-bold text-3xl">area de deudas</h1>
-      <ul className="rounded-lg grid grid-cols-3 w-full h-full gap-4">
+      <ul className="rounded-lg grid grid-cols-3 w-full gap-4">
         {children}
       </ul>
     </div>
@@ -69,7 +58,7 @@ const ClientGrid = ({ clientInfo }) => {
     <div
       onClick={clickHandler}
       data-client_id={clientInfo[0].id}
-      className="cols-2-1-1 grid font-medium text-base capitalize cursor-pointer border-t-2 border-slate-50 hover:bg-slate-100 text-slate-700 transition-colors"
+      className="cols-2-1-1 grid font-medium text-base capitalize cursor-pointer border-t border-slate-200 hover:bg-slate-100 text-slate-700 transition-colors"
     >
       <div className="flex justify-start items-center ml-4">
         <span className="bg-slate-200 w-10 h-10 on-surface-variant-text rounded-lg mr-4 grid place-items-center">
@@ -104,7 +93,7 @@ const BookHeader = () => {
 const TableOfDebs = ({ clientsInfo }) => {
   return (
     <div
-      className={`book-grid grid grid-cols-1 auto-rows-[64px] h-[384px] overflow-y-auto`}
+      className={` rounded-lg book-grid grid grid-cols-1 auto-rows-[60px] h-[240px] overflow-y-auto`}
     >
       {clientsInfo &&
         clientsInfo.map(info => (
@@ -120,7 +109,7 @@ TableOfDebs.propTypes = {
 
 const OweBook = ({ children }) => {
   return (
-    <section className="shadow-sm border-solid border-2 border-slate-100 rounded-lg p-4 w-full h-full">
+    <section className="rounded-lg  w-full h-full">
       <h2 className="capitalize mb-4 text-2xl font-bold">libro de deudores</h2>
       <BookHeader />
       {children}
@@ -207,13 +196,13 @@ let DetailedClient = ({ children, clientName }, ref) => {
       </p>
       <ul
         ref={ref}
-        className="mb-2 grid auto-rows-[40px] h-[200px] overflow-y-auto bg-slate-50 rounded-lg"
+        className=" mb-2 grid auto-rows-[40px] h-[340px] overflow-y-auto rounded-lg"
       >
         {children}
       </ul>
       <div className="grid grid-cols-2 gap-4">
         <button
-          className="transition-colors rounded-lg bg-slate-100 hover:bg-slate-200"
+          className="transition-colors py-2 rounded-lg bg-slate-100 hover:bg-slate-200"
           onClick={selectAll}
         >
           <span className="grid place-items-center">
@@ -222,7 +211,7 @@ let DetailedClient = ({ children, clientName }, ref) => {
           <span className="grid place-items-center">Seleccionar todo</span>
         </button>
         <button
-          className="transition-colors  rounded-lg bg-blue-100 hover:bg-blue-200 text-sky-700"
+          className="transition-colors py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-sky-700"
           onClick={updateSaleStatus}
         >
           <span className="grid place-items-center">
@@ -270,10 +259,9 @@ const OweSectionManager = () => {
   }, [clients, owes])
 
   return (
-    <section id="owe-section" className="section grid gap-8 ">
+    <section id="owe-section" className="w-[1080px] h-[520px] grid gap-16 p-4 border-solid border border-slate-200 shadow-sm rounded-xl">
       <div className="flex flex-col">
         <OweActionBar>
-          <NewDebtor />
           <InfoCard title={'Deuda Total'} info={totalDebts}  color={'bg-violet-200'}/>
           <InfoCard title={'Clientes Totales'} info={activeDebtors.length} color={'bg-lime-200'}/>
         </OweActionBar>
@@ -281,7 +269,7 @@ const OweSectionManager = () => {
           <TableOfDebs clientsInfo={activeDebtors} />
         </OweBook>
       </div>
-      <div className="shadow-sm border-solid border-2 border-slate-100 rounded-lg p-4">
+      <div className="rounded-lg">
         {selectedClient.length > 0 && (
           <DetailedClient
             clientName={selectedClient[0].name}

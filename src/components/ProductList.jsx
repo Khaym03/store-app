@@ -15,7 +15,7 @@ const borderColor = product => {
     case 'desinfectante':
       return 'border-red-400'
     case 'lavaplatos':
-      return 'border-lime-400'
+      return 'border-green-400'
     case 'suavizante':
       return 'border-purple-400'
     case 'limpia poceta':
@@ -61,9 +61,10 @@ function ProductList() {
   const { selected, setSelected } = useContext(DollarContext)
 
   const transitions = useTransition(listOfProducts, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
+    from: { scale: 0, opacity: 0 },
+    enter: { scale: 1, opacity: 1 },
+    config: { duration: 30 },
+    trail: 15,
     keys: item => item.name // Use the product name as the key
   })
 
@@ -71,11 +72,11 @@ function ProductList() {
 
   return (
     <div style={{ gridArea: 'ProductList' }} className="ProductList rounded-lg">
-      <ul className="grid grid-cols-2 auto-rows-[163px] gap-2 h-full list-none overflow-y-auto p-4">
+      <ul className="grid grid-cols-2 auto-rows-[127px] gap-2 h-full list-none overflow-y-auto p-4">
         {transitions((styles, product) => (
           <animated.li
             style={styles}
-            className={`hover:scale-105 rounded-lg border-solid border-2  ProductList transition cursor-pointer  text-slate-600   ${
+            className={`rounded-lg border-solid border-2  ProductList transition cursor-pointer  text-slate-600   ${
               selected && selected[0] === product.name
                 ? `shadow-md ${borderColor(product.name)}`
                 : 'border-slate-100 hover:border-slate-200'

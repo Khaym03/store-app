@@ -1,4 +1,4 @@
-import { Bar, Pie } from 'react-chartjs-2'
+import { Bar, Pie, Line } from 'react-chartjs-2'
 import Chart from 'chart.js/auto'
 import { CategoryScale } from 'chart.js'
 import { FetchTable } from '../hooks/FetchTable'
@@ -7,12 +7,11 @@ import { useEffect, useState } from 'react'
 
 Chart.register(CategoryScale)
 
-
-
 const AnalyticSection = () => {
   const { data: allSales } = FetchTable(URLs.getSalesURL)
   const [data, setData] = useState([])
   const [percentages, setPercentages] = useState([])
+  const [salesActivity, setSalesActivity] = useState(null)
 
   useEffect(() => {
     if (allSales) {
@@ -41,18 +40,34 @@ const AnalyticSection = () => {
       const percentage = data[1].map(
         amount => +((amount / total) * 100).toFixed(2)
       )
-
       setPercentages(percentage)
+    }
+
+    if (allSales) {
+      const activity = new Map()
+
+      allSales.forEach(sale => {
+        if (activity.has(sale.date)) {
+          const currentValue = activity.get(sale.date)
+          activity.set(sale.date, currentValue + sale.price)
+        } else {
+          activity.set(sale.date, sale.price)
+        }
+      })
+      setSalesActivity(activity)
     }
   }, [data])
 
   const productColors = [
-    '#68bd62',
-    '#de7373',
-    '#7a8bbf',
-    '#517dea',
+    '#4ade80',
+    '#f87171',
+    '#a78bfa',
+    '#60a5fa',
     '#e9e9e5',
-    '#ebddcd'
+    '#fb923c',
+    '#ede9fe',
+    '#ffedd5',
+    '#fbbf24'
   ]
 
   const chartData = {
@@ -74,6 +89,16 @@ const AnalyticSection = () => {
         label: 'Porciento',
         data: percentages,
         backgroundColor: productColors
+      }
+    ]
+  }
+
+  const lineData = {
+    labels: salesActivity ? [...salesActivity.keys()] : [],
+    datasets: [
+      {
+        label: 'Venta',
+        data: salesActivity ? [...salesActivity.values()] : []
       }
     ]
   }
@@ -112,6 +137,22 @@ const AnalyticSection = () => {
           }}
         />
       </div>
+      <div className="grid place-items-center overflow-hidden col-span-2">
+        <Line
+          data={lineData}
+          options={{
+            plugins: {
+              title: {
+                display: true,
+                text: 'Actividad de venta'
+              },
+              legend: {
+                display: false
+              }
+            }
+          }}
+        />
+        </div>
     </section>
   )
 }

@@ -1,11 +1,11 @@
 import {Product} from './types'
 
 const listOfProducts: Product[] = [
-  // {
-  //   name: 'acondicionador',
-  //   price: 45,
-  //   color: 'text-slate-400'
-  // },
+  {
+    name: 'acondicionador',
+    price: 45,
+    color: 'text-slate-400'
+  },
   {
     name: 'ariel',
     price: 33,
@@ -34,7 +34,7 @@ const listOfProducts: Product[] = [
   {
     name: 'lavaplatos',
     price: 33,
-    color: 'text-lime-400'
+    color: 'text-green-400'
   },
   {
     name: 'shampoo',

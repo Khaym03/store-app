@@ -25,10 +25,6 @@ body {
   margin-left: var(--nav-width);
 }
 
-.background {
-  background-color: #fafdfd;
-}
-
 .section {
   width: 1200px;
   max-width: 1200px;
