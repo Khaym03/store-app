@@ -51,7 +51,8 @@ const OptimalPurchase = (bs, ignore) => {
       }, new Map())
       setOptimalPurchase(howManyShouldBuy)
     }
-  }, [sales, gazaPrices])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sales, gazaPrices,budget])
 
   return { optimalPurchase }
 }

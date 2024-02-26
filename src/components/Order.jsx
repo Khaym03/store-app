@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import PropTypes from 'prop-types'
-import { DollarContext } from './DollarProvider'
 import { useTransition, animated } from '@react-spring/web'
+import { DollarContext } from './DollarProvider'
 
 const Row = ({ name, quan, price }) => (
   <>

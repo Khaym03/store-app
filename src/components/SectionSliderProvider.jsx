@@ -6,32 +6,45 @@ import OweSectionManager from './OweSectionManager'
 import ToolBar from './ToolBar'
 import OweProvider from './OweProvider'
 import AnalyticSection from './AnalyticSection'
-import OptimalPurchase from '../hooks/OptimalPurchase'
+import { animated, useTransition } from '@react-spring/web'
+import GazaCalcSection from './GazaCalcSection'
+import  GazaCalcProvider  from './GazaCalcProvider'
 
 export const SectionSliderContext = createContext()
 
 export const SectionDisplayer = () => {
   const { currentSection, APP_SECTIONS } = useContext(SectionSliderContext)
-  // const ignore = new Map()
-  // ignore.set('cloro', 'cloro')
-  // ignore.set('desengrasante', 'desengrasante')
-  // const {optimalPurchase} = OptimalPurchase(1346, ignore)
-  
-  // console.log(optimalPurchase)
+
+  const transitions = useTransition(currentSection, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 }
+  })
   return (
-    <main id="content" className="grid place-items-center h-full relative overflow-x-auto overflow-y-hidden">
+    <main
+      id="content"
+      className="grid place-items-center h-full relative overflow-x-auto overflow-y-hidden"
+    >
       <ToolBar />
-      {currentSection === APP_SECTIONS.SALES_SECTION ? (
-        <DollarProvider>
-          <SalesSectionManager />
-        </DollarProvider>
-      ) : currentSection === APP_SECTIONS.OWE_SECTION ? (
-        <OweProvider>
-          <OweSectionManager />
-        </OweProvider>
-      ) : currentSection === APP_SECTIONS.ANALYTICS_SECTION ? (
-        <AnalyticSection />
-      ) : null}
+      {transitions((style, section) => (
+        <animated.div style={style} className={'absolute'}>
+          {section === APP_SECTIONS.SALES_SECTION ? (
+            <DollarProvider>
+              <SalesSectionManager />
+            </DollarProvider>
+          ) : section === APP_SECTIONS.OWE_SECTION ? (
+            <OweProvider>
+              <OweSectionManager />
+            </OweProvider>
+          ) : section === APP_SECTIONS.ANALYTICS_SECTION ? (
+            <AnalyticSection />
+          ) : section === APP_SECTIONS.GAZA_CALC_SECTION ? (
+            <GazaCalcProvider>
+              <GazaCalcSection />
+            </GazaCalcProvider>
+          ) : null}
+        </animated.div>
+      ))}
     </main>
   )
 }
@@ -40,7 +53,8 @@ const SectionSliderProvider = ({ children }) => {
   const APP_SECTIONS = Object.freeze({
     SALES_SECTION: 'compras',
     OWE_SECTION: 'deudas',
-    ANALYTICS_SECTION: 'analysis'
+    ANALYTICS_SECTION: 'analysis',
+    GAZA_CALC_SECTION: 'gaza calc'
   })
 
   const [currentSection, setCurrentSection] = useState(
@@ -48,7 +62,7 @@ const SectionSliderProvider = ({ children }) => {
   )
 
   const [todaySales, setTodaySales] = useState(0)
-  const [saveButtonWasClicked, setSaveButtonWasClicked] = useState(false)
+  const [updateNavInfo, setUpdateNavInfo] = useState(false)
 
   return (
     <SectionSliderContext.Provider
@@ -58,8 +72,8 @@ const SectionSliderProvider = ({ children }) => {
         setCurrentSection,
         todaySales,
         setTodaySales,
-        saveButtonWasClicked,
-        setSaveButtonWasClicked
+        updateNavInfo,
+        setUpdateNavInfo
       }}
     >
       {children}

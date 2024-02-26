@@ -19,9 +19,9 @@ const NewDebtor = () => {
   )
 }
 
-const InfoCard = ({ title, info }) => {
+const InfoCard = ({ title, info, color }) => {
   return (
-    <div className="tertiary-container on-tertiary-container-text rounded-lg grid grid-rows-2 p-4">
+    <div className={"rounded-lg grid grid-rows-2 p-4 " + color}>
       <div className="flex justify-start">
         <span className="background rounded-lg mr-4 w-10 h-10 grid place-items-center">
           <IoMdCash size={'1.75rem'} />
@@ -35,14 +35,17 @@ const InfoCard = ({ title, info }) => {
 
 InfoCard.propTypes = {
   title: PropTypes.string,
-  info: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  info: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  color: PropTypes.string
 }
 
 const OweActionBar = ({ children }) => {
   return (
     <div className="flex flex-col mb-4">
       <h1 className="capitalize mb-4 font-bold text-3xl">area de deudas</h1>
-      <ul className="rounded-lg grid grid-cols-3 w-full h-full gap-4">{children}</ul>
+      <ul className="rounded-lg grid grid-cols-3 w-full h-full gap-4">
+        {children}
+      </ul>
     </div>
   )
 }
@@ -141,7 +144,12 @@ const DetailedClientRow = ({ name, price, date }) => {
       onClick={clickhander}
     >
       <span className="grid place-items-center">
-        <input className='w-6 h-6' type="checkbox" name={name} defaultChecked={false} />
+        <input
+          className="w-6 h-6 pointer-events-none"
+          type="checkbox"
+          name={name}
+          defaultChecked={false}
+        />
       </span>
       <span className="flex justify-start items-center capitalize text-sm font-medium">
         {name}
@@ -193,21 +201,30 @@ let DetailedClient = ({ children, clientName }, ref) => {
 
   return (
     <div>
-      <h2 className="font-bold text-2xl mb-2">{clientName}</h2>
+      <h2 className="font-bold text-2xl mb-2 capitalize">{clientName}</h2>
       <p className="text-sm text-slate-700 font-medium mb-2">
         Selecciona las ventas que quieres borrar de la lista de deudas
       </p>
-      <ul ref={ref} className="mb-2 grid auto-rows-[40px] h-[200px] overflow-y-auto">
+      <ul
+        ref={ref}
+        className="mb-2 grid auto-rows-[40px] h-[200px] overflow-y-auto bg-slate-50 rounded-lg"
+      >
         {children}
       </ul>
       <div className="grid grid-cols-2 gap-4">
-        <button className="transition-colors rounded-lg bg-slate-100 hover:bg-slate-200" onClick={selectAll}>
+        <button
+          className="transition-colors rounded-lg bg-slate-100 hover:bg-slate-200"
+          onClick={selectAll}
+        >
           <span className="grid place-items-center">
             <MdPlaylistAddCheck size={'1.5rem'} />
           </span>
           <span className="grid place-items-center">Seleccionar todo</span>
         </button>
-        <button className="transition-colors  rounded-lg bg-slate-100 hover:bg-slate-200" onClick={updateSaleStatus}>
+        <button
+          className="transition-colors  rounded-lg bg-blue-100 hover:bg-blue-200 text-sky-700"
+          onClick={updateSaleStatus}
+        >
           <span className="grid place-items-center">
             <IoMdPaper size={'1.5rem'} />
           </span>
@@ -257,8 +274,8 @@ const OweSectionManager = () => {
       <div className="flex flex-col">
         <OweActionBar>
           <NewDebtor />
-          <InfoCard title={'Deuda Total'} info={totalDebts} />
-          <InfoCard title={'Clientes Totales'} info={activeDebtors.length} />
+          <InfoCard title={'Deuda Total'} info={totalDebts}  color={'bg-violet-200'}/>
+          <InfoCard title={'Clientes Totales'} info={activeDebtors.length} color={'bg-lime-200'}/>
         </OweActionBar>
         <OweBook>
           <TableOfDebs clientsInfo={activeDebtors} />

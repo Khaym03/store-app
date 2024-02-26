@@ -6,13 +6,14 @@ export const DollarContext = React.createContext()
 
 const DollarProvider = ({ children }) => {
   const [dollar, setDollar] = useState(0)
-  const [orders, setOrders] = useState([])
   const [total, setTotal] = useState(0)
   const [bs, setBs] = useState(0)
   const [searchingClient, setSearchingClient] = useState('')
   const [showSaveNotification, setShowSaveNotification] = useState(false)
   const [initialLoad, setInitialLoad] = useState(true)
   const [selected, setSelected] = useState([])
+  const [orders, setOrders] = useState([])
+  const [updateClientList, setUpdateClientList] = useState(true)
   const url = URLs.getDollarURL
 
   useEffect(() => {
@@ -25,8 +26,6 @@ const DollarProvider = ({ children }) => {
     <DollarContext.Provider
       value={{
         dollar,
-        orders,
-        setOrders,
         total,
         setTotal,
         bs,
@@ -38,7 +37,10 @@ const DollarProvider = ({ children }) => {
         initialLoad,
         setInitialLoad,
         selected,
-        setSelected
+        setSelected,
+        orders,
+        setOrders,
+        updateClientList, setUpdateClientList
       }}
     >
       {children}

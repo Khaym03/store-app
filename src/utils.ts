@@ -1,4 +1,7 @@
-export const fullDate = () => {
+import { URLs } from './constants'
+import { Order, Sale } from './types'
+
+export const fullDate = (): string => {
   const date = new Date()
 
   return [date.getDate(), date.getMonth() + 1, date.getFullYear()]
@@ -9,41 +12,37 @@ export const fullDate = () => {
     .join('-')
 }
 
-export const salesFormater = (orders, foreign_key = null) => {
-  const SALE_STATUS = Object.freeze({
-    DEBT_FREE: 'debt-free',
-    DEBT: 'debt'
-  })
-
-  return orders.reduce((acc, [name, unit, price]) => {
-    const sale = {
+export const salesFormater = (orders: Order[], foreign_key: number) => {
+  return orders.reduce<Sale[]>((acc, order) => {
+    const [name, unit, price] = order
+    const sale: Sale = {
       name,
       price,
       unit,
       type: 'cleaning',
       date: fullDate(),
-      status: foreign_key ? SALE_STATUS.DEBT : SALE_STATUS.DEBT_FREE,
-      foreign_key
+      status: foreign_key ? 'debt' : 'debt-free',
+      foreign_key: foreign_key ? foreign_key : null
     }
 
     return [...acc, sale]
   }, [])
 }
 
-export const postSales = sales => {
-  sales.forEach(sale => {
-    fetch('http://localhost:1234/postSale', {
+export const postSales = (sales: Sale[]) => {
+  sales.forEach((sale: Sale) => {
+    fetch(URLs.postSaleURL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(sale) // body data type must match "Content-Type" header
-    })
+    }).then(res => console.log(res?.status))
   })
 }
 
-export const postClient = clientName => {
-  fetch('http://localhost:1234/postClient', {
+export const postClient = (clientName: string) => {
+  fetch(URLs.postClientURL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

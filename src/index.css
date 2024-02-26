@@ -18,10 +18,15 @@
 
 body {
   color-scheme: light;
+  color: #191c1d;
 }
 
 #content {
   margin-left: var(--nav-width);
+}
+
+.background {
+  background-color: #fafdfd;
 }
 
 .section {
@@ -100,12 +105,20 @@ input[type='text']:focus {
   grid-template-columns: 1fr 2fr;
 }
 
+.cols-80-20 {
+  grid-template-columns: 80% 20%;
+}
+
 .Order {
   grid-template-rows: repeat(auto-fill, 28px);
 }
 
 .cols-2-1-1 {
   grid-template-columns: 2fr 1fr 1fr;
+}
+
+.rows-4-1-1 {
+  grid-template-rows: 4fr 1fr 1fr;
 }
 
 #owe-section {
@@ -117,5 +130,13 @@ input[type='text']:focus {
 }
 
 .ProductCard {
-  grid-template-columns: 2fr 1fr;
+  /* grid-template-columns: 2fr 1fr; */
+  grid-template-rows: 2fr;
+}
+
+.svg-overlay {
+  background-image: url('/lavaplatos.svg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.75;
 }

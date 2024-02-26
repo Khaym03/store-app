@@ -5,49 +5,6 @@ import { MdAdd } from 'react-icons/md'
 
 const calcMls = (x, price) => x / price
 
-const InputRange = ({ setRangeValue, inputRef }) => {
-  const changeHandler = e => {
-    const value = Number(e.target.value)
-    if (Number.isNaN(value)) return
-
-    setRangeValue(value)
-  }
-
-  return (
-    <div className="min-h-16 rounded-lg p-4 grid place-items-center relative transition-colors tertiary-container on-tertiary-container-text">
-      <input
-        id="measure-range"
-        type="text"
-        ref={inputRef}
-        onChange={changeHandler}
-        placeholder="Ingrese los ML"
-        className="cursor-pointer w-full h-full text-base font-medium bg-slate-100 absolute text-center border-none rounded-lg transition-colors"
-      />
-    </div>
-  )
-}
-
-InputRange.propTypes = {
-  setRangeValue: PropTypes.func.isRequired,
-  inputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) })
-}
-
-const Units = ({ fraction, clickHandler }) => {
-  return (
-    <div
-      onClick={clickHandler}
-      className="grid w-full h-full place-items-center rounded-lg text-sm font-medium transition-colors cursor-pointer secondary-container on-secondary-container-text"
-    >
-      {fraction}
-    </div>
-  )
-}
-
-Units.propTypes = {
-  fraction: PropTypes.string,
-  clickHandler: PropTypes.func.isRequired
-}
-
 const Converter = ({ setRangeValue }) => {
   const { bs, setBs, selected } = useContext(DollarContext)
   const price = selected[1]
@@ -65,7 +22,7 @@ const Converter = ({ setRangeValue }) => {
   return (
     <div className="relative w-full h-full ">
       <input
-        className="absolute text-center w-full h-full text-md font-medium rounded-lg surface-variant on-surface-variant-text"
+        className="absolute text-center w-full h-full text-md font-medium rounded-lg border-solid border-2 border-slate-100 shadow-sm"
         type="text"
         placeholder="Bs"
         value={!bs ? '' : bs}
@@ -77,6 +34,50 @@ const Converter = ({ setRangeValue }) => {
 
 Converter.propTypes = {
   setRangeValue: PropTypes.func
+}
+
+const InputRange = ({ setRangeValue, inputRef }) => {
+  const changeHandler = e => {
+    const value = Number(e.target.value)
+    if (Number.isNaN(value)) return
+
+    setRangeValue(value)
+  }
+
+  return (
+    <div className="min-h-16 rounded-lg gap-2 grid grid-cols-2 place-items-center relative transition-colors">
+      <input
+        id="measure-range"
+        type="text"
+        ref={inputRef}
+        onChange={changeHandler}
+        placeholder="Ingrese los ML"
+        className="cursor-pointer w-full h-full text-base font-medium text-center rounded-lg transition-colors border-solid border-2 border-slate-100 shadow-sm"
+      />
+      <Converter setRangeValue={setRangeValue}/>
+    </div>
+  )
+}
+
+InputRange.propTypes = {
+  setRangeValue: PropTypes.func.isRequired,
+  inputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+}
+
+const Units = ({ fraction, clickHandler }) => {
+  return (
+    <div
+      onClick={clickHandler}
+      className="grid w-full h-full place-items-center rounded-lg text-sm font-medium transition-colors cursor-pointer hover:bg-blue-200 bg-blue-100 text-sky-800"
+    >
+      {fraction}
+    </div>
+  )
+}
+
+Units.propTypes = {
+  fraction: PropTypes.string,
+  clickHandler: PropTypes.func.isRequired
 }
 
 const MeasureUnits = ({ setRangeValue }) => {
@@ -101,11 +102,10 @@ const MeasureUnits = ({ setRangeValue }) => {
   }
 
   return (
-    <div className="MeasureUnits grid grid-cols-4 gap-2 min-h-16">
+    <div className="MeasureUnits grid grid-cols-3 gap-2 min-h-16 py-2">
       {fractions.map((fr, i) => (
         <Units key={i} fraction={fr} clickHandler={clickHandler} />
       ))}
-      <Converter setRangeValue={setRangeValue} />
     </div>
   )
 }
@@ -116,7 +116,7 @@ MeasureUnits.propTypes = {
 
 const ShowUnit = ({ rangeValue }) => {
   return (
-    <div className="surface-light text-base font-medium w-full h-full grid place-items-center rounded-lg">{`${parseInt(
+    <div className="bg-slate-100 text-lg font-medium w-full h-full grid place-items-center rounded-lg italic">{`${parseInt(
       rangeValue
     )} ml`}</div>
   )
@@ -184,7 +184,7 @@ const AddToCart = ({
 
   return (
     <div
-      className="secondary-container on-secondary-container-text text-md capitalize grid place-items-center font-medium cursor-pointer rounded-lg"
+      className="hover:bg-blue-200 bg-blue-100 text-sky-800 text-md capitalize grid place-items-center font-medium cursor-pointer rounded-lg transition-colors"
       onClick={clickHandler}
     >
       <div className="flex">
@@ -210,7 +210,10 @@ const Measure = ({ rangeValue, setRangeValue }) => {
   const inputRef = useRef(null)
 
   return (
-    <section style={{gridArea: 'Measure'}} className="grid grid-rows-4 gap-2 p-4 rounded-lg">
+    <section
+      style={{ gridArea: 'Measure' }}
+      className="grid grid-rows-4 gap-2 p-4 rounded-lg"
+    >
       <InputRange
         rangeValue={rangeValue}
         setRangeValue={setRangeValue}

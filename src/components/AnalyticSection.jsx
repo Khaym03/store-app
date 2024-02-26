@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react'
 
 Chart.register(CategoryScale)
 
+
+
 const AnalyticSection = () => {
   const { data: allSales } = FetchTable(URLs.getSalesURL)
   const [data, setData] = useState([])
