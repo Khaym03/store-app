@@ -38,13 +38,13 @@ NavItem.propTypes = {
   Icon: PropTypes.func.isRequired
 }
 
-export const SimpleInfo = ({ title, info, Icon, color }) => (
+export const SimpleInfo = ({ title, info, Icon, color, iconSize, titleSize }) => (
   <div className={'rounded-lg p-4 cols-1-2 grid ' + color}>
     <div className="mr-4 flex justify-center items-center">
-      <Icon size={'1.5rem'} />
+      <Icon size={iconSize ? iconSize : '1.5rem'} />
     </div>
     <div>
-      <label className="text-xs font-bold">{title}</label>
+      <label className={`${titleSize? titleSize : 'text-xs'} font-bold`}>{title}</label>
       <p className="text-md italic font-medium opacity-80">{info.toFixed(2)}</p>
     </div>
   </div>
@@ -54,7 +54,9 @@ SimpleInfo.propTypes = {
   title: PropTypes.string,
   info: PropTypes.number,
   Icon: PropTypes.func.isRequired,
-  color: PropTypes.string
+  color: PropTypes.string,
+  iconSize: PropTypes.string,
+  titleSize: PropTypes.string
 }
 
 const Navbar = () => {

@@ -54,6 +54,12 @@ const AnalyticSection = () => {
           activity.set(sale.date, sale.price)
         }
       })
+
+      // const p = allSales.reduce((acc,curr) => {
+      //   return curr.price + acc
+      // },0)
+
+      // console.log(p / activity.size)
       setSalesActivity(activity)
     }
   }, [data])

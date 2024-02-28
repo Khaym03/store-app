@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 export const OweContext = createContext()
 
 const OweProvider = ({ children }) => {
-  const [selectedClient, setSelectedClient] = useState([])
-  const [selectedSales, setSelectedSales] = useState([])
+  const [selectedClient, setSelectedClient] = useState(null)
+  const [triggerUpdate, setTriggerUpdate] = useState(true)
   const detailedClientUlRef = useRef()
   return (
     <OweContext.Provider
@@ -13,8 +13,8 @@ const OweProvider = ({ children }) => {
         selectedClient,
         setSelectedClient,
         detailedClientUlRef,
-        selectedSales,
-        setSelectedSales
+        triggerUpdate,
+        setTriggerUpdate
       }}
     >
       {children}

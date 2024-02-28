@@ -15,3 +15,10 @@ export type Product = {
     price: number,
     color: string
 }
+
+export type Gaza = {
+  name: string
+  price: number
+}
+
+export type CalcPurchase = [Sale[], Gaza[], number]

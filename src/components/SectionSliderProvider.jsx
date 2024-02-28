@@ -20,7 +20,7 @@ export const SectionDisplayer = () => {
     >
       <ToolBar />
 
-      <div className={'absolute'}>
+      <div className={'w-full h-full grid place-items-center'}>
         {currentSection === APP_SECTIONS.SALES_SECTION ? (
           <DollarProvider>
             <SalesSectionManager />

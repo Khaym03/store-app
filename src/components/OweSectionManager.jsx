@@ -1,40 +1,46 @@
-import { MdAccountBox } from 'react-icons/md'
-import { IoMdCash } from 'react-icons/io'
+import { FiUser } from 'react-icons/fi'
+import { LiaMoneyBillWaveSolid } from 'react-icons/lia'
 import { URLs } from '../constants'
-import { FetchTable } from '../hooks/FetchTable'
 import PropTypes from 'prop-types'
 import { useContext, useEffect, useState, forwardRef } from 'react'
 import { MdPlaylistAddCheck } from 'react-icons/md'
+import { FiUsers } from 'react-icons/fi'
 import { IoMdPaper } from 'react-icons/io'
 import { OweContext } from './OweProvider'
+import { SimpleInfo } from './Navbar'
+import { useSpring,animated } from '@react-spring/web'
 
-const InfoCard = ({ title, info, color }) => {
+const Hand = () => {
+  const range = 5
+  const pointing = useSpring({
+    from:{x:-range},
+    to:[
+      {x:range},
+      {x:-range}
+    ],
+    loop: true,
+  })
+
   return (
-    <div className={"rounded-lg grid grid-rows-2 p-2 " + color}>
-      <div className="flex justify-start">
-        <span className="rounded-lg mr-4 w-10 h-10 grid place-items-center">
-          <IoMdCash size={'1.75rem'} />
-        </span>
-        <span className="font-medium text-base flex items-center">{title}</span>
+    <div className='p-8 h-full flex justify-center flex-col items-center '>
+      <h1 className="font-black text-3xl text-center capitalize mb-4">
+        Seleciona un cliente
+      </h1>
+      <p className="text-center font-medium text-lg text-slate-700 mb-4">
+        para ver los detalles de la dueda
+      </p>
+      <div className="p-8 rounded-lg w-48">
+        <animated.img src="/Hands.webp"  style={pointing}/>
       </div>
-      <div className="text-xl font-medium flex items-center italic ml-2">{info}</div>
     </div>
   )
-}
-
-InfoCard.propTypes = {
-  title: PropTypes.string,
-  info: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  color: PropTypes.string
 }
 
 const OweActionBar = ({ children }) => {
   return (
     <div className="flex flex-col mb-4">
-      <h1 className="capitalize mb-4 font-bold text-3xl">area de deudas</h1>
-      <ul className="rounded-lg grid grid-cols-3 w-full gap-4">
-        {children}
-      </ul>
+      <h1 className="capitalize mb-4 font-bold text-2xl">area de deudas</h1>
+      <ul className="rounded-lg grid grid-cols-2 w-full gap-4">{children}</ul>
     </div>
   )
 }
@@ -45,7 +51,6 @@ OweActionBar.propTypes = {
 
 const ClientGrid = ({ clientInfo }) => {
   const { setSelectedClient } = useContext(OweContext)
-
   const clientName = clientInfo[0].name
   const clientOwe = clientInfo[1].reduce((acc, curr) => acc + curr.price, 0)
   const since = clientInfo[1][0].date
@@ -58,11 +63,11 @@ const ClientGrid = ({ clientInfo }) => {
     <div
       onClick={clickHandler}
       data-client_id={clientInfo[0].id}
-      className="cols-2-1-1 grid font-medium text-base capitalize cursor-pointer border-t border-slate-200 hover:bg-slate-100 text-slate-700 transition-colors"
+      className="cols-2-1-1 grid font-medium text-base capitalize cursor-pointer border-t border-slate-100 hover:bg-slate-100 text-slate-700 transition-colors"
     >
       <div className="flex justify-start items-center ml-4">
-        <span className="bg-slate-200 w-10 h-10 on-surface-variant-text rounded-lg mr-4 grid place-items-center">
-          <MdAccountBox size={'2rem'} />
+        <span className=" w-10 h-10 on-surface-variant-text rounded-lg mr-4 grid place-items-center">
+          <FiUser size={'2rem'} />
         </span>
         <span>{clientName}</span>
       </div>
@@ -93,7 +98,7 @@ const BookHeader = () => {
 const TableOfDebs = ({ clientsInfo }) => {
   return (
     <div
-      className={` rounded-lg book-grid grid grid-cols-1 auto-rows-[60px] h-[240px] overflow-y-auto`}
+      className={` rounded-lg book-grid grid grid-cols-1 auto-rows-[68px] h-[276px] overflow-y-auto`}
     >
       {clientsInfo &&
         clientsInfo.map(info => (
@@ -110,7 +115,7 @@ TableOfDebs.propTypes = {
 const OweBook = ({ children }) => {
   return (
     <section className="rounded-lg  w-full h-full">
-      <h2 className="capitalize mb-4 text-2xl font-bold">libro de deudores</h2>
+      <h2 className="capitalize mb-4 text-xl font-bold">libro de deudores</h2>
       <BookHeader />
       {children}
     </section>
@@ -158,7 +163,8 @@ DetailedClientRow.propTypes = {
 }
 
 let DetailedClient = ({ children, clientName }, ref) => {
-  const { selectedClient } = useContext(OweContext)
+  const { selectedClient, setSelectedClient, setTriggerUpdate } =
+    useContext(OweContext)
   const [toggleSelectAll, setToggleSelectAll] = useState(false)
 
   const selectAll = () => {
@@ -170,7 +176,7 @@ let DetailedClient = ({ children, clientName }, ref) => {
   const updateSaleStatus = () => {
     const selected = Array.from(ref.current.querySelectorAll('input'))
 
-    if (!(selected.length > 0 && selectedClient.length > 0)) return
+    if (!(selected.length > 0 && selectedClient)) return
 
     const salesToBeProcessed = selected.reduce((acc, currInput, index) => {
       if (currInput.checked) return [...acc, selectedClient[1][index]]
@@ -184,6 +190,11 @@ let DetailedClient = ({ children, clientName }, ref) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ id: sale.id })
+      }).then(res => {
+        if (res.ok) {
+          setTriggerUpdate(true)
+          setSelectedClient(null)
+        }
       })
     })
   }
@@ -232,20 +243,39 @@ DetailedClient.propTypes = {
 }
 
 const OweSectionManager = () => {
-  const { data: clients } = FetchTable(URLs.getClientsURL)
-  const { data: owes } = FetchTable(URLs.getSalesByStatusURL)
-  const { data: allDebts } = FetchTable(URLs.getSalesByStatusURL)
+  const [data, setData] = useState(null)
+  const [totalDebts, setTotalDebts] = useState(0)
 
-  const { selectedClient, detailedClientUlRef } = useContext(OweContext)
-
-  const totalDebts = allDebts
-    ? allDebts.reduce((acc, cur) => acc + cur.price, 0)
-    : 0
+  const {
+    selectedClient,
+    detailedClientUlRef,
+    triggerUpdate,
+    setTriggerUpdate
+  } = useContext(OweContext)
 
   const [activeDebtors, setActiveDebtors] = useState([])
 
   useEffect(() => {
-    if (clients && owes) {
+    if (triggerUpdate) {
+      const responses = [
+        URLs.getClientsURL,
+        URLs.getSalesByStatusURL,
+        URLs.getSalesByStatusURL
+      ].map(url => fetch(url).then(res => res.json()))
+
+      Promise.all(responses).then(info => {
+        setData(info)
+        setTriggerUpdate(false)
+      })
+    }
+  }, [triggerUpdate, setTriggerUpdate])
+
+  useEffect(() => {
+    if (data) {
+      const [clients, owes, allSales] = data
+
+      setTotalDebts(allSales.reduce((acc, cur) => acc + cur.price, 0))
+
       const clientsInfo = clients.reduce((acc, currClient) => {
         const findClientOwes = owes.filter(
           sale => sale.foreign_key === currClient.id
@@ -254,23 +284,45 @@ const OweSectionManager = () => {
 
         return hasOwes ? acc.concat([[currClient, findClientOwes]]) : acc
       }, [])
+
       setActiveDebtors(clientsInfo)
     }
-  }, [clients, owes])
+  }, [data])
 
   return (
-    <section id="owe-section" className="w-[1080px] h-[520px] grid gap-16 p-4 border-solid border border-slate-200 shadow-sm rounded-xl">
+    <section
+      id="owe-section"
+      className="w-[1080px] h-[572px] grid gap-8 p-8 border-solid border border-slate-200 shadow-sm rounded-xl"
+    >
       <div className="flex flex-col">
         <OweActionBar>
-          <InfoCard title={'Deuda Total'} info={totalDebts}  color={'bg-violet-200'}/>
-          <InfoCard title={'Clientes Totales'} info={activeDebtors.length} color={'bg-lime-200'}/>
+          <SimpleInfo
+            title={'Deuda Total'}
+            info={totalDebts}
+            color={'bg-violet-200'}
+            Icon={LiaMoneyBillWaveSolid}
+            iconSize={'2rem'}
+            titleSize={'text-md'}
+          />
+          <SimpleInfo
+            title={'Clientes Totales'}
+            info={activeDebtors.length}
+            color={'bg-lime-200'}
+            Icon={FiUsers}
+            iconSize={'2rem'}
+            titleSize={'text-md'}
+          />
         </OweActionBar>
         <OweBook>
           <TableOfDebs clientsInfo={activeDebtors} />
         </OweBook>
       </div>
+
+      <span className="bg-gradient-to-b from-transparent via-slate-300 to-transparent rounded-full"></span>
+
       <div className="rounded-lg">
-        {selectedClient.length > 0 && (
+        {!selectedClient ? <Hand /> : null}
+        {selectedClient && (
           <DetailedClient
             clientName={selectedClient[0].name}
             ref={detailedClientUlRef}

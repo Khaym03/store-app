@@ -2,11 +2,6 @@ import {Product} from './types'
 
 const listOfProducts: Product[] = [
   {
-    name: 'acondicionador',
-    price: 45,
-    color: 'text-slate-400'
-  },
-  {
     name: 'ariel',
     price: 33,
     color: 'text-blue-400'

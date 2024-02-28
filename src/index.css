@@ -118,7 +118,7 @@ input[type='text']:focus {
 }
 
 #owe-section {
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1.5fr 1px 1fr;
 }
 
 .DetailedClientRow {
@@ -128,11 +128,4 @@ input[type='text']:focus {
 .ProductCard {
   /* grid-template-columns: 2fr 1fr; */
   grid-template-rows: 2fr;
-}
-
-.svg-overlay {
-  background-image: url('/lavaplatos.svg');
-  background-size: cover;
-  background-position: center;
-  opacity: 0.75;
 }

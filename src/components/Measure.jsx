@@ -7,10 +7,10 @@ const calcMls = (x, price) => x / price
 
 const Converter = ({ setRangeValue }) => {
   const { bs, setBs, selected } = useContext(DollarContext)
-  const price = selected[1]
-
+  
   const handleChange = e => {
-    if (selected.length > 0) {
+    if (selected) {
+      const price = selected[1]
       const value = Number(e.target.value),
         ml = calcMls(value, price) * 1000
 
@@ -151,7 +151,7 @@ const AddToCart = ({
   }
 
   const clickHandler = () => {
-    if (selected.length > 0) {
+    if (selected) {
       const newOrder = formattedOrder()
 
       const map = new Map()

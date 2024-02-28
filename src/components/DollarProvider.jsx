@@ -11,7 +11,7 @@ const DollarProvider = ({ children }) => {
   const [searchingClient, setSearchingClient] = useState('')
   const [showSaveNotification, setShowSaveNotification] = useState(false)
   const [initialLoad, setInitialLoad] = useState(true)
-  const [selected, setSelected] = useState([])
+  const [selected, setSelected] = useState(null)
   const [orders, setOrders] = useState([])
   const [updateClientList, setUpdateClientList] = useState(true)
   const url = URLs.getDollarURL
