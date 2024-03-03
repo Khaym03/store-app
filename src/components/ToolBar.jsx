@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect, useContext } from 'react'
 import { useSpring, animated } from '@react-spring/web'
 import { FaCaretDown } from 'react-icons/fa6'
-import { MdOutlineAutoDelete } from "react-icons/md";
+import { MdOutlineAutoDelete } from 'react-icons/md'
 import { IoMdPaper } from 'react-icons/io'
 import PropTypes from 'prop-types'
 import { URLs } from '../constants'
 import { fullDate } from '../utils'
 import { SectionSliderContext } from './SectionSliderProvider'
+import Button from '../comp/Button'
 
 const TextInput = ({ placeholder }) => {
   return (
@@ -104,6 +105,24 @@ const ToolBar = () => {
     )
 
     const [sales, todayOwe] = await Promise.all(responses)
+    ////
+
+    console.log('bio = ',
+      sales
+        .filter(sale => sale.payment_method === 'bio')
+        .reduce((a, b) => a + b.price, 0)
+    )
+    console.log('efectivo = ',
+      sales
+        .filter(sale => sale.payment_method === 'efectivo')
+        .reduce((a, b) => a + b.price, 0)
+    )
+    console.log('punto = ',
+      sales
+        .filter(sale => sale.payment_method === 'punto')
+        .reduce((a, b) => a + b.price, 0)
+    )
+    ////
 
     const total = sales.reduce((sum, sale) => sum + sale.price, 0),
       profit = total * 0.45,
@@ -145,14 +164,13 @@ const ToolBar = () => {
       }
     >
       <ul className=" grid grid-cols-4 gap-4 px-8 py-8 h-full">
-        <ToolBarButton
-          title={'Borra la ultima venta'}
-          style={
-            'bg-red-100 hover:bg-red-200 text-red-700 transition-colors text-red-700'
-          }
-          actionHandler={deleteLastSale}
-          Icon={MdOutlineAutoDelete}
-        />
+        <Button
+          clickHandler={deleteLastSale}
+          actionType="delete"
+          title="Borrar ultima venta"
+        >
+          <MdOutlineAutoDelete size={'1.5rem'} />
+        </Button>
       </ul>
       <div className="px-4 py-4">
         <ul className="grid grid-cols-4 gap-4">
@@ -168,14 +186,9 @@ const ToolBar = () => {
               <TextInput placeholder={labels[i]} />
             </li>
           ))}
-          <ToolBarButton
-            title={'Reporte de ventas'}
-            style={
-              'bg-blue-100 text-sky-700 hover:bg-blue-200 transition-colors'
-            }
-            actionHandler={report}
-            Icon={IoMdPaper}
-          />
+          <Button clickHandler={report} actionType="main" title="Crear Reporte">
+            <IoMdPaper size={'1.5rem'} />
+          </Button>
         </ul>
       </div>
       <Arrow showToolBar={showToolBar} setShowToolBar={setShowToolBar} />

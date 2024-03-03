@@ -8,21 +8,20 @@ import { FiUsers } from 'react-icons/fi'
 import { IoMdPaper } from 'react-icons/io'
 import { OweContext } from './OweProvider'
 import { SimpleInfo } from './Navbar'
-import { useSpring,animated } from '@react-spring/web'
+import { useSpring, animated, useTransition } from '@react-spring/web'
+import Button from '../comp/Button'
+import {SelectPaymentMethod} from './SalesStorager'
 
-const Hand = () => {
+const Hand = ({anime}) => {
   const range = 5
   const pointing = useSpring({
-    from:{x:-range},
-    to:[
-      {x:range},
-      {x:-range}
-    ],
-    loop: true,
+    from: { x: -range },
+    to: [{ x: range }, { x: -range }],
+    loop: true
   })
 
   return (
-    <div className='p-8 h-full flex justify-center flex-col items-center '>
+    <animated.div style={anime} className="p-8 h-full flex justify-center flex-col items-center">
       <h1 className="font-black text-3xl text-center capitalize mb-4">
         Seleciona un cliente
       </h1>
@@ -30,10 +29,14 @@ const Hand = () => {
         para ver los detalles de la dueda
       </p>
       <div className="p-8 rounded-lg w-48">
-        <animated.img src="/Hands.webp"  style={pointing}/>
+        <animated.img src="/Hands.webp" style={pointing} />
       </div>
-    </div>
+    </animated.div>
   )
+}
+
+Hand.propTypes = {
+  anime: PropTypes.object
 }
 
 const OweActionBar = ({ children }) => {
@@ -56,7 +59,13 @@ const ClientGrid = ({ clientInfo }) => {
   const since = clientInfo[1][0].date
 
   const clickHandler = () => {
-    setSelectedClient(clientInfo)
+    const info = {
+      name: clientName,
+      since,
+      owe: clientInfo[1]
+    }
+
+    setSelectedClient(info)
   }
 
   return (
@@ -162,7 +171,7 @@ DetailedClientRow.propTypes = {
   date: PropTypes.string
 }
 
-let DetailedClient = ({ children, clientName }, ref) => {
+let DetailedClient = ({ children, clientName, anime }, ref) => {
   const { selectedClient, setSelectedClient, setTriggerUpdate } =
     useContext(OweContext)
   const [toggleSelectAll, setToggleSelectAll] = useState(false)
@@ -179,7 +188,7 @@ let DetailedClient = ({ children, clientName }, ref) => {
     if (!(selected.length > 0 && selectedClient)) return
 
     const salesToBeProcessed = selected.reduce((acc, currInput, index) => {
-      if (currInput.checked) return [...acc, selectedClient[1][index]]
+      if (currInput.checked) return [...acc, selectedClient.owe[index]]
       return acc
     }, [])
 
@@ -200,38 +209,29 @@ let DetailedClient = ({ children, clientName }, ref) => {
   }
 
   return (
-    <div>
+    <animated.div style={anime} className={'h-full'}>
       <h2 className="font-bold text-2xl mb-2 capitalize">{clientName}</h2>
       <p className="text-sm text-slate-700 font-medium mb-2">
         Selecciona las ventas que quieres borrar de la lista de deudas
       </p>
       <ul
         ref={ref}
-        className=" mb-2 grid auto-rows-[40px] h-[340px] overflow-y-auto rounded-lg"
+        className=" mb-2 grid auto-rows-[40px] h-[240px] overflow-y-auto rounded-lg"
       >
         {children}
       </ul>
-      <div className="grid grid-cols-2 gap-4">
-        <button
-          className="transition-colors py-2 rounded-lg bg-slate-100 hover:bg-slate-200"
-          onClick={selectAll}
-        >
-          <span className="grid place-items-center">
-            <MdPlaylistAddCheck size={'1.5rem'} />
-          </span>
-          <span className="grid place-items-center">Seleccionar todo</span>
-        </button>
-        <button
-          className="transition-colors py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-sky-700"
-          onClick={updateSaleStatus}
-        >
-          <span className="grid place-items-center">
-            <IoMdPaper size={'1.5rem'} />
-          </span>
-          <span className="grid place-items-center">Deuda pagada</span>
-        </button>
+      <SelectPaymentMethod className={'mb-4'} ctx={OweContext}/>
+      <div className="grid grid-cols-2 gap-4 mt-auto">
+        <Button clickHandler={selectAll} orientation='vertical'>
+          <MdPlaylistAddCheck size={'1.5rem'} />
+          Seleccionar todo
+        </Button>
+        <Button clickHandler={updateSaleStatus} actionType="main" orientation='vertical'>
+          <IoMdPaper size={'1.5rem'} />
+          Pagar
+        </Button>
       </div>
-    </div>
+    </animated.div>
   )
 }
 
@@ -239,7 +239,8 @@ DetailedClient = forwardRef(DetailedClient)
 
 DetailedClient.propTypes = {
   children: PropTypes.node,
-  clientName: PropTypes.string
+  clientName: PropTypes.string,
+  anime: PropTypes.object
 }
 
 const OweSectionManager = () => {
@@ -289,6 +290,11 @@ const OweSectionManager = () => {
     }
   }, [data])
 
+  const transition = useTransition(selectedClient ? [selectedClient] : false, {
+    from: { opacity: 0 },
+    enter: { opacity: 1}
+  })
+
   return (
     <section
       id="owe-section"
@@ -320,22 +326,26 @@ const OweSectionManager = () => {
 
       <span className="bg-gradient-to-b from-transparent via-slate-300 to-transparent rounded-full"></span>
 
-      <div className="rounded-lg">
-        {!selectedClient ? <Hand /> : null}
-        {selectedClient && (
-          <DetailedClient
-            clientName={selectedClient[0].name}
-            ref={detailedClientUlRef}
-          >
-            {selectedClient[1].map(({ name, price, date }, i) => (
-              <DetailedClientRow
-                key={i}
-                name={name}
-                price={price}
-                date={date}
-              />
-            ))}
-          </DetailedClient>
+      <div className="rounded-lg relative">
+        {transition((style, x) =>
+          x ? (
+            <DetailedClient
+              anime={style}
+              clientName={x.name}
+              ref={detailedClientUlRef}
+            >
+              {x.owe.map(({ name, price, date }, i) => (
+                <DetailedClientRow
+                  key={i}
+                  name={name}
+                  price={price}
+                  date={date}
+                />
+              ))}
+            </DetailedClient>
+          ) : (
+            <Hand anime={style}/>
+          )
         )}
       </div>
     </section>

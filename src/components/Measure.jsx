@@ -2,12 +2,13 @@ import PropTypes from 'prop-types'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { DollarContext } from './DollarProvider'
 import { MdAdd } from 'react-icons/md'
+import Button from '../comp/Button'
 
 const calcMls = (x, price) => x / price
 
 const Converter = ({ setRangeValue }) => {
   const { bs, setBs, selected } = useContext(DollarContext)
-  
+
   const handleChange = e => {
     if (selected) {
       const price = selected[1]
@@ -54,7 +55,7 @@ const InputRange = ({ setRangeValue, inputRef }) => {
         placeholder="Ingrese los ML"
         className="cursor-pointer w-full h-full text-base font-medium text-center rounded-lg transition-colors border-solid border-2 border-slate-100 shadow-sm"
       />
-      <Converter setRangeValue={setRangeValue}/>
+      <Converter setRangeValue={setRangeValue} />
     </div>
   )
 }
@@ -64,27 +65,9 @@ InputRange.propTypes = {
   inputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) })
 }
 
-const Units = ({ fraction, clickHandler }) => {
-  return (
-    <div
-      onClick={clickHandler}
-      className="grid w-full h-full place-items-center rounded-lg text-sm font-medium transition-colors cursor-pointer hover:bg-blue-200 bg-blue-100 text-sky-800"
-    >
-      {fraction}
-    </div>
-  )
-}
-
-Units.propTypes = {
-  fraction: PropTypes.string,
-  clickHandler: PropTypes.func.isRequired
-}
-
 const MeasureUnits = ({ setRangeValue }) => {
-  const fractions = ['1/4', '1/2', '1']
-
-  const clickHandler = ({ target }) => {
-    let fr = target.textContent
+  const clickHandler = ({ currentTarget }) => {
+    let fr = currentTarget.textContent
     const unit = 1000
 
     switch (fr) {
@@ -103,9 +86,15 @@ const MeasureUnits = ({ setRangeValue }) => {
 
   return (
     <div className="MeasureUnits grid grid-cols-3 gap-2 min-h-16 py-2">
-      {fractions.map((fr, i) => (
-        <Units key={i} fraction={fr} clickHandler={clickHandler} />
-      ))}
+      <Button clickHandler={clickHandler} actionType="main">
+        1/4
+      </Button>
+      <Button clickHandler={clickHandler} actionType="main">
+        1/2
+      </Button>
+      <Button clickHandler={clickHandler} actionType="main">
+        1
+      </Button>
     </div>
   )
 }
@@ -183,17 +172,10 @@ const AddToCart = ({
   }, [orderWasAdded, inputRef])
 
   return (
-    <div
-      className="hover:bg-blue-200 bg-blue-100 text-sky-800 text-md capitalize grid place-items-center font-medium cursor-pointer rounded-lg transition-colors"
-      onClick={clickHandler}
-    >
-      <div className="flex">
-        <span className="mr-4 grid place-items-center">
-          <MdAdd size={'1.5rem'} />
-        </span>
-        <span>agregar</span>
-      </div>
-    </div>
+    <Button clickHandler={clickHandler} actionType='main' orientation='orizontal'>
+      <MdAdd className='mr-2' size={'1.5rem'} />
+      Agregar
+    </Button>
   )
 }
 

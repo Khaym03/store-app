@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import listOfProducts from '../listOfProducts'
 import { GazaCalcContext } from './GazaCalcProvider'
 import calc from '../calcOptimalPurchase'
+import { matchBg } from '../utils'
+import { useTransition, animated } from '@react-spring/web'
+import Button from '../comp/Button'
 
 const Title = ({ children }) => (
   <h2 className="capitalize font-black text-3xl mb-4 pointer-events-none">
@@ -27,22 +30,6 @@ BasicInput.displayName = 'BasicInput'
 
 BasicInput.propTypes = {
   placeholder: PropTypes.string
-}
-
-const ActionBtn = ({ text, clickHandler }) => {
-  return (
-    <button
-      onClick={clickHandler}
-      className="bg-blue-100 text-sky-700 hover:bg-blue-200 transition-colors h-14 rounded-lg capitalize p-4 w-full"
-    >
-      {text}
-    </button>
-  )
-}
-
-ActionBtn.propTypes = {
-  text: PropTypes.string.isRequired,
-  clickHandler: PropTypes.func.isRequired
 }
 
 const ProductTags = ({ productName }) => {
@@ -104,7 +91,11 @@ const ProductToBeBough = () => {
 
   useEffect(() => {
     if (calcOptimalPurchase) {
-      calc(bs, ignoreProducts, discount).then(data => setProductToBebough(data))
+      calc(bs, ignoreProducts, discount).then(data => {
+        const filterCeros = [...data.entries()].filter(prod => prod[1])
+
+        setProductToBebough(new Map(filterCeros))
+      })
       setCalcOptimalPurchase(false)
     }
   }, [
@@ -114,19 +105,34 @@ const ProductToBeBough = () => {
     bs,
     discount
   ])
+
+  const transition = useTransition(
+    productToBebough ? [...productToBebough.entries()] : [],
+    {
+      from: { x: -10, opacity: 0 },
+      enter: { x: 0, opacity: 1 },
+      trail: 15
+    }
+  )
+
   return (
-    <ul className="grid grid-cols-3 gap-2 capitalize font-medium italic items-center">
-      {productToBebough &&
-        [...productToBebough.entries()].map(([name, amount]) => {
-          return (
-            <li
-              key={name}
-              className={
-                'border-solid border-slate-200 border-2 rounded-md shadow-sm p-4 text-slate-600 text-sm'
-              }
-            >{`${name} -> ${amount}`}</li>
-          )
-        })}
+    <ul className="grid auto-rows-[45.5px] capitalize font-medium italic items-center">
+      {transition((style, [name, amount]) => {
+        const bg = matchBg(name)
+        return (
+          <animated.li
+            style={style}
+            key={name}
+            className={
+              'rounded-md px-4 py-3 text-slate-600 text-sm relative grid cols-1-3-1'
+            }
+          >
+            <span className={`w-5 h-5 ${bg} rounded-full`}></span>
+            <span>{name}</span>
+            <span>{amount + ' Lts'}</span>
+          </animated.li>
+        )
+      })}
     </ul>
   )
 }
@@ -160,7 +166,7 @@ const OptimalPurchaseSection = () => {
         <BasicInput ref={budgetRef} placeholder="presupuesto" />
         <BasicInput ref={discountRef} placeholder="descuento" />
       </div>
-      <ActionBtn text={'calcular'} clickHandler={clickhandler} />
+      <Button clickHandler={clickhandler} actionType="main">calcular</Button>
     </>
   )
 }
@@ -199,17 +205,27 @@ const StageOne = () => {
 const GazaCalcSection = () => {
   const { onDemand, firstStage } = useContext(GazaCalcContext)
 
+  const transition = useTransition(onDemand, {
+    from: { x: 25, opacity: 0.1 },
+    enter: { x: 0, opacity: 1 }
+  })
+
   return firstStage ? (
     <StageOne />
   ) : onDemand ? (
-    <section className="section grid grid-cols-2 gap-4 rounded-lg shadow-sm">
-      <div className=" border border-slate-200 p-8 rounded-lg my-auto">
-        <OptimalPurchaseSection />
-      </div>
-      <div className="border border-slate-200 p-8 rounded-lg shadow-sm my-auto">
-        <ProductToBeBough />
-      </div>
-    </section>
+    transition(style => (
+      <animated.section
+        style={style}
+        className="grid grid-cols-2 gap-4 rounded-lg shadow-sm h-fit"
+      >
+        <div className=" border border-slate-200 p-8 rounded-lg my-auto">
+          <OptimalPurchaseSection />
+        </div>
+        <div className="border border-slate-200 p-8 rounded-lg shadow-sm my-auto h-full">
+          <ProductToBeBough />
+        </div>
+      </animated.section>
+    ))
   ) : null
 }
 

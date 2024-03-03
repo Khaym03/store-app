@@ -9,11 +9,12 @@ const DollarProvider = ({ children }) => {
   const [total, setTotal] = useState(0)
   const [bs, setBs] = useState(0)
   const [searchingClient, setSearchingClient] = useState('')
-  const [showSaveNotification, setShowSaveNotification] = useState(false)
+  const [notification, setNotification] = useState(null)
   const [initialLoad, setInitialLoad] = useState(true)
   const [selected, setSelected] = useState(null)
   const [orders, setOrders] = useState([])
   const [updateClientList, setUpdateClientList] = useState(true)
+  const [paymentMethod, setPaymentMethod] = useState('bio')
   const url = URLs.getDollarURL
 
   useEffect(() => {
@@ -32,15 +33,18 @@ const DollarProvider = ({ children }) => {
         setBs,
         searchingClient,
         setSearchingClient,
-        showSaveNotification,
-        setShowSaveNotification,
+        notification,
+        setNotification,
         initialLoad,
         setInitialLoad,
         selected,
         setSelected,
         orders,
         setOrders,
-        updateClientList, setUpdateClientList
+        updateClientList,
+        setUpdateClientList,
+        paymentMethod,
+        setPaymentMethod
       }}
     >
       {children}

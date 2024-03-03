@@ -55,14 +55,14 @@ const AnalyticSection = () => {
         }
       })
 
-      // const p = allSales.reduce((acc,curr) => {
-      //   return curr.price + acc
-      // },0)
+      const p = allSales.reduce((acc,curr) => {
+        return curr.price + acc
+      },0)
 
-      // console.log(p / activity.size)
+      console.log(p / activity.size)
       setSalesActivity(activity)
     }
-  }, [data])
+  }, [data, allSales])
 
   const productColors = [
     '#4ade80',

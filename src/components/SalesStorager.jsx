@@ -1,5 +1,5 @@
 import { MdAddShoppingCart } from 'react-icons/md'
-import { MdOutlineArchive } from "react-icons/md"
+import { MdOutlineArchive } from 'react-icons/md'
 import { MdDeleteOutline } from 'react-icons/md'
 import PropTypes from 'prop-types'
 import { useContext, useEffect, useRef, useState } from 'react'
@@ -12,11 +12,15 @@ import { FetchTable } from '../hooks/FetchTable.jsx'
 import { useTransition, animated } from '@react-spring/web'
 import { URLs } from '../constants.ts'
 import { SectionSliderContext } from './SectionSliderProvider.jsx'
+import { MdOutlineFingerprint } from 'react-icons/md'
+import { MdOutlineCreditCard } from 'react-icons/md'
+import { GiMoneyStack } from 'react-icons/gi'
+import { MdOutlineMessage } from 'react-icons/md'
+import PaymentMethodItem from '../comp/SelectPaymentMethod.tsx'
+import Button from '../comp/Button.tsx'
+import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
 
 const iconSize = '2.5rem'
-
-const SAVE_SALE = 'guardar',
-  DELETE_SALE = 'borrar'
 
 const Total = ({ total }) => {
   return (
@@ -42,59 +46,6 @@ Total.propTypes = {
   total: PropTypes.number
 }
 
-const StoragerAction = ({ Icon, text }) => {
-  let bgColor, color, handler, hover
-  const { orders, setOrders, setTotal, setShowSaveNotification } =
-    useContext(DollarContext)
-
-  const { setUpdateNavInfo } = useContext(SectionSliderContext)
-
-  const deleteHandler = () => {
-    setOrders([])
-    setTotal(0)
-  }
-
-  const saveHandler = () => {
-    postSales(salesFormater(orders))
-    setOrders([])
-    setTotal(0)
-    setShowSaveNotification(true)
-    setUpdateNavInfo(true)
-  }
-
-  if (text === DELETE_SALE) {
-    bgColor = 'bg-red-100'
-    color = 'text-red-700'
-    hover = 'hover:bg-red-200'
-    handler = deleteHandler
-  } else if (text === SAVE_SALE) {
-    bgColor = 'bg-blue-100'
-    color = 'text-sky-700'
-    hover = 'hover:bg-blue-200'
-    handler = saveHandler
-  }
-
-  return (
-    <button
-      className={`grid place-items-center rounded-lg ${bgColor} ${color} ${hover} transition-colors`}
-      onClick={handler}
-    >
-      <div className="flex-col">
-        <span className="grid place-items-center rounded-lg mb-4">
-          <Icon size={iconSize} />
-        </span>
-        <span className="grid place-items-center capitalize text-md">
-          {text}
-        </span>
-      </div>
-    </button>
-  )
-}
-
-StoragerAction.propTypes = {
-  Icon: PropTypes.func.isRequired,
-  text: PropTypes.string
-}
 
 const SearchBar = () => {
   const { setSearchingClient, setUpdateClientList } = useContext(DollarContext)
@@ -117,17 +68,24 @@ const SearchBar = () => {
 }
 
 const ClientCard = ({ name, clientId }) => {
-  const { orders, setOrders, setTotal, setShowSaveNotification } =
+  const { orders, setOrders, setTotal, setNotification } =
     useContext(DollarContext)
 
   const { setUpdateNavInfo } = useContext(SectionSliderContext)
+
+  const notificationConfig = {
+    message: 'Guardado Correctamente',
+    show: true,
+    setShow: setNotification,
+    Icon: IoMdCheckmarkCircleOutline
+  }
 
   const clickHandler = clientId => {
     postSales(salesFormater(orders, clientId))
     setOrders([])
     setTotal(0)
     setUpdateNavInfo(true)
-    setShowSaveNotification(true)
+    setNotification(notificationConfig)
   }
 
   return (
@@ -185,12 +143,9 @@ const ClientDialog = ({ setUpdateClientList }) => {
 
   return (
     <div>
-      <button
-        className="flex justify-center items-center bg-blue-100 hover:bg-blue-200 text-sky-700 rounded-lg h-full transition-colors"
-        onClick={popup}
-      >
+      <Button clickHandler={popup} actionType='main'>
         <MdOutlineAddReaction size={'1.5rem'} />
-      </button>
+      </Button>
 
       <dialog
         ref={dialogRef}
@@ -206,18 +161,8 @@ const ClientDialog = ({ setUpdateClientList }) => {
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <button
-              onClick={close}
-              className="border-solid border-2 border-slate-100 rounded-lg transition-colors hover:bg-slate-100 capitalize"
-            >
-              cancel
-            </button>
-            <button
-              onClick={addClient}
-              className="hover:bg-blue-200 transition-colors rounded-lg bg-blue-100 text-sky-700 capitalize"
-            >
-              añadir
-            </button>
+            <Button clickHandler={close}>Cancel</Button>
+            <Button clickHandler={addClient} actionType='main'>Añadir</Button>
           </div>
         </div>
       </dialog>
@@ -229,14 +174,77 @@ ClientDialog.propTypes = {
   setUpdateClientList: PropTypes.func
 }
 
+export const SelectPaymentMethod = ({ctx,className}) => {
+  const { paymentMethod, setPaymentMethod } = useContext(ctx)
+  const methods = [
+    { name: 'bio', icon: MdOutlineFingerprint },
+    { name: 'punto', icon: MdOutlineCreditCard },
+    { name: 'efectivo', icon: GiMoneyStack },
+    { name: 'pago-movil', icon: MdOutlineMessage }
+  ]
+
+  return (
+    <ul className={`grid grid-cols-4 bg-slate-50 rounded-lg ${className}`}>
+      {methods.map(method => (
+        <PaymentMethodItem
+          key={method.name}
+          name={method.name}
+          Icon={method.icon}
+          paymentMethod={paymentMethod}
+          setPaymentMethod={setPaymentMethod}
+        />
+      ))}
+    </ul>
+  )
+}
+
+SelectPaymentMethod.propTypes = {
+  ctx: PropTypes.shape({
+    paymentMethod: PropTypes.string, 
+    setPaymentMethod: PropTypes.func,
+ }).isRequired,
+ className: PropTypes.string
+}
+
 const SalesStorager = () => {
   const [clients, setClients] = useState(null)
-  const { total, searchingClient, updateClientList, setUpdateClientList } =
-    useContext(DollarContext)
+  const {
+    total,
+    searchingClient,
+    updateClientList,
+    setUpdateClientList,
+    orders,
+    setOrders,
+    setTotal,
+    setNotification,
+    paymentMethod
+  } = useContext(DollarContext)
+
+  const { setUpdateNavInfo } = useContext(SectionSliderContext)
+
+  const deleteHandler = () => {
+    setOrders([])
+    setTotal(0)
+  }
+
+  const notificationConfig = {
+    message: 'Guardado Correctamente',
+    show: true,
+    setShow: setNotification,
+    Icon: IoMdCheckmarkCircleOutline
+  }
+
+  const saveHandler = () => {
+    postSales(salesFormater(orders, null, paymentMethod))
+    setOrders([])
+    setTotal(0)
+    setNotification(notificationConfig)
+    setUpdateNavInfo(true)
+  }
 
   const transitions = useTransition(clients || [], {
-    from: { opacity: 0, display:'none' },
-    enter: { opacity: 1,  display:'block'},
+    from: { opacity: 0, display: 'none' },
+    enter: { opacity: 1, display: 'block' },
     config: { duration: 40 },
     trail: 20,
     keys: item => item.name // Use the product name as the key
@@ -267,20 +275,27 @@ const SalesStorager = () => {
       style={{ gridArea: ' Client' }}
       className=" grid-cols-2 grid gap-4 rounded-lg"
     >
-      <div className="grid gap-4 grid-rows-2 p-4">
+      <div className="grid gap-4 rows-2-1-1 p-4 overflow-hidden">
         <Total total={total} />
+        <SelectPaymentMethod ctx={DollarContext}/>
         <div className="grid grid-cols-2 gap-4">
-          <StoragerAction Icon={MdDeleteOutline} text={DELETE_SALE} />
-          <StoragerAction Icon={MdOutlineArchive } text={SAVE_SALE} />
+          <Button clickHandler={deleteHandler} actionType='delete'>
+            <MdDeleteOutline size={'1.5rem'} className='mr-2'/>
+            Borrar
+          </Button>
+          <Button clickHandler={saveHandler} actionType='main'>
+            <MdOutlineArchive size={'1.5rem'} className='mr-2'/>
+            Guardar
+          </Button>
         </div>
       </div>
       <section className="flex flex-col p-4">
-        <div className="h-[52.4px] relative justify-between rounded-lg flex mb-2">
+        <div className="h-[52.4px] relative justify-between rounded-lg flex mb-2 overflow-hidden">
           <SearchBar />
           <ClientDialog setUpdateClientList={setUpdateClientList} />
         </div>
         <ul
-          className={`grid max-h-[241.6px] gap-2 overflow-y-auto auto-rows-[52.4px] h-full  text-slate-700`}
+          className={`grid max-h-[241.6px] gap-2 overflow-y-auto auto-rows-[54px] h-[241.6px]  text-slate-700`}
         >
           {transitions(
             (styles, client) =>

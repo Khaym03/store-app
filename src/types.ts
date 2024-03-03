@@ -1,5 +1,7 @@
 export type Order = [string, number, number]
 
+export type PaymentMethod = 'bio' | 'punto' | 'efectivo' | 'pago-movil' | null
+
 export type Sale = {
   name: string
   price: number
@@ -8,6 +10,7 @@ export type Sale = {
   date: string
   status: 'debt-free' | 'debt'
   foreign_key: number | null
+  payment_method: PaymentMethod
 }
 
 export type Product = {

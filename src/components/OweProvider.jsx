@@ -7,6 +7,8 @@ const OweProvider = ({ children }) => {
   const [selectedClient, setSelectedClient] = useState(null)
   const [triggerUpdate, setTriggerUpdate] = useState(true)
   const detailedClientUlRef = useRef()
+  const [paymentMethod, setPaymentMethod] = useState('bio')
+
   return (
     <OweContext.Provider
       value={{
@@ -14,7 +16,9 @@ const OweProvider = ({ children }) => {
         setSelectedClient,
         detailedClientUlRef,
         triggerUpdate,
-        setTriggerUpdate
+        setTriggerUpdate,
+        paymentMethod,
+        setPaymentMethod
       }}
     >
       {children}
