@@ -190,21 +190,20 @@ let DetailedClient = ({ children, clientName, anime }, ref) => {
     const salesToBeProcessed = selected.reduce((acc, currInput, index) => {
       if (currInput.checked) return [...acc, selectedClient.owe[index]]
       return acc
-    }, [])
-
-    salesToBeProcessed.forEach(sale => {
-      fetch(URLs.updateSaleStatusByIDURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ id: sale.id })
-      }).then(res => {
-        if (res.ok) {
-          setTriggerUpdate(true)
-          setSelectedClient(null)
-        }
-      })
+    }, []).map(sale => sale.id)
+    
+    fetch(URLs.updateSaleStatusByIDURL, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(salesToBeProcessed)
+    }).then(res => {
+      if (res.ok) {
+        setTriggerUpdate(true)
+        setSelectedClient(null)
+        console.log(res)
+      }
     })
   }
 
@@ -260,8 +259,7 @@ const OweSectionManager = () => {
     if (triggerUpdate) {
       const responses = [
         URLs.getClientsURL,
-        URLs.getSalesByStatusURL,
-        URLs.getSalesByStatusURL
+        URLs.getSalesByStatusURL('debt')
       ].map(url => fetch(url).then(res => res.json()))
 
       Promise.all(responses).then(info => {
@@ -273,9 +271,9 @@ const OweSectionManager = () => {
 
   useEffect(() => {
     if (data) {
-      const [clients, owes, allSales] = data
+      const [clients, owes] = data
 
-      setTotalDebts(allSales.reduce((acc, cur) => acc + cur.price, 0))
+      setTotalDebts(owes.reduce((acc, cur) => acc + cur.price, 0))
 
       const clientsInfo = clients.reduce((acc, currClient) => {
         const findClientOwes = owes.filter(

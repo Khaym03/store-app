@@ -1,5 +1,5 @@
-import { URLs } from './constants'
-import { CalcPurchase } from './types'
+import { URLs } from './constants.ts'
+import { CalcPurchase } from './types.ts'
 
 const calcOptimalPurchase = async (
   bs: number,

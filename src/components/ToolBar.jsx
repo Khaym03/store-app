@@ -91,8 +91,9 @@ const ToolBar = () => {
   })
 
   const deleteLastSale = () => {
-    fetch(URLs.deleteLastSaleURL, { method: 'POST' }).then(res => {
+    fetch(URLs.deleteLastSaleURL, { method: 'DELETE' }).then(res => {
       if (!res.ok) throw new Error('Error deleting last sale')
+      console.log(res)
       setUpdateNavInfo(true)
     })
   }
@@ -100,7 +101,7 @@ const ToolBar = () => {
   const labels = ['Bio', 'Patria', 'Punto']
 
   const report = async () => {
-    const responses = [URLs.getSalesOfTheDayURL, URLs.getTodayDebtsURL].map(
+    const responses = [URLs.getSalesOfTheDayURL, URLs.getSalesByStatusURL('debt')].map(
       url => fetch(url).then(res => res.json())
     )
 

@@ -1,5 +1,5 @@
-import { URLs } from './constants'
-import { Order, Sale, PaymentMethod } from './types'
+import { URLs } from './constants.ts'
+import { Order, Sale, PaymentMethod } from './types.ts'
 
 export const fullDate = (): string => {
   const date = new Date()
@@ -35,15 +35,13 @@ export const salesFormater = (
 }
 
 export const postSales = (sales: Sale[]) => {
-  sales.forEach((sale: Sale) => {
-    fetch(URLs.postSaleURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(sale) // body data type must match "Content-Type" header
-    }).then(res => console.log(res))
-  })
+  fetch(URLs.postSaleURL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(sales) // body data type must match "Content-Type" header
+  }).then(res => console.log(res))
 }
 
 export const postClient = (clientName: string) => {

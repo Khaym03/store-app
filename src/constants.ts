@@ -1,17 +1,20 @@
+import { fullDate } from "./utils.ts"
+
 export class URLs {
-  static readonly port = 1234
+  static readonly port = 8080
   static readonly local = `http://localhost:${this.port}`
-  static readonly getDollarEndpoint = '/getDollar'
-  static readonly getClientsEndpoint = '/getClients'
-  static readonly getProductsEndpoint = '/getProducts'
-  static readonly getSalesEndpoint = '/getSales'
-  static readonly getSalesOfTheDayEndpoint = '/getSalesOfTheDay'
-  static readonly getSalesByStatusEndpoint = '/getSalesByStatus'
-  static readonly getTodayDebtsEndpoint = '/getTodayDebts'
-  static readonly postClientEndpoint = '/postClient'
-  static readonly postSaleEndpoint = '/postSale'
-  static readonly deleteLastSaleEndpoint = '/deleteLastSale'
-  static readonly updateSaleStatusByIDEndpoint = '/updateSaleStatusByID'
+  static readonly getDollarEndpoint = '/dollar'
+  static readonly getClientsEndpoint = '/clients'
+  static readonly getProductsEndpoint = '/products'
+  static readonly getSalesEndpoint = '/sales'
+  static readonly getSalesOfTheDayEndpoint = '/sales'
+  static readonly getSalesByStatusEndpoint = '/sales'
+  static readonly getTodayDebtsEndpoint = '/sales/status/debt'
+  static readonly postClientEndpoint = '/client'
+  static readonly postSaleEndpoint = '/addSales'
+  static readonly deleteLastSaleEndpoint = '/sales/deleteLast'
+  static readonly updateSaleStatusByIDEndpoint = '/sales/updateStatus'
+  static readonly optimalPurchaseEndpoitn = '/optimalPurchase'
 
   static get getDollarURL() {
     return this.local + this.getDollarEndpoint
@@ -29,7 +32,7 @@ export class URLs {
   }
 
   static get getSalesOfTheDayURL() {
-    return this.local + this.getSalesOfTheDayEndpoint
+    return this.local + this.getSalesOfTheDayEndpoint + `/date/${fullDate()}`
   }
 
   static get postClientURL() {
@@ -40,8 +43,8 @@ export class URLs {
     return this.local + this.postSaleEndpoint
   }
 
-  static get getSalesByStatusURL() {
-    return this.local + this.getSalesByStatusEndpoint
+  static getSalesByStatusURL(status:string) {
+    return this.local + this.getSalesByStatusEndpoint + `/status/${status}`
   }
 
   static get deleteLastSaleURL() {
@@ -52,7 +55,11 @@ export class URLs {
     return this.local + this.updateSaleStatusByIDEndpoint
   }
 
-  static get getTodayDebtsURL() {
-    return this.local + this.getTodayDebtsEndpoint
+//   static get getTodayDebtsURL() {
+//     return this.local + this.getTodayDebtsEndpoint
+//   }
+
+  static get getOptimalPurchaseURL() {
+    return this.local + this.optimalPurchaseEndpoitn
   }
 }

@@ -2,10 +2,10 @@ import { forwardRef, useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import listOfProducts from '../listOfProducts'
 import { GazaCalcContext } from './GazaCalcProvider'
-import calc from '../calcOptimalPurchase'
 import { matchBg } from '../utils'
 import { useTransition, animated } from '@react-spring/web'
 import Button from '../comp/Button'
+import { URLs } from '../constants'
 
 const Title = ({ children }) => (
   <h2 className="capitalize font-black text-3xl mb-4 pointer-events-none">
@@ -91,12 +91,19 @@ const ProductToBeBough = () => {
 
   useEffect(() => {
     if (calcOptimalPurchase) {
-      calc(bs, ignoreProducts, discount).then(data => {
-        const filterCeros = [...data.entries()].filter(prod => prod[1])
-
-        setProductToBebough(new Map(filterCeros))
+      const paramsToTheCalcFunc = { bs, ignoreProducts: [...ignoreProducts.values()], discount }
+      fetch(URLs.getOptimalPurchaseURL,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(paramsToTheCalcFunc) // body data type must match "Content-Type" header
       })
-      setCalcOptimalPurchase(false)
+      .then(res => res.ok ? res.json() : console.log(res))
+      .then(data => {
+        setProductToBebough(new Map(Object.entries(data)))
+        setCalcOptimalPurchase(false)
+      })
     }
   }, [
     calcOptimalPurchase,
