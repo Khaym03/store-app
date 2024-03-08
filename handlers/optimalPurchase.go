@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/Khaym03/store-app/models"
@@ -116,7 +115,6 @@ func CalcOptimalPurchase(c *fiber.Ctx) error {
 	listOfPrices, _ := getGazaProducts()
 
 	mapOfMls := countAndDiscard(*sales, params.Ignore)
-	fmt.Println(mapOfMls)
 	mapOfUnits := mlToUnit(mapOfMls)
 	total := calcTotal(mapOfUnits)
 	mapOfPercentages := percentages(mapOfUnits, total)
