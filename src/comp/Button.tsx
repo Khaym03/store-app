@@ -7,15 +7,19 @@ type btn = {
   children: React.ReactNode
   clickHandler: () => void
   actionType?: btnAction
-  orientation?: Orientation
   title?: string
+  className?: string
 }
 
-const Button = ({ children, clickHandler, actionType, orientation, title }: btn) => {
+const Button = ({
+  children,
+  clickHandler,
+  actionType,
+  title,
+  className
+}: btn) => {
   const numOfChilds = React.Children.count(children)
   let style = ''
-
-  orientation === 'vertical' ? (style += ' flex-col p-2') : ' flex-row p-4'
 
   if (actionType === 'main')
     style += ' bg-blue-100 text-sky-800 hover:bg-blue-200'
@@ -24,9 +28,9 @@ const Button = ({ children, clickHandler, actionType, orientation, title }: btn)
   else style += ' bg-slate-100 text-slate-800 hover:bg-slate-200'
   return (
     <button
-    title={title ?? ''}
+      title={title ?? ''}
       onClick={clickHandler}
-      className={`flex  items-center justify-center transition-colors text-base rounded-lg capitalize  w-full ${style}`}
+      className={`flex items-center justify-center transition-colors text-sm rounded-md capitalize w-full ${style} h-12 px-4 py-2 ${className??''}`}
     >
       {children}
     </button>

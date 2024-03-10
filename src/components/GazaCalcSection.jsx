@@ -6,15 +6,8 @@ import { matchBg } from '../utils'
 import { useTransition, animated } from '@react-spring/web'
 import Button from '../comp/Button'
 import { URLs } from '../constants'
+import Title from '../comp/Title'
 
-const Title = ({ children }) => (
-  <h2 className="capitalize font-black text-3xl mb-4 pointer-events-none">
-    {children}
-  </h2>
-)
-Title.propTypes = {
-  children: PropTypes.node
-}
 
 const BasicInput = forwardRef(({ placeholder }, ref) => {
   return (
@@ -50,7 +43,7 @@ const ProductTags = ({ productName }) => {
       className={`transition shadow-sm flex items-center p-4 border-solid border-2 rounded-lg cursor-pointer ${
         selected
           ? ' border-red-400 text-red-400'
-          : ' border-slate-100 hover:border-slate-300'
+          : ' border-slate-100 hover:border-slate-200'
       }`}
     >
       {productName}

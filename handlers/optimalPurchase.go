@@ -16,7 +16,7 @@ func contains(slice []string, str string) bool {
 	return false
 }
 
-func countAndDiscard(sales []models.DBSale, ignore []string) map[string]uint32 {
+func CountAndDiscard(sales []models.DBSale, ignore []string) map[string]uint32 {
 	var m = map[string]uint32{}
 	for _, sale := range sales {
 		_, ok := m[sale.Name]
@@ -114,7 +114,7 @@ func CalcOptimalPurchase(c *fiber.Ctx) error {
 	sales, _ := getAllSales()
 	listOfPrices, _ := getGazaProducts()
 
-	mapOfMls := countAndDiscard(*sales, params.Ignore)
+	mapOfMls := CountAndDiscard(*sales, params.Ignore)
 	mapOfUnits := mlToUnit(mapOfMls)
 	total := calcTotal(mapOfUnits)
 	mapOfPercentages := percentages(mapOfUnits, total)

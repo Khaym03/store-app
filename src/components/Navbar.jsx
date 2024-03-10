@@ -8,6 +8,7 @@ import { useContext, useEffect } from 'react'
 import { MdOutlineAnalytics } from 'react-icons/md'
 import { MdOutlineCalculate } from 'react-icons/md'
 import { TbPigMoney } from 'react-icons/tb'
+import InfoCard from '../comp/InfoCard'
 
 const NavItem = ({ sectionName, Icon }) => {
   const { setCurrentSection, currentSection } = useContext(SectionSliderContext)
@@ -38,36 +39,6 @@ NavItem.propTypes = {
   Icon: PropTypes.func.isRequired
 }
 
-export const SimpleInfo = ({
-  title,
-  info,
-  Icon,
-  color,
-  iconSize,
-  titleSize
-}) => (
-  <div className={'rounded-lg p-4 cols-1-2 grid ' + color}>
-    <div className="mr-4 flex justify-center items-center">
-      <Icon size={iconSize ? iconSize : '1.5rem'} />
-    </div>
-    <div>
-      <label className={`${titleSize ? titleSize : 'text-xs'} font-bold`}>
-        {title}
-      </label>
-      <p className="text-md italic font-medium opacity-80">{info.toFixed(2)}</p>
-    </div>
-  </div>
-)
-
-SimpleInfo.propTypes = {
-  title: PropTypes.string,
-  info: PropTypes.number,
-  Icon: PropTypes.func.isRequired,
-  color: PropTypes.string,
-  iconSize: PropTypes.string,
-  titleSize: PropTypes.string
-}
-
 const Navbar = () => {
   const {
     APP_SECTIONS,
@@ -88,7 +59,7 @@ const Navbar = () => {
   }, [updateNavInfo, setTodaySales, setUpdateNavInfo])
 
   return (
-    <nav className="Navbar border-solid border-r border-slate-200 absolute top-0 left-0 h-full flex flex-col z-10 py-8 px-4">
+    <nav className="Navbar border-r border-slate-200 absolute top-0 left-0 h-full flex flex-col z-10 py-8 px-4">
       <ul className="grid auto-rows-[56px] gap-2 h-4/5 mb-auto">
         <NavItem
           sectionName={APP_SECTIONS.SALES_SECTION}
@@ -108,13 +79,13 @@ const Navbar = () => {
         />
       </ul>
       <div className="grid gap-2">
-        <SimpleInfo
+        <InfoCard
           title={'Total vendido Hoy'}
           info={todaySales}
           Icon={LiaCashRegisterSolid}
           color={'bg-violet-200'}
         />
-        <SimpleInfo
+        <InfoCard
           title={'Ganancia de hoy'}
           info={todaySales * 0.45}
           Icon={TbPigMoney}

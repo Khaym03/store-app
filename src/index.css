@@ -18,7 +18,7 @@
 
 body {
   color-scheme: light;
-  color: #191c1d;
+  color: black;
 }
 
 #content {
@@ -33,11 +33,13 @@ body {
 }
 
 .mainSection {
-  grid-template-areas:
-    'ProductList Measure Order'
-    'ProductList Client Client';
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  /* grid-template-areas:
+    'ProductList Measure SalesStorager SearchClient'
+    'ProductList Order Order SearchClient'; */
+  grid-template-columns: 1.1fr 2fr 0.9fr;
+  grid-template-rows: 1fr 1fr;
+  /* grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr); */
 }
 
 .Navbar {
@@ -84,18 +86,11 @@ input[type='text']:focus {
   outline-color: var(--md-sys-color-tertiary);
 }
 
-.Order-header::after {
-  content: '';
-  position: absolute;
-  left: 10%;
-  bottom: 0;
-  height: 1px;
-  width: 80%;
-  background: linear-gradient(transparent, rgb(0 0 0 / 20%), transparent);
-  z-index: 2;
-}
-
 /* Grids */
+
+.rows-fit-auto {
+  grid-template-rows: min-content auto;
+}
 
 .cols-1-2 {
   grid-template-columns: 1fr 2fr;
@@ -105,8 +100,12 @@ input[type='text']:focus {
   grid-template-columns: 80% 20%;
 }
 
+.cols-35-auto {
+  grid-template-columns: 35% auto;
+}
+
 .Order {
-  grid-template-rows: repeat(auto-fill, 28px);
+  grid-template-rows: repeat(auto-fill, 48px);
 }
 
 .cols-2-1-1 {
@@ -119,6 +118,10 @@ input[type='text']:focus {
 
 #owe-section {
   grid-template-columns: 1.5fr 1px 1fr;
+}
+
+.cols-1fr-1px-1fr {
+  grid-template-columns: 1fr 1px 1fr;
 }
 
 .DetailedClientRow {

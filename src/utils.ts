@@ -58,6 +58,8 @@ export const matchBg = (product: string) => {
   switch (product) {
     case 'ariel':
       return 'bg-blue-400'
+    case 'cera':
+      return 'bg-[#ffedd5]'
     case 'desengrasante':
       return 'bg-orange-400'
     case 'desinfectante':
@@ -71,5 +73,25 @@ export const matchBg = (product: string) => {
 
     default:
       return 'bg-slate-400'
+  }
+}
+
+export const borderColor = (product: string) => {
+  switch (product) {
+    case 'ariel':
+      return 'border-blue-400'
+    case 'desengrasante':
+      return 'border-orange-400'
+    case 'desinfectante':
+      return 'border-red-400'
+    case 'lavaplatos':
+      return 'border-green-400'
+    case 'suavizante':
+      return 'border-purple-400'
+    case 'limpia poceta':
+      return 'border-amber-400'
+
+    default:
+      return 'border-slate-400'
   }
 }

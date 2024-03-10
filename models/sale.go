@@ -15,3 +15,8 @@ type DBSale struct {
 	Sale
 	Id int `json:"id"`
 }
+
+type SaleAverage struct {
+	Key string
+	Val float32
+}

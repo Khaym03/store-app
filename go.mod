@@ -3,6 +3,7 @@ module github.com/Khaym03/store-app
 go 1.22.0
 
 require (
+	github.com/elliotchance/orderedmap v1.5.1
 	github.com/gofiber/fiber/v2 v2.52.2
 	github.com/mattn/go-sqlite3 v1.14.22
 )

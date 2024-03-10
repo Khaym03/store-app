@@ -31,6 +31,8 @@ func main() {
 	app.Get("/sales/foreign_key/:foreign_key", handlers.GetSalesByClientID)
 	app.Get("/sales/date/:date", handlers.GetSalesByDate)
 	app.Get("/sales/status/:status", handlers.GetSalesByStatus)
+	app.Get("/sales/average", handlers.GetSalesAverage)
+	app.Get("/sales/count", handlers.CountProducts)
 	app.Patch("/sales/updateStatus", handlers.UpdateSalesStatus)
 	app.Delete("/sales/deleteLast", handlers.DeleteLastSale)
 

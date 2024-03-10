@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/Khaym03/store-app/models"
+	"github.com/elliotchance/orderedmap"
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -142,7 +143,7 @@ func GetSalesByDate(c *fiber.Ctx) error {
 
 	sales, err := getSalesByDate(date)
 	if err != nil {
-		return c.SendString("something is wrong in the date or it does exist")
+		return c.SendString("something is wrong in the date or it does not exist")
 	}
 
 	if sales == nil {
@@ -270,7 +271,6 @@ func DeleteLastSale(c *fiber.Ctx) error {
 	}
 	defer stmt.Close()
 
-	// Execute the statement
 	_, err = stmt.Exec()
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).SendString(err.Error())
@@ -321,4 +321,55 @@ func UpdateSalesStatus(c *fiber.Ctx) error {
 	}
 
 	return c.Status(200).JSON(map[string]string{"message": "all sales updated successfully"})
+}
+
+func GetSalesAverage(c *fiber.Ctx) error {
+	sales, err := getAllSales()
+	if err != nil {
+		return err
+	}
+
+	days := orderedmap.NewOrderedMap()
+
+	var total float32
+	for _, sale := range *sales {
+		total += sale.Price
+
+		_, ok := days.Get(sale.Date)
+		if !ok {
+			days.Set(sale.Date, sale.Price)
+		} else {
+			prev, _ := days.Get(sale.Date)
+			prevFloat, _ := prev.(float32)
+
+			days.Set(sale.Date, prevFloat+sale.Price)
+		}
+	}
+
+	var formated []interface{}
+
+	for _, key := range days.Keys() {
+		val, _ := days.Get(key)
+		var box []interface{}
+		box = append(box, key)
+		box = append(box, val)
+		formated = append(formated, box)
+	}
+
+	average := total / float32(days.Len())
+
+	return c.Status(200).JSON(map[string]interface{}{
+		"average":     average,
+		"salesPerDay": formated})
+}
+
+func CountProducts(c *fiber.Ctx) error {
+	sales, err := getAllSales()
+	if err != nil {
+		return err
+	}
+
+	countedMap := CountAndDiscard(*sales, []string{""})
+
+	return c.Status(200).JSON(countedMap)
 }

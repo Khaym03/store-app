@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { URLs } from '../constants'
+import React, { useState, useEffect, useRef } from 'react'
+import { URLs } from '../../constants'
 import PropTypes from 'prop-types'
 
-export const DollarContext = React.createContext()
+export const ManagerContext = React.createContext()
 
-const DollarProvider = ({ children }) => {
+const Manager = ({ children }) => {
   const [dollar, setDollar] = useState(0)
   const [total, setTotal] = useState(0)
   const [bs, setBs] = useState(0)
@@ -13,8 +13,12 @@ const DollarProvider = ({ children }) => {
   const [initialLoad, setInitialLoad] = useState(true)
   const [selected, setSelected] = useState(null)
   const [orders, setOrders] = useState([])
+  const [processedOrders, setProcessedOrders] = useState(null)
+  const [triggerProcessOrders, setTriggerProcessOrders] = useState(false)
   const [updateClientList, setUpdateClientList] = useState(true)
   const [paymentMethod, setPaymentMethod] = useState('bio')
+  const [rangeValue, setRangeValue] = useState(1000)
+  const bsConverterRef = useRef()
   const url = URLs.getDollarURL
 
   useEffect(() => {
@@ -24,7 +28,7 @@ const DollarProvider = ({ children }) => {
   }, [url])
 
   return (
-    <DollarContext.Provider
+    <ManagerContext.Provider
       value={{
         dollar,
         total,
@@ -44,16 +48,23 @@ const DollarProvider = ({ children }) => {
         updateClientList,
         setUpdateClientList,
         paymentMethod,
-        setPaymentMethod
+        setPaymentMethod,
+        bsConverterRef,
+        rangeValue,
+        setRangeValue,
+        triggerProcessOrders,
+        setTriggerProcessOrders,
+        processedOrders,
+        setProcessedOrders
       }}
     >
       {children}
-    </DollarContext.Provider>
+    </ManagerContext.Provider>
   )
 }
 
-DollarProvider.propTypes = {
+Manager.propTypes = {
   children: PropTypes.node
 }
 
-export default DollarProvider
+export default Manager

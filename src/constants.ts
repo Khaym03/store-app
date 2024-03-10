@@ -15,6 +15,8 @@ export class URLs {
   static readonly deleteLastSaleEndpoint = '/sales/deleteLast'
   static readonly updateSaleStatusByIDEndpoint = '/sales/updateStatus'
   static readonly optimalPurchaseEndpoitn = '/optimalPurchase'
+  static readonly averageEndpoint = '/sales/average'
+  static readonly countProductEndpoint = '/sales/count'
 
   static get getDollarURL() {
     return this.local + this.getDollarEndpoint
@@ -55,11 +57,15 @@ export class URLs {
     return this.local + this.updateSaleStatusByIDEndpoint
   }
 
-//   static get getTodayDebtsURL() {
-//     return this.local + this.getTodayDebtsEndpoint
-//   }
+  static get getAverageSalesURL() {
+    return this.local + this.averageEndpoint
+  }
 
   static get getOptimalPurchaseURL() {
     return this.local + this.optimalPurchaseEndpoitn
+  }
+
+  static get getCountProductsURL() {
+    return this.local + this.countProductEndpoint
   }
 }

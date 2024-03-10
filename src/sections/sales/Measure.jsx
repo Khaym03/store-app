@@ -1,18 +1,19 @@
 import PropTypes from 'prop-types'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { DollarContext } from './DollarProvider'
+import { ManagerContext } from './Manager'
 import { MdAdd } from 'react-icons/md'
-import Button from '../comp/Button'
+import Button from '../../comp/Button'
+import Input from '../../comp/Input'
 
 const calcMls = (x, price) => x / price
 
 const Converter = ({ setRangeValue }) => {
-  const { bs, setBs, selected } = useContext(DollarContext)
+  const { bsConverterRef, setBs, selected } = useContext(ManagerContext)
 
-  const handleChange = e => {
+  const handleChange = () => {
     if (selected) {
       const price = selected[1]
-      const value = Number(e.target.value),
+      const value = +bsConverterRef.current.value,
         ml = calcMls(value, price) * 1000
 
       setBs(value)
@@ -21,15 +22,7 @@ const Converter = ({ setRangeValue }) => {
   }
 
   return (
-    <div className="relative w-full h-full ">
-      <input
-        className="absolute text-center w-full h-full text-md font-medium rounded-lg border-solid border-2 border-slate-100 shadow-sm"
-        type="text"
-        placeholder="Bs"
-        value={!bs ? '' : bs}
-        onChange={handleChange}
-      />
-    </div>
+    <Input placeholder="bs" changeHandler={handleChange} ref={bsConverterRef} />
   )
 }
 
@@ -38,22 +31,19 @@ Converter.propTypes = {
 }
 
 const InputRange = ({ setRangeValue, inputRef }) => {
-  const changeHandler = e => {
-    const value = Number(e.target.value)
+  const changeHandler = () => {
+    const value = +inputRef.current.value
     if (Number.isNaN(value)) return
 
     setRangeValue(value)
   }
 
   return (
-    <div className="min-h-16 rounded-lg gap-2 grid grid-cols-2 place-items-center relative transition-colors">
-      <input
-        id="measure-range"
-        type="text"
+    <div className="rounded-lg gap-2 grid grid-cols-2 place-items-center relative transition-colors mb-4">
+      <Input
+        placeholder="Ingrese los ml"
         ref={inputRef}
-        onChange={changeHandler}
-        placeholder="Ingrese los ML"
-        className="cursor-pointer w-full h-full text-base font-medium text-center rounded-lg transition-colors border-solid border-2 border-slate-100 shadow-sm"
+        changeHandler={changeHandler}
       />
       <Converter setRangeValue={setRangeValue} />
     </div>
@@ -85,14 +75,14 @@ const MeasureUnits = ({ setRangeValue }) => {
   }
 
   return (
-    <div className="MeasureUnits grid grid-cols-3 gap-2 min-h-16 py-2">
-      <Button clickHandler={clickHandler} actionType="main">
+    <div className="MeasureUnits grid grid-cols-3 gap-2 mb-4">
+      <Button clickHandler={clickHandler} actionType="main" data-fraction="1/4">
         1/4
       </Button>
-      <Button clickHandler={clickHandler} actionType="main">
+      <Button clickHandler={clickHandler} actionType="main" data-fraction="1/2">
         1/2
       </Button>
-      <Button clickHandler={clickHandler} actionType="main">
+      <Button clickHandler={clickHandler} actionType="main" data-fraction="1">
         1
       </Button>
     </div>
@@ -105,7 +95,7 @@ MeasureUnits.propTypes = {
 
 const ShowUnit = ({ rangeValue }) => {
   return (
-    <div className="bg-slate-100 text-lg font-medium w-full h-full grid place-items-center rounded-lg italic">{`${parseInt(
+    <div className="border-slate-200 border text-base font-medium w-full h-12 grid place-items-center rounded-lg italic mb-4 shadow-sm">{`${parseInt(
       rangeValue
     )} ml`}</div>
   )
@@ -121,8 +111,16 @@ const AddToCart = ({
   setOrderWasAdded,
   inputRef
 }) => {
-  const { orders, setOrders, setTotal, bs, setBs, selected } =
-    useContext(DollarContext)
+  const {
+    orders,
+    setOrders,
+    setTotal,
+    bs,
+    setBs,
+    selected,
+    triggerProcessOrders,
+    setProcessedOrders
+  } = useContext(ManagerContext)
 
   const formattedOrder = () => {
     const [name, price] = selected
@@ -139,41 +137,57 @@ const AddToCart = ({
     }
   }
 
-  const clickHandler = () => {
+  const mergeOrders = orders => {
+    return orders.reduce((map, [name, quan, price]) => {
+      if (!map.has(name)) {
+        return map.set(name, [quan, price])
+      } else {
+        const [q, p] = map.get(name)
+        return map.set(name, [quan + q, price + p])
+      }
+    }, new Map())
+  }
+
+  const processOrders = () => {
+    let map
+
     if (selected) {
       const newOrder = formattedOrder()
-
-      const map = new Map()
       const merged = [...orders, newOrder]
 
-      merged.forEach(([name, quan, price]) => {
-        if (!map.has(name)) {
-          map.set(name, [quan, price])
-        } else {
-          const [q, p] = map.get(name)
-          map.set(name, [quan + q, price + p])
-        }
-      })
+      map = mergeOrders(merged)
+    } else {
+      map = mergeOrders(orders)
+    }
 
-      const flated = Array.from(map).reduce((acc, curr) => {
-        return [...acc, [curr[0], ...curr[1]]]
-      }, [])
+    const flated = Array.from(map).reduce((acc, curr) => {
+      return [...acc, [curr[0], ...curr[1]]]
+    }, [])
 
-      const total = flated.reduce((acc, cur) => acc + cur[2], 0)
+    const total = flated.reduce((acc, cur) => acc + cur[2], 0)
 
-      setTotal(total)
-      setOrders(flated)
-      setBs(0)
-      setOrderWasAdded(true)
+    setTotal(total)
+    setOrders(flated)
+    setProcessedOrders(flated)
+    setBs(0)
+    setOrderWasAdded(true)
+  }
+  const clickHandler = () => {
+    if (selected) {
+      processOrders()
     }
   }
   useEffect(() => {
     if (orderWasAdded) inputRef.current.value = ''
   }, [orderWasAdded, inputRef])
 
+  useEffect(() => {
+    processOrders()
+  }, [triggerProcessOrders])
+
   return (
-    <Button clickHandler={clickHandler} actionType='main' orientation='orizontal'>
-      <MdAdd className='mr-2' size={'1.5rem'} />
+    <Button clickHandler={clickHandler} actionType="main">
+      <MdAdd className="mr-2" size={'1.5rem'} />
       Agregar
     </Button>
   )
@@ -187,15 +201,13 @@ AddToCart.propTypes = {
   inputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) })
 }
 
-const Measure = ({ rangeValue, setRangeValue }) => {
+const Measure = () => {
+  const { rangeValue, setRangeValue } = useContext(ManagerContext)
   const [orderWasAdded, setOrderWasAdded] = useState(false)
   const inputRef = useRef(null)
 
   return (
-    <section
-      style={{ gridArea: 'Measure' }}
-      className="grid grid-rows-4 gap-2 p-4 rounded-lg"
-    >
+    <section className="flex flex-col p-4 w-full">
       <InputRange
         rangeValue={rangeValue}
         setRangeValue={setRangeValue}
@@ -213,11 +225,6 @@ const Measure = ({ rangeValue, setRangeValue }) => {
       />
     </section>
   )
-}
-
-Measure.propTypes = {
-  rangeValue: PropTypes.number,
-  setRangeValue: PropTypes.func.isRequired
 }
 
 export default Measure

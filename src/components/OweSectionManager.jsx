@@ -7,10 +7,10 @@ import { MdPlaylistAddCheck } from 'react-icons/md'
 import { FiUsers } from 'react-icons/fi'
 import { IoMdPaper } from 'react-icons/io'
 import { OweContext } from './OweProvider'
-import { SimpleInfo } from './Navbar'
+import InfoCard from '../comp/InfoCard'
 import { useSpring, animated, useTransition } from '@react-spring/web'
 import Button from '../comp/Button'
-import {SelectPaymentMethod} from './SalesStorager'
+import {SelectPaymentMethod} from '../sections/sales/SalesStorager'
 
 const Hand = ({anime}) => {
   const range = 5
@@ -221,11 +221,11 @@ let DetailedClient = ({ children, clientName, anime }, ref) => {
       </ul>
       <SelectPaymentMethod className={'mb-4'} ctx={OweContext}/>
       <div className="grid grid-cols-2 gap-4 mt-auto">
-        <Button clickHandler={selectAll} orientation='vertical'>
+        <Button clickHandler={selectAll}>
           <MdPlaylistAddCheck size={'1.5rem'} />
           Seleccionar todo
         </Button>
-        <Button clickHandler={updateSaleStatus} actionType="main" orientation='vertical'>
+        <Button clickHandler={updateSaleStatus} actionType="main">
           <IoMdPaper size={'1.5rem'} />
           Pagar
         </Button>
@@ -300,7 +300,7 @@ const OweSectionManager = () => {
     >
       <div className="flex flex-col">
         <OweActionBar>
-          <SimpleInfo
+          <InfoCard
             title={'Deuda Total'}
             info={totalDebts}
             color={'bg-violet-200'}
@@ -308,7 +308,7 @@ const OweSectionManager = () => {
             iconSize={'2rem'}
             titleSize={'text-md'}
           />
-          <SimpleInfo
+          <InfoCard
             title={'Clientes Totales'}
             info={activeDebtors.length}
             color={'bg-lime-200'}

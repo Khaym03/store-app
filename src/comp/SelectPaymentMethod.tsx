@@ -1,6 +1,6 @@
 import React from 'react'
-import { IconType } from '../../node_modules/react-icons/lib/esm/iconBase'
-import { PaymentMethod } from '../types'
+import { IconType } from 'react-icons'
+import { PaymentMethod } from '../types.ts'
 
 type Payment = {
   name: PaymentMethod
@@ -23,7 +23,7 @@ const PaymentMethodItem = ({
 
   return (
     <li
-      className={`border-b-2 grid place-items-center transition-colors cursor-pointer p-4 ${
+      className={`h-12 border-b-2 grid place-items-center transition-colors cursor-pointer px-4 py-2 ${
         paymentMethod === name
           ? ' border-sky-500 text-sky-500 text-3xl'
           : 'text-slate-500 text-2xl hover:border-slate-200 border-transparent'
@@ -31,7 +31,7 @@ const PaymentMethodItem = ({
       onClick={clickHandler}
       title={name ?? ''}
     >
-      <Icon />
+      <Icon size={'1.5rem'}/>
     </li>
   )
 }

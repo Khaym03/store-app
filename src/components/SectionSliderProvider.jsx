@@ -1,13 +1,14 @@
 import { createContext, useContext, useState } from 'react'
 import PropTypes from 'prop-types'
-import DollarProvider from './DollarProvider'
-import SalesSectionManager from './SalesSectionManager'
+import DollarProvider from '../sections/sales/Manager'
+import SalesSectionManager from '../sections/sales/SalesSectionManager'
 import OweSectionManager from './OweSectionManager'
 import ToolBar from './ToolBar'
 import OweProvider from './OweProvider'
 import AnalyticSection from './AnalyticSection'
 import GazaCalcSection from './GazaCalcSection'
 import GazaCalcProvider from './GazaCalcProvider'
+import AnalyticManager from './AnalyticsManager'
 
 export const SectionSliderContext = createContext()
 
@@ -30,7 +31,9 @@ export const SectionDisplayer = () => {
             <OweSectionManager />
           </OweProvider>
         ) : currentSection === APP_SECTIONS.ANALYTICS_SECTION ? (
-          <AnalyticSection />
+          <AnalyticManager>
+            <AnalyticSection />
+          </AnalyticManager>
         ) : currentSection === APP_SECTIONS.GAZA_CALC_SECTION ? (
           <GazaCalcProvider>
             <GazaCalcSection />

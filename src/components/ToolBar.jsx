@@ -106,25 +106,7 @@ const ToolBar = () => {
     )
 
     const [sales, todayOwe] = await Promise.all(responses)
-    ////
-
-    console.log('bio = ',
-      sales
-        .filter(sale => sale.payment_method === 'bio')
-        .reduce((a, b) => a + b.price, 0)
-    )
-    console.log('efectivo = ',
-      sales
-        .filter(sale => sale.payment_method === 'efectivo')
-        .reduce((a, b) => a + b.price, 0)
-    )
-    console.log('punto = ',
-      sales
-        .filter(sale => sale.payment_method === 'punto')
-        .reduce((a, b) => a + b.price, 0)
-    )
-    ////
-
+    
     const total = sales.reduce((sum, sale) => sum + sale.price, 0),
       profit = total * 0.45,
       fiado = todayOwe.reduce((sum, product) => sum + product.price, 0)

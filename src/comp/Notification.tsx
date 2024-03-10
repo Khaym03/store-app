@@ -20,7 +20,7 @@ const Notification = ({
     enter: { y: 0, opacity: 1 },
     leave: { y: 64, opacity: 0 },
     onRest: () => {
-      setTimeout(() => notification?.setShow(null), 1000)
+      setTimeout(() => notification?.setShow(null), 300)
     }
   })
 
