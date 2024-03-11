@@ -279,14 +279,14 @@ func DeleteLastSale(c *fiber.Ctx) error {
 	return c.SendString("Last Sale deleted successfully")
 }
 
-func markAsPaid(id uint32) error {
+func markAsPaid(id uint32, paymentMethod string) error {
 	db, err := sql.Open("sqlite3", "./shop.db")
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	result, err := db.Exec(`UPDATE sales SET status = "debt-free" WHERE id = ?`, id)
+	result, err := db.Exec(`UPDATE sales SET status = ?, payment_method = ? WHERE id = ?`, "debt-free", paymentMethod, id)
 	if err != nil {
 		return err
 	}
@@ -304,15 +304,15 @@ func markAsPaid(id uint32) error {
 }
 
 func UpdateSalesStatus(c *fiber.Ctx) error {
-	var ids []uint32
-	if err := c.BodyParser(&ids); err != nil {
+	var salesToBeProcesses models.MarkPaid
+	if err := c.BodyParser(&salesToBeProcesses); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse JSON array",
 		})
 	}
 
-	for _, id := range ids {
-		err := markAsPaid(id)
+	for _, id := range salesToBeProcesses.Ids {
+		err := markAsPaid(id, salesToBeProcesses.Payment_method)
 		if err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": "At updating the sale with the id = " + fmt.Sprintf("%d", id),

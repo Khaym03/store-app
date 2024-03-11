@@ -7,6 +7,7 @@ interface NotificationInfo {
   Icon?: IconType
   show: boolean
   setShow: (backToNull: null) => null
+  type: 'success'| 'error'
 }
 
 const Notification = ({
@@ -19,10 +20,14 @@ const Notification = ({
     from: { y: 64, opacity: 0 },
     enter: { y: 0, opacity: 1 },
     leave: { y: 64, opacity: 0 },
+    duration: 1250,
     onRest: () => {
-      setTimeout(() => notification?.setShow(null), 300)
+       notification?.setShow(null)
     }
   })
+
+  const success = 'bg-green-300 text-green-900'
+  const error = 'bg-red-200 text-red-800'
 
   return fadeIn((style, show) => {
     if (notification) {
@@ -31,7 +36,7 @@ const Notification = ({
         <animated.div
           style={style}
           className={
-            'w-72 bottom-8 right-8 rounded-lg flex justify-center items-center bg-green-300 text-green-900  h-16 pointer-events-none absolute'
+            `w-72 bottom-8 right-8 rounded-lg flex justify-center items-center h-12 pointer-events-none absolute ${notification.type === 'success' ? success : error}`
           }
         >
           {show ? (

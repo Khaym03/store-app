@@ -172,7 +172,7 @@ DetailedClientRow.propTypes = {
 }
 
 let DetailedClient = ({ children, clientName, anime }, ref) => {
-  const { selectedClient, setSelectedClient, setTriggerUpdate } =
+  const { selectedClient, setSelectedClient, setTriggerUpdate, paymentMethod } =
     useContext(OweContext)
   const [toggleSelectAll, setToggleSelectAll] = useState(false)
 
@@ -197,7 +197,7 @@ let DetailedClient = ({ children, clientName, anime }, ref) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(salesToBeProcessed)
+      body: JSON.stringify({ids: salesToBeProcessed, payment_method: paymentMethod})
     }).then(res => {
       if (res.ok) {
         setTriggerUpdate(true)

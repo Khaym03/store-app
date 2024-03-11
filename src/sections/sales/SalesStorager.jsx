@@ -49,7 +49,7 @@ export const SelectPaymentMethod = ({ ctx, className }) => {
     { name: 'efectivo', icon: GiMoneyStack },
     { name: 'pago-movil', icon: MdOutlineMessage }
   ]
-
+  
   return (
     <ul className={`grid grid-cols-4 rounded-md border border-slate-200 shadow-sm ${className ?? ''}`}>
       {methods.map(method => (

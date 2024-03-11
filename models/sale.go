@@ -20,3 +20,8 @@ type SaleAverage struct {
 	Key string
 	Val float32
 }
+
+type MarkPaid struct {
+	Ids            []uint32 `json:"ids"`
+	Payment_method string   `json:"payment_method"`
+}

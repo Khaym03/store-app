@@ -11,67 +11,77 @@ import { SectionSliderContext } from '../../components/SectionSliderProvider'
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
 import { postSales, salesFormater } from '../../utils'
 
-
 const SearchBar = () => {
-    const { setSearchingClient, setUpdateClientList } = useContext(ManagerContext)
-  
-    const changeHandler = e => {
-      setSearchingClient(e.currentTarget.value.toLowerCase())
-      setUpdateClientList(true)
-    }
-  
-    return (
-      <Input placeholder='Buscar clienter' changeHandler={changeHandler}/>
-    )
+  const { setSearchingClient, setUpdateClientList } = useContext(ManagerContext)
+
+  const changeHandler = e => {
+    setSearchingClient(e.currentTarget.value.toLowerCase())
+    setUpdateClientList(true)
   }
 
-  const ClientCard = ({ name, clientId }) => {
-    const { orders, setOrders, setTotal, setNotification } =
-      useContext(ManagerContext)
-  
-    const { setUpdateNavInfo } = useContext(SectionSliderContext)
-  
-    const notificationConfig = {
-      message: 'Guardado Correctamente',
-      show: true,
-      setShow: setNotification,
-      Icon: IoMdCheckmarkCircleOutline
-    }
-  
-    const clickHandler = clientId => {
+  return <Input placeholder="Buscar clienter" changeHandler={changeHandler} />
+}
+
+const ClientCard = ({ name, clientId }) => {
+  const { orders, setOrders, setTotal, setNotification, setProcessedOrders } =
+    useContext(ManagerContext)
+
+  const { setUpdateNavInfo } = useContext(SectionSliderContext)
+
+  const success = {
+    message: 'Guardado Correctamente',
+    show: true,
+    setShow: setNotification,
+    type: 'success',
+    Icon: IoMdCheckmarkCircleOutline
+  }
+
+  const fail = {
+    message: 'No hay orden que agregar',
+    show: true,
+    setShow: setNotification,
+    type:'error'
+  }
+
+  const clickHandler = clientId => {
+    if (orders.length > 0) {
       postSales(salesFormater(orders, clientId))
       setOrders([])
+      setProcessedOrders(null)
       setTotal(0)
       setUpdateNavInfo(true)
-      setNotification(notificationConfig)
+      setNotification(success)
+    } else {
+      setNotification(fail)
     }
-  
-    return (
-      <div
-        className="justify-between hover:bg-slate-100 transition-colors rounded-lg flex cursor-pointer w-full h-full"
-        data-clientid={clientId}
-        onClick={() => clickHandler(clientId)}
-      >
-        <span className="flex">
-          <span className="grid place-items-center ml-4">
-            <FiUser size={'1.5rem'} />
-          </span>
-  
-          <span className="capitalize text-sm font-medium grid place-items-center ml-4">
-            {name}
-          </span>
-        </span>
-        <span className="grid place-items-center mr-4">
-          <MdAdd size={'1.5rem'} />
-        </span>
-      </div>
-    )
   }
-  
-  ClientCard.propTypes = {
-    name: PropTypes.string,
-    clientId: PropTypes.number
-  }
+
+  return (
+    <div
+      className="justify-between hover:bg-slate-100 transition-colors rounded-lg flex cursor-pointer w-full h-full"
+      data-clientid={clientId}
+      onClick={() => clickHandler(clientId)}
+    >
+      <span className="flex">
+        <span className="grid place-items-center ml-4">
+          <FiUser size={'1.5rem'} />
+        </span>
+
+        <span className="capitalize text-sm font-medium grid place-items-center ml-4">
+          {name}
+        </span>
+      </span>
+      <span className="grid place-items-center mr-4">
+        <MdAdd size={'1.5rem'} />
+      </span>
+    </div>
+  )
+}
+
+ClientCard.propTypes = {
+  name: PropTypes.string,
+  clientId: PropTypes.number
+}
 
 const SearchClient = () => {
   const { searchingClient, updateClientList, setUpdateClientList } =

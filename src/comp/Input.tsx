@@ -2,7 +2,7 @@ import React from "react";
 
 type input = {
     placeholder: string
-    changeHandler: () => void
+    changeHandler?: () => void
     className?: string
 }
 

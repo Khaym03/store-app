@@ -28,13 +28,14 @@ const OrderHeader = () => {
 }
 
 const Order = () => {
-  const { processedOrders } = useContext(ManagerContext)
+  const { processedOrders,orders, setOrders,setTriggerProcessOrders } = useContext(ManagerContext)
   const transitions = useTransition(processedOrders, {
     from: { opacity: 0, x: -10 },
     enter: { opacity: 1, x: 0 },
-    leave: { opacity: 0, x: 10 },
+    leave: { opacity: 0, x:10 },
     keys: item => item? item[0] : 0 // Use the product name as the key
   })
+
   return (
     <section className="flex flex-col">
       <OrderHeader />
@@ -45,8 +46,12 @@ const Order = () => {
               data && (
                 <animated.li
                   style={styles}
+                  onClick={() => {
+                    setOrders(orders.filter(order => order[0] !== data[0]))
+                    setTriggerProcessOrders(prev => !prev)
+                  }}
                   className={
-                    'grid cols-2-1-1 text-sm text-slate-700 font-medium border-b border-slate-100 px-4 py-2 h-10'
+                    'grid cols-2-1-1 text-sm text-slate-700 font-medium border-b border-slate-100 px-4 py-2 h-10 hover:bg-red-100 cursor-pointer transition-colors hover:text-red-800 overflow-hidden'
                   }
                 >
                   <Row name={data[0]} quan={data[1]} price={data[2]} />
