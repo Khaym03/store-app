@@ -77,14 +77,14 @@ button {
   border-color: transparent;
 }
 
-input[type='text'] {
+/* input[type='text'] {
   outline-color: transparent;
   transition: outline-color 100ms ease-in;
 }
 
 input[type='text']:focus {
   outline-color: var(--md-sys-color-tertiary);
-}
+} */
 
 /* Grids */
 

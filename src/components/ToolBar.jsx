@@ -101,15 +101,25 @@ const ToolBar = () => {
   const labels = ['Bio', 'Patria', 'Punto']
 
   const report = async () => {
-    const responses = [URLs.getSalesOfTheDayURL, URLs.getSalesByStatusURL('debt')].map(
-      url => fetch(url).then(res => res.json())
-    )
+    const responses = [
+      URLs.getSalesOfTheDayURL,
+      URLs.getSalesByStatusURL('debt')
+    ].map(url => fetch(url).then(res => res.json()))
 
     const [sales, todayOwe] = await Promise.all(responses)
-    
-    const total = sales.reduce((sum, sale) => sum + sale.price, 0),
-      profit = total * 0.45,
-      fiado = todayOwe.reduce((sum, product) => sum + product.price, 0)
+
+    const total = sales
+        .filter(sale => sale.status !== 'debt')
+        .reduce((sum, sale) => sum + sale.price, 0),
+      profit = total * 0.45
+
+    const efectivo = sales
+      .filter(sale => sale.payment_method === 'efectivo')
+      .reduce((sum, product) => sum + product.price, 0)
+
+    const fiado = todayOwe
+      .filter(sale => sale.date === fullDate())
+      .reduce((sum, product) => sum + product.price, 0)
 
     const [byBio, byPatia, byPunto] = inputReferences
       .map(ref => +ref.current.querySelector('input').value)
@@ -124,6 +134,7 @@ const ToolBar = () => {
       `\n  👉 Por Bancos: ${(byBio - byPatia).toFixed(2)} Bs`,
       `\n  👉 Por Patria: ${byPatia.toFixed(2)} Bs`,
       `\n  👉 Por Punto: ${byPunto.toFixed(2)} Bs`,
+      `\n  👉 Por Efectivo: ${efectivo.toFixed(2)} Bs`,
       `\n\nTotal BIOPAGO: ${byBio.toFixed(2)} Bs`
     ].reduce((merge, str) => merge + str, '')
 

@@ -11,7 +11,7 @@ type Info = {
 }
 
 const InfoCard = ({ title, info, Icon, color, iconSize, titleSize }: Info) => (
-  <div className={'rounded-xl p-4 cols-1-2 grid ' + color}>
+  <div className={'rounded-xl p-3 cols-1-2 grid ' + color}>
     <div className="mr-4 flex justify-center items-center">
       <Icon size={iconSize ? iconSize : '1.5rem'} />
     </div>

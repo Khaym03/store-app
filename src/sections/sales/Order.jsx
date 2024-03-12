@@ -51,7 +51,7 @@ const Order = () => {
                     setTriggerProcessOrders(prev => !prev)
                   }}
                   className={
-                    'grid cols-2-1-1 text-sm text-slate-700 font-medium border-b border-slate-100 px-4 py-2 h-10 hover:bg-red-100 cursor-pointer transition-colors hover:text-red-800 overflow-hidden'
+                    'grid cols-2-1-1 text-sm text-slate-700 font-medium border-b border-slate-100 px-4 py-2 h-10 hover:bg-red-50 cursor-pointer transition-colors hover:text-red-800 overflow-hidden'
                   }
                 >
                   <Row name={data[0]} quan={data[1]} price={data[2]} />

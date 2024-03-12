@@ -19,8 +19,8 @@ const NavItem = ({ sectionName, Icon }) => {
 
   return (
     <li
-      className={` cols-1-2 hover:bg-slate-100 grid transition-colors relative rounded-lg on-surface-variant-text cursor-pointer  ${
-        currentSection === sectionName ? 'bg-slate-100' : ''
+      className={`cols-1-2 hover:text-sky-500 grid transition-colors relative rounded-md  cursor-pointer  ${
+        currentSection === sectionName ? ' text-sky-500 ' : 'text-slate-600'
       }`}
       onClick={clickHandler}
     >
@@ -52,7 +52,9 @@ const Navbar = () => {
     fetch(URLs.getSalesOfTheDayURL)
       .then(data => data.json())
       .then(todaySalesData => {
-        const total = todaySalesData.reduce((sum, cur) => sum + cur.price, 0)
+        const total = todaySalesData
+          .filter(sale => sale.status !== 'debt')
+          .reduce((sum, cur) => sum + cur.price, 0)
         setTodaySales(total)
         setUpdateNavInfo(false)
       })
@@ -60,7 +62,7 @@ const Navbar = () => {
 
   return (
     <nav className="Navbar border-r border-slate-200 absolute top-0 left-0 h-full flex flex-col z-10 py-8 px-4">
-      <ul className="grid auto-rows-[56px] gap-2 h-4/5 mb-auto">
+      <ul className="grid auto-rows-[48px] gap-2 h-4/5 mb-auto">
         <NavItem
           sectionName={APP_SECTIONS.SALES_SECTION}
           Icon={MdAddShoppingCart}

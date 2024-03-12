@@ -89,10 +89,12 @@ const SalesStorager = () => {
     message: 'Guardado Correctamente',
     show: true,
     setShow: setNotification,
-    Icon: IoMdCheckmarkCircleOutline
+    Icon: IoMdCheckmarkCircleOutline,
+    type: 'success'
   }
 
   const saveHandler = () => {
+    if(!(orders.length > 0)) return
     postSales(salesFormater(orders, null, paymentMethod))
     setOrders([])
     setProcessedOrders(null)

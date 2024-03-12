@@ -117,7 +117,7 @@ const SearchClient = () => {
 
   return (
     <section className="flex flex-col p-4 row-span-3 border-l border-slate-200">
-      <div className="flex flex-row relative rounded-lg mb-2 overflow-hidden">
+      <div className="flex flex-row relative rounded-lg mb-2">
         <SearchBar />
       </div>
       <ul
