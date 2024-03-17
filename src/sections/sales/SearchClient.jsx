@@ -58,7 +58,7 @@ const ClientCard = ({ name, clientId }) => {
 
   return (
     <div
-      className="justify-between hover:bg-slate-100 transition-colors rounded-lg flex cursor-pointer w-full h-full"
+      className="bg-white border border-slate-200 justify-between hover:bg-slate-100 transition-colors rounded-lg flex cursor-pointer w-full h-full"
       data-clientid={clientId}
       onClick={() => clickHandler(clientId)}
     >
@@ -121,7 +121,7 @@ const SearchClient = () => {
         <SearchBar />
       </div>
       <ul
-        className={`grid gap-2 overflow-y-auto auto-rows-[48px] h-[608px] text-slate-700 mb-2`}
+        className={`grid gap-2 overflow-y-auto auto-rows-[48px] h-[608px] text-slate-700 mb-2 scrollbar-hide`}
       >
         {transitions(
           (styles, client) =>

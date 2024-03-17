@@ -17,7 +17,7 @@ export const SectionDisplayer = () => {
   return (
     <main
       id="content"
-      className="grid place-items-center h-full relative overflow-x-auto overflow-y-hidden"
+      className="bg-slate-50 grid place-items-center h-full relative overflow-x-auto overflow-y-hidden"
     >
       <ToolBar />
 

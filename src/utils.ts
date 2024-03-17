@@ -1,5 +1,5 @@
 import { URLs } from './constants.ts'
-import { Order, Sale, PaymentMethod } from './types.ts'
+import { Order, Sale, PaymentMethod, ProductNames } from './types.ts'
 
 export const fullDate = (): string => {
   const date = new Date()
@@ -54,25 +54,51 @@ export const postClient = (clientName: string) => {
   })
 }
 
-export const matchBg = (product: string) => {
+export const generateTailwindClass = (
+  product: ProductNames,
+  prop: string,
+  hue: string
+): string => {
+  const productColors: Record<ProductNames, string> = {
+    ariel: 'blue',
+    cera: 'rose',
+    cloro: 'slate',
+    shampoo: 'slate',
+    desengrasante: 'orange',
+    desinfectante: 'red',
+    lavaplatos: 'green',
+    suavizante: 'purple',
+    'limpia poceta': 'amber'
+  }
+
+  const color = productColors[product]
+ 
+  if (!color) {
+    throw new Error(`Unsupported product: ${product}`)
+  }
+
+  return `${prop}-${color}-${hue}`
+}
+
+export const matchBg = (product: string, light: boolean | undefined) => {
   switch (product) {
     case 'ariel':
-      return 'bg-blue-400'
+      return light ? 'bg-blue-100' : 'bg-blue-400'
     case 'cera':
       return 'bg-[#ffedd5]'
     case 'desengrasante':
-      return 'bg-orange-400'
+      return light ? 'bg-orange-100' : 'bg-orange-400'
     case 'desinfectante':
-      return 'bg-red-400'
+      return light ? 'bg-red-100' : 'bg-red-400'
     case 'lavaplatos':
-      return 'bg-green-400'
+      return light ? 'bg-green-100' : 'bg-green-400'
     case 'suavizante':
-      return 'bg-purple-400'
+      return light ? 'bg-purple-100' : 'bg-purple-400'
     case 'limpia poceta':
-      return 'bg-amber-400'
+      return light ? 'bg-amber-100' : 'bg-amber-400'
 
     default:
-      return 'bg-slate-400'
+      return light ? 'bg-slate-100' : 'bg-slate-400'
   }
 }
 

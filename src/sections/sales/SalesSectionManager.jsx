@@ -12,7 +12,7 @@ const SalesSectionManager = () => {
   return (
     <section className="mainSection w-full h-full grid">
       <ProductList />
-      <div className='grid rows-fit-auto row-span-3'>
+      <div className='grid rows-fit-auto row-span-3 bg-white'>
         <div className="grid cols-1fr-1px-1fr border-b border-slate-200 place-items-center">
           <Measure />
           <span className="w-full h-full bg-slate-300"></span>

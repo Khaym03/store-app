@@ -1,4 +1,4 @@
-import { Bar, Pie, Line } from 'react-chartjs-2'
+import { Bar, Pie, Line, PolarArea } from 'react-chartjs-2'
 import { GiMoneyStack } from 'react-icons/gi'
 import { MdOutlineMessage } from 'react-icons/md'
 import { MdOutlineFingerprint } from 'react-icons/md'
@@ -15,6 +15,7 @@ import Title from '../comp/Title'
 import ProductLabel from '../comp/ProductLabel'
 import PropTypes from 'prop-types'
 import Button from '../comp/Button'
+import PaymentCard from '../comp/PaymentCard'
 
 Chart.register(CategoryScale)
 
@@ -51,53 +52,57 @@ const InfoBar = () => {
   }, [])
 
   return (
-    <section className="w-full grid grid-cols-5 gap-4 mb-4">
-      <InfoCard
-        title="venta promedio"
-        info={averageSale}
-        Icon={TbDivide}
-        color=" bg-violet-200"
+    <ul className="w-full grid grid-cols-5 gap-4 mb-4 text-center">
+      <PaymentCard
+        paymentName="venta promedio"
+        value={averageSale}
+        textColor="text-purple-500"
       />
-      <InfoCard
-        title="vendido en efectivo"
-        info={reduceBy('efectivo', salesInfo)}
+      <PaymentCard
+        paymentName="vendido en efectivo"
+        value={reduceBy('efectivo', salesInfo)}
+        textColor="text-green-500"
         Icon={GiMoneyStack}
-        color=" bg-lime-200"
       />
-      <InfoCard
-        title="por Punto"
-        info={reduceBy('punto', salesInfo)}
+      <PaymentCard
+        paymentName="Punto"
+        value={reduceBy('punto', salesInfo)}
+        textColor="text-blue-500"
         Icon={MdOutlineCreditCard}
-        color=" bg-sky-200"
       />
-      <InfoCard
-        title="por Bio"
-        info={reduceBy('bio', salesInfo)}
+      <PaymentCard
+        paymentName="Bio"
+        value={reduceBy('bio', salesInfo)}
+        textColor="text-red-500"
         Icon={MdOutlineFingerprint}
-        color=" bg-orange-200"
       />
-      <InfoCard
-        title="por pago-movil"
-        info={reduceBy('pago-movil', salesInfo)}
+      <PaymentCard
+        paymentName="pago-movil"
+        value={reduceBy('pago-movil', salesInfo)}
+        textColor="text-orange-500"
         Icon={MdOutlineMessage}
-        color=" bg-yellow-200"
       />
-    </section>
+    </ul>
   )
 }
 
-const ListOfLabels = ({ labels }) => {
+const ListOfLabels = ({ data }) => {
   return (
-    <ul className="grid grid-cols-2 gap-2">
-      {labels
-        ? labels.map(label => <ProductLabel key={label} productName={label} />)
-        : null}
+    <ul className="grid grid-cols-3 gap-2 auto-rows-fr h-[350px]">
+      {data &&
+        [...data.entries()].map(([key, val]) => (
+          <ProductLabel
+            key={key}
+            productName={key}
+            value={parseInt(val / 1000)}
+          />
+        ))}
     </ul>
   )
 }
 
 ListOfLabels.propTypes = {
-  labels: PropTypes.array
+  data: PropTypes.any
 }
 
 const BarChart = () => {
@@ -109,7 +114,7 @@ const BarChart = () => {
         label: 'Unidades Vendidas',
         data: data ? [...data.values()].map(val => val / 1000) : [],
         backgroundColor: productColors,
-        borderRadius: 12
+        borderRadius: 4
       }
     ]
   }
@@ -130,6 +135,9 @@ const BarChart = () => {
           x: {
             ticks: {
               display: false // Hide x-axis labels
+            },
+            grid: {
+              display: false // This line hides the x-axis grid lines
             }
           }
         }
@@ -152,27 +160,27 @@ const PieChart = () => {
   }
 
   return (
-    <div className='w-[300px]'>
+    <div className="w-[300px]">
       <Pie
-      data={donutData}
-      options={{
-        plugins: {
-          title: {
-            display: false,
-            text: 'Porcentaje de venta'
-          },
-          legend: {
-            display: false
+        data={donutData}
+        options={{
+          plugins: {
+            title: {
+              display: false,
+              text: 'Porcentaje de venta'
+            },
+            legend: {
+              display: false
+            }
           }
-        }
-      }}
-    />
+        }}
+      />
     </div>
   )
 }
 
 const ActivityChart = () => {
-  const {salesActivity} = useContext(AnalyticContext)
+  const { salesActivity } = useContext(AnalyticContext)
   const lineData = {
     labels: salesActivity ? [...salesActivity.keys()] : [],
     datasets: [
@@ -182,38 +190,49 @@ const ActivityChart = () => {
       }
     ]
   }
-  return <Line
-  data={lineData}
-  options={{
-    plugins: {
-      title: {
-        display: false,
-        text: 'Actividad de venta'
-      },
-      legend: {
-        display: false
-      }
-    },
-    scales: {
-      x: {
-        ticks: {
-          display: false // Hide x-axis labels
+  return (
+    <Line
+      data={lineData}
+      options={{
+        plugins: {
+          title: {
+            display: false,
+            text: 'Actividad de venta'
+          },
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              display: false // Hide x-axis labels
+            },
+            grid: {
+              display: false
+            }
+          }
         }
-      }
-    }
-  }}
-/>
+      }}
+    />
+  )
 }
 
 const AnalyticSection = () => {
   const { data: allSales } = FetchTable(URLs.getSalesURL)
-  const { data, setData, setPercentages, setSalesActivity,currentChart,setCurrentChart } =
-    useContext(AnalyticContext)
-  
+  const {
+    data,
+    setData,
+    setPercentages,
+    setSalesActivity,
+    currentChart,
+    setCurrentChart
+  } = useContext(AnalyticContext)
+
   const { setAverageSale } = useContext(AnalyticContext)
 
   const showNext = () => {
-    if(currentChart === 2) setCurrentChart(0)
+    if (currentChart === 2) setCurrentChart(0)
     else setCurrentChart(currentChart + 1)
   }
 
@@ -230,7 +249,7 @@ const AnalyticSection = () => {
           setSalesActivity(new Map(salesInfo.salesPerDay))
         })
     }
-  }, [data, setData, setAverageSale,setSalesActivity])
+  }, [data, setData, setAverageSale, setSalesActivity])
 
   useEffect(() => {
     if (data) {
@@ -245,25 +264,31 @@ const AnalyticSection = () => {
     }
   }, [data, allSales, setAverageSale, setPercentages])
 
-  const charts = [BarChart,PieChart,ActivityChart]
-  const titles = ['Productos mas Vendidos','Porcentajes','actividad de ventas']
+  const charts = [BarChart, PieChart, ActivityChart]
+  const titles = [
+    'Productos mas Vendidos',
+    'Porcentajes',
+    'actividad de ventas'
+  ]
   let Current = charts[currentChart]
   return (
     <section className="section flex items-center justify-center flex-col">
       <InfoBar />
 
-      <div className="grid gap-8 cols-35-auto overflow-hidden w-full relative p-4 border border-slate-200 rounded-xl shadow-sm mb-4">
-        <section>
-          <Title className="left-4 top-8">
-            {titles[currentChart]}
-          </Title>
-          <ListOfLabels labels={data ? [...data.keys()] : null} />
-        </section>
-        <section className="grid place-items-center h-[400px]">
-          {<Current/>}
-        </section>
+      <div className="bg-white overflow-hidden w-full relative px-8 py-6 border border-slate-200 rounded-xl shadow-sm mb-4">
+        <Title className="text-center text-slate-600">
+          {titles[currentChart]}
+        </Title>
+        <div className="grid gap-8 cols-35-auto relative h-[352px]">
+          <section className=" overflow-hidden">
+            <ListOfLabels data={data} />
+          </section>
+          <section className="grid place-items-center overflow-hidden">
+            {<Current />}
+          </section>
+        </div>
       </div>
-    <Button clickHandler={showNext}>next</Button>
+      <Button clickHandler={showNext}>next</Button>
     </section>
   )
 }

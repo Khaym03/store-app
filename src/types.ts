@@ -13,10 +13,21 @@ export type Sale = {
   payment_method: PaymentMethod
 }
 
+export type ProductNames =
+  | 'ariel'
+  | 'cera'
+  | 'desengrasante'
+  | 'desinfectante'
+  | 'lavaplatos'
+  | 'suavizante'
+  | 'limpia poceta'
+  | 'cloro'
+  | 'shampoo'
+
 export type Product = {
-    name: string,
-    price: number,
-    color: string
+  name: string
+  price: number
+  color: string
 }
 
 export type Gaza = {

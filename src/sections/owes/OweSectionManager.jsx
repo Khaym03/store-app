@@ -195,7 +195,7 @@ const OweSectionManager = () => {
   return (
     <section
       id="owe-section"
-      className="w-[1080px] grid gap-4 p-8 border-solid border border-slate-200 shadow-sm rounded-xl overflow-hidden"
+      className="w-[1080px] grid gap-4 p-8 border-solid border border-slate-200 shadow-sm rounded-xl overflow-hidden bg-white"
     >
       <div className="flex flex-col">
         <OweActionBar>

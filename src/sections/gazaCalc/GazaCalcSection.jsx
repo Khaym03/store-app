@@ -200,12 +200,12 @@ const GazaCalcSection = () => {
     transition(style => (
       <animated.section
         style={style}
-        className="grid grid-cols-2 gap-4 rounded-lg shadow-sm h-fit"
+        className="grid grid-cols-2 gap-4 rounded-lg h-fit"
       >
-        <div className=" border border-slate-200 p-8 rounded-lg my-auto">
+        <div className="bg-white border border-slate-200 p-8 rounded-lg my-auto">
           <OptimalPurchaseSection />
         </div>
-        <div className="border border-slate-200 p-8 rounded-lg shadow-sm my-auto h-full">
+        <div className="bg-white border border-slate-200 p-8 rounded-lg shadow-sm my-auto h-full">
           <ProductToBeBough />
         </div>
       </animated.section>

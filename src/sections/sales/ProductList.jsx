@@ -25,7 +25,7 @@ const ProductCard = ({ name, value, color }) => {
 
   return (
     <div
-      className={`overflow-hidden grid place-items-center capitalize rounded-lg ProductCard h-full font-medium transition-colors relative p-4`}
+      className={`bg-white overflow-hidden grid place-items-center capitalize rounded-lg ProductCard h-full font-medium transition-colors relative p-4`}
       onMouseEnter={enterHandler}
       onMouseLeave={outHandler}
     >

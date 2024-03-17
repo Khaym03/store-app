@@ -140,3 +140,12 @@ input[type='text']:focus {
 .rows-2-1-1 {
   grid-template-rows: 2fr 1fr 1fr;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0px;
+ }
+ 
+ .scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+ }
