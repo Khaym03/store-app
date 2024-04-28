@@ -195,7 +195,7 @@ const OweSectionManager = () => {
   return (
     <section
       id="owe-section"
-      className="w-[1080px] grid gap-4 p-8 border-solid border border-slate-200 shadow-sm rounded-xl overflow-hidden bg-white"
+      className="w-[1080px] h-[548px] grid gap-4 p-8 border-solid border border-slate-200 shadow-sm rounded-xl overflow-hidden bg-white"
     >
       <div className="flex flex-col">
         <OweActionBar>
@@ -204,6 +204,7 @@ const OweSectionManager = () => {
             info={totalDebts}
             color={'bg-violet-200'}
             Icon={LiaMoneyBillWaveSolid}
+            currency='Bs'
           />
           <InfoCard
             title={'Clientes por pagar'}

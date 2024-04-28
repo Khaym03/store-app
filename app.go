@@ -1,14 +1,39 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/Khaym03/store-app/handlers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+
+	"os"
+	"os/exec"
+	"runtime"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
+	url := "http://127.0.0.1:8080"
+
+	var cmd *exec.Cmd
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "start", url)
+	case "darwin":
+		cmd = exec.Command("open", url)
+	default:
+		cmd = exec.Command("xdg-open", url)
+	}
+
+	err := cmd.Start()
+	if err != nil {
+		fmt.Printf("Failed to open URL: %v\n", err)
+		os.Exit(1)
+	}
 
 	app := fiber.New()
 	app.Use(cors.New(), compress.New(compress.Config{

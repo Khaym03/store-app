@@ -11,14 +11,17 @@ const Converter = ({ setRangeValue }) => {
   const { bsConverterRef, setBs, selected } = useContext(ManagerContext)
 
   const handleChange = () => {
-    if (selected) {
-      const price = selected[1]
-      const value = +bsConverterRef.current.value,
-        ml = calcMls(value, price) * 1000
-
-      setBs(value)
-      setRangeValue(ml)
+    if (!selected) {
+      bsConverterRef.current.value = ''
+      return
     }
+
+    const price = selected[1]
+    const value = +bsConverterRef.current.value,
+      ml = calcMls(value, price) * 1000
+
+    setBs(value)
+    setRangeValue(ml)
   }
 
   return (
@@ -119,7 +122,8 @@ const AddToCart = ({
     setBs,
     selected,
     triggerProcessOrders,
-    setProcessedOrders
+    setProcessedOrders,
+    bsConverterRef
   } = useContext(ManagerContext)
 
   const formattedOrder = () => {
@@ -170,16 +174,18 @@ const AddToCart = ({
     setOrders(flated)
     setProcessedOrders(flated)
     setBs(0)
-    setOrderWasAdded(true)
+    setOrderWasAdded(false)
   }
   const clickHandler = () => {
     if (selected) {
       processOrders()
+      setOrderWasAdded(true)
     }
   }
   useEffect(() => {
-    if (orderWasAdded) inputRef.current.value = ''
-  }, [orderWasAdded, inputRef])
+    inputRef.current.value = ''
+    bsConverterRef.current.value = ''
+  }, [orderWasAdded])
 
   useEffect(() => {
     processOrders()

@@ -10,6 +10,21 @@ import { MdOutlineCalculate } from 'react-icons/md'
 import { TbPigMoney } from 'react-icons/tb'
 import InfoCard from '../comp/InfoCard'
 
+const NavTitle = ({ title, description }) => {
+  return (
+    <div className="flex flex-col justify-start px-4 py-2 pointer-events-none">
+      <span className="text-xs font-bold text-sky-600 uppercase">
+        {title}
+      </span>
+      {description && (
+        <span className="text-xs text-slate-500 font-medium">
+          {description}
+        </span>
+      )}
+    </div>
+  )
+}
+
 const NavItem = ({ sectionName, Icon }) => {
   const { setCurrentSection, currentSection } = useContext(SectionSliderContext)
 
@@ -19,17 +34,16 @@ const NavItem = ({ sectionName, Icon }) => {
 
   return (
     <li
-      className={`cols-1-2 hover:text-sky-500 grid transition-colors relative rounded-md  cursor-pointer  ${
-        currentSection === sectionName ? ' text-sky-500 ' : 'text-slate-600'
+      className={`flex flex-row px-4 py-3 hover:bg-slate-100 hover:text-slate-600 transition-colors relative rounded-md cursor-pointer font-light  ${
+        currentSection === sectionName
+          ? ' text-slate-600 bg-slate-100'
+          : 'text-slate-500'
       }`}
       onClick={clickHandler}
     >
-      <div className="text-center grid place-items-center  rounded-lg">
-        <Icon size={'1.5rem'} />
-      </div>
-      <span className="items-center flex text-left text-sm capitalize font-medium">
-        {sectionName}
-      </span>
+      <Icon className={'mr-4'} size={'1.5rem'} />
+
+      <div className="text-sm capitalize font-medium h-min">{sectionName}</div>
     </li>
   )
 }
@@ -62,7 +76,8 @@ const Navbar = () => {
 
   return (
     <nav className="Navbar border-r border-slate-200 absolute top-0 left-0 h-full flex flex-col z-10 py-8 px-4">
-      <ul className="grid auto-rows-[48px] gap-2 h-4/5 mb-auto">
+      <NavTitle title={'menu'} />
+      <ul className="grid auto-rows-min gap-2 mb-auto">
         <NavItem
           sectionName={APP_SECTIONS.SALES_SECTION}
           Icon={MdAddShoppingCart}
@@ -80,18 +95,21 @@ const Navbar = () => {
           Icon={MdOutlineCalculate}
         />
       </ul>
+      <NavTitle title={'ventas'} description={'Informacion general del dia'}/>
       <div className="grid gap-2">
         <InfoCard
-          title={'Total vendido Hoy'}
+          title={'vendido'}
           info={todaySales}
           Icon={LiaCashRegisterSolid}
           color={'bg-violet-200'}
+          currency="Bs"
         />
         <InfoCard
-          title={'Ganancia de hoy'}
+          title={'Ganancia'}
           info={todaySales * 0.45}
           Icon={TbPigMoney}
           color={'bg-lime-200'}
+          currency="Bs"
         />
       </div>
     </nav>

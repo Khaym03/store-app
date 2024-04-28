@@ -8,7 +8,6 @@ import { CategoryScale } from 'chart.js'
 import { FetchTable } from '../hooks/FetchTable'
 import { URLs } from '../constants'
 import { useContext, useEffect, useState } from 'react'
-import InfoCard from '../comp/InfoCard'
 import { TbDivide } from 'react-icons/tb'
 import { AnalyticContext } from './AnalyticsManager'
 import Title from '../comp/Title'
@@ -54,12 +53,13 @@ const InfoBar = () => {
   return (
     <ul className="w-full grid grid-cols-5 gap-4 mb-4 text-center">
       <PaymentCard
-        paymentName="venta promedio"
+        paymentName="promedio"
         value={averageSale}
         textColor="text-purple-500"
+        Icon={TbDivide}
       />
       <PaymentCard
-        paymentName="vendido en efectivo"
+        paymentName="efectivo"
         value={reduceBy('efectivo', salesInfo)}
         textColor="text-green-500"
         Icon={GiMoneyStack}
