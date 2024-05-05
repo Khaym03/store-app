@@ -44,40 +44,43 @@ const ProductCard = ({ name, value, color, animation }) => {
   }
 
   return (
-    <animated.div
-      style={animation}
-      className={`bg-white overflow-hidden grid place-items-center capitalize rounded-lg ProductCard h-full font-medium transition relative p-4 border-2 ${
-        selected && selected[0] === name
-          ? `shadow-md ${borderColor(name)} -translate-y-1`
-          : 'border-slate-200 hover:border-slate-500 '
-      }`}
-      onMouseEnter={enterHandler}
-      onMouseLeave={outHandler}
-      onClick={() => selectHandler({ name, price: value })}
-    >
-      <span
-        className={`grid place-items-center w-full h-full rounded-md ${color}`}
+    <animated.div style={animation}>
+      <div
+        className={`bg-white overflow-hidden grid place-items-center capitalize rounded-lg ProductCard cursor-pointer h-full font-medium transition relative p-4 border-2 ${
+          selected && selected[0] === name
+            ? `shadow-md ${borderColor(name)} -translate-y-1`
+            : 'border-slate-200 hover:border-slate-500 '
+        }`}
+        onMouseEnter={enterHandler}
+        onMouseLeave={outHandler}
+        onClick={() => selectHandler({ name, price: value })}
       >
-        {transparent ? (
-          <TbBottle size={'2rem'} />
-        ) : (
-          <TbBottleFilled size={'2rem'} />
-        )}
-      </span>
+        <span
+          className={`grid place-items-center w-full h-full rounded-md ${color}`}
+        >
+          {transparent ? (
+            <TbBottle size={'2rem'} />
+          ) : (
+            <TbBottleFilled size={'2rem'} />
+          )}
+        </span>
 
-      <div className="z-10 text-sm w-full text-left text-slate-900">{name}</div>
-      <span className="z-10 text-slate-400 text-xs w-full text-left italic ">
-        {value.toFixed(2)}
-      </span>
-      <span
-        onClick={clickHandler}
-        id={name}
-        className={`${
-          isIn ? 'visible scale-100 bg-slate-100' : 'invisible scale-75'
-        } absolute top-1 right-1  p-2 transition-transform rounded-md `}
-      >
-        <MdOutlinePlusOne size={'1.5rem'} />
-      </span>
+        <div className="z-10 text-sm w-full text-left text-slate-900">
+          {name}
+        </div>
+        <span className="z-10 text-slate-400 text-xs w-full text-left italic ">
+          {value.toFixed(2)}
+        </span>
+        <span
+          onClick={clickHandler}
+          id={name}
+          className={`${
+            isIn ? 'visible scale-100 bg-slate-100' : 'invisible scale-75'
+          } absolute top-1 right-1  p-2 transition-transform rounded-md cursor-pointer`}
+        >
+          <MdOutlinePlusOne size={'1.5rem'} />
+        </span>
+      </div>
     </animated.div>
   )
 }
@@ -101,7 +104,7 @@ function ProductList() {
   const transitions = useTransition(plusEmpty, {
     from: { scale: 0, opacity: 0 },
     enter: { scale: 1, opacity: 1 },
-    config: { duration: 30 },
+    config: { duration: 90 },
     trail: 25,
     keys: item => item.name // Use the product name as the key
   })

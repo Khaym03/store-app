@@ -13,21 +13,33 @@ const Row = ({ name, quan, price }) => {
   const amount = Number.isInteger(lts) ? lts : lts.toFixed(1)
 
   return (
-    <div onMouseEnter={enter} onMouseLeave={out}>
+    <div onMouseEnter={enter} onMouseLeave={out} className='px-4 py-2'>
       <span
         className={`absolute top-2 right-2 pointer-events-none transition-opacity ${
           isIn ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <IoCloseOutline className="text-red-400" size={'1.5rem'} />
+        <IoCloseOutline className="text-red-700" size={'1.5rem'} />
       </span>
-      <div className="text-xl italic text-slate-700">
+      <div
+        className={`text-xl italic ${isIn ? 'text-red-700' : 'text-slate-700'}`}
+      >
         {amount} <span className="text-sm">Lts</span>
       </div>
-      <div className="align-right italic text-sm text-slate-600">
+      <div
+        className={`align-right italic text-sm ${
+          isIn ? 'text-red-700' : 'text-slate-600'
+        }`}
+      >
         {price.toFixed(2)} Bs
       </div>
-      <div className="capitalize text-sm text-slate-500">{name}</div>
+      <div
+        className={`capitalize text-sm ${
+          isIn ? 'text-red-700' : 'text-slate-500'
+        }`}
+      >
+        {name}
+      </div>
     </div>
   )
 }
@@ -35,7 +47,7 @@ const Row = ({ name, quan, price }) => {
 Row.propTypes = {
   name: PropTypes.string,
   quan: PropTypes.number,
-  price: PropTypes.number
+  price: PropTypes.number,
 }
 
 const Order = () => {
@@ -70,10 +82,14 @@ const Order = () => {
                     setTriggerProcessOrders(prev => !prev)
                   }}
                   className={
-                    ' px-4 py-2 text-sm text-slate-700 font-medium bg-white border-b border-slate-200 cursor-pointer transition-colors hover:border-red-400 overflow-hidden w-full h-full border rounded-md relative'
+                    'text-sm text-slate-700 font-medium bg-white border-b border-slate-200 cursor-pointer transition-colors overflow-hidden w-full h-full border rounded-md relative hover:bg-red-100 hover:border-red-200'
                   }
                 >
-                  <Row name={data[0]} quan={data[1]} price={data[2]} />
+                  <Row
+                    name={data[0]}
+                    quan={data[1]}
+                    price={data[2]}
+                  />
                 </animated.li>
               )
           )}

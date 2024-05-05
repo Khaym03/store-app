@@ -22,7 +22,7 @@ const InfoCard = ({
   const formatedInfo = `${formatNum} ${currency ?? ''}`
 
   return (
-    <div className={'rounded-md text-slate-700 p-3 cols-1-2 grid '}>
+    <div className={'rounded-md text-slate-700 p-3 cols-1-2 grid bg-blue-50'}>
       <div className="mr-4 flex justify-center items-center">
         <Icon size={iconSize ? iconSize : '1.5rem'} />
       </div>

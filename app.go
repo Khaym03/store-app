@@ -43,7 +43,7 @@ func main() {
 	app.Static("/", "/dist")
 
 	app.Get("/dollar", func(c *fiber.Ctx) error {
-		return c.Status(200).JSON(36.2)
+		return c.Status(200).JSON(36.4)
 	})
 
 	app.Get("/clients", handlers.Clients)
